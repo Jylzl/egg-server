@@ -23,7 +23,11 @@ class UserController extends Controller {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
     };
-    ctx.body = await ctx.service.user.list(query);
+    ctx.body = {
+      code: 200,
+      msg: 'success',
+      data: await ctx.service.user.list(query),
+    };
   }
 
   // GET:查询指定id
@@ -40,12 +44,17 @@ class UserController extends Controller {
   // POST:创建
   async create() {
     const ctx = this.ctx;
+    console.log('ctx.csrf');
+    console.log(ctx.csrf);
     // 校验 `ctx.request.body` 是否符合我们预期的格式
     // 如果参数校验未通过，将会抛出一个 status = 422 的异常
     ctx.validate(createRule, ctx.request.body);
-    const user = await ctx.service.user.create(ctx.request.body);
     ctx.status = 201;
-    ctx.body = user;
+    ctx.body = {
+      code: 200,
+      msg: 'success',
+      data: await ctx.service.user.create(ctx.request.body),
+    };
   }
 
   // PUT:修改指定id
@@ -53,7 +62,10 @@ class UserController extends Controller {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
     const body = ctx.request.body;
-    ctx.body = await ctx.service.user.update({ id, updates: body });
+    ctx.body = await ctx.service.user.update({
+      id,
+      updates: body,
+    });
   }
 
   // DELETE:删除指定id

@@ -11,12 +11,24 @@ module.exports = appInfo => {
    * @type {Egg.EggAppConfig}
    **/
   const config = exports = {};
+  config.security = {
+    csrf: {
+      // enable: false,
+      headerName: 'x-csrf-token', // 自定义请求头
+    },
+  };
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1576679752309_3203';
 
   // add your middleware config here
-  config.middleware = [ 'errorHandler' ];
+  config.middleware = [ 'errorHandler', 'gzip' ];
+
+  // 配置 gzip 中间件的配置
+  config.gzip = {
+    threshold: 1024, // 小于 1k 的响应体不压缩
+  };
+
   config.errorHandler = {
     match: '/api',
   };

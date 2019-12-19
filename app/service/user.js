@@ -16,16 +16,21 @@ class UserService extends Service {
 
   async create(params) {
     // 调用 CNode V1 版本 API
-    const result = await this.ctx.curl(`${this.root}/topics`, {
-      method: 'post',
-      data: params,
-      dataType: 'json',
-      contentType: 'json',
-    });
+    const result = await this.ctx.model.Users.create(params);
     // 检查调用是否成功，如果调用失败会抛出异常
-    this.checkSuccess(result);
+    // this.checkSuccess(result);
     // 返回创建的 topic 的 id
-    return result.data;
+    return result;
+  }
+
+  async list(query) {
+    // 调用 CNode V1 版本 API
+    console.log(this.ctx.model.Users);
+    const result = await this.ctx.model.Users.findAll(query);
+    // 检查调用是否成功，如果调用失败会抛出异常
+    // this.checkSuccess(result);
+    // 返回创建的 topic 的 id
+    return result;
   }
 
   async find(id) {
@@ -40,9 +45,8 @@ class UserService extends Service {
     // });
     // 检查调用是否成功，如果调用失败会抛出异常
     // this.checkSuccess(result);
-    console.log(result.dataValues);
     // 返回创建的 topic 的 id
-    return result.dataValues;
+    return result;
   }
 
   // 封装统一的调用检查函数，可以在查询、创建和更新等 Service 中复用
