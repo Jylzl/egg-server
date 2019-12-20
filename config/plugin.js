@@ -1,3 +1,10 @@
+/**
+ * @description: Description
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2019-12-19 08:30:57
+ * @LastAuthor: lizlong
+ * @lastTime: 2019-12-20 17:10:41
+ */
 'use strict';
 
 /** @type Egg.EggPlugin */
@@ -10,11 +17,7 @@ module.exports = {
     enable: true,
     package: 'egg-validate',
   },
-  mysql: {
-    enable: true,
-    package: 'egg-mysql',
-  },
-  sequeliz: {
+  sequelize: {
     enable: true,
     package: 'egg-sequelize',
   },

@@ -1,3 +1,10 @@
+/**
+ * @description: Description
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2019-12-20 08:43:13
+ * @LastAuthor: lizlong
+ * @lastTime: 2019-12-20 16:08:59
+ */
 /* eslint valid-jsdoc: "off" */
 
 'use strict';
@@ -37,38 +44,31 @@ module.exports = appInfo => {
     // convert: false,
     // validateRoot: false,
   };
-  config.mysql = {
-    // 单数据库信息配置
-    client: {
-      // host
-      host: '39.108.161.110',
-      // 端口号
-      port: '3306',
-      // 用户名
-      user: 'root',
-      // 密码
-      password: '929924',
-      // 数据库名
-      database: 'blogdb',
-    },
-    // 是否加载到 app 上，默认开启
-    app: true,
-    // 是否加载到 agent 上，默认关闭
-    agent: false,
-  };
 
   config.sequelize = {
-    dialect: 'mysql',
-    // host
-    host: '39.108.161.110',
-    // 端口号
-    port: '3306',
-    // 用户名
-    user: 'root',
-    // 密码
-    password: '929924',
-    // 数据库名
-    database: 'blogdb',
+    dialect: 'mysql', // 数据库类型
+    host: '39.108.161.110', // host
+    port: '3306', // 端口号
+    user: 'root', // 用户名
+    password: '929924', // 密码
+    database: 'blogdb', // 数据库名
+    // model的全局配置
+    define: {
+      timestamps: false, // 添加create,update,delete时间戳
+      paranoid: true, // 添加软删除
+      freezeTableName: true, // 防止修改表名为复数
+      underscored: false, // 防止驼峰式字段被默认转为下划线
+    },
+    timezone: '+08:00', // 由于orm用的UTC时间，这里必须加上东八区，否则取出来的时间相差8小时
+    dialectOptions: { // 让读取date类型数据时返回字符串而不是UTC时间
+      dateStrings: true,
+      typeCast(field, next) {
+        if (field.type === 'DATETIME') {
+          return field.string();
+        }
+        return next();
+      },
+    },
   };
 
   config.passportGithub = {

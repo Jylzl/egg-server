@@ -1,3 +1,10 @@
+/**
+ * @description: Description
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2019-12-20 08:43:13
+ * @LastAuthor: lizlong
+ * @lastTime: 2019-12-20 13:00:52
+ */
 'use strict';
 
 const Service = require('egg').Service;
@@ -8,7 +15,7 @@ function toInt(str) {
   return parseInt(str, 10) || 0;
 }
 
-class UserService extends Service {
+class Userervice extends Service {
   constructor(ctx) {
     super(ctx);
     this.root = 'https://cnodejs.org/api/v1';
@@ -16,7 +23,7 @@ class UserService extends Service {
 
   async create(params) {
     // 调用 CNode V1 版本 API
-    const result = await this.ctx.model.Users.create(params);
+    const result = await this.ctx.model.User.create(params);
     // 检查调用是否成功，如果调用失败会抛出异常
     // this.checkSuccess(result);
     // 返回创建的 topic 的 id
@@ -25,8 +32,8 @@ class UserService extends Service {
 
   async list(query) {
     // 调用 CNode V1 版本 API
-    console.log(this.ctx.model.Users);
-    const result = await this.ctx.model.Users.findAll(query);
+    console.log(this.ctx.model.User);
+    const result = await this.ctx.model.User.findAll(query);
     // 检查调用是否成功，如果调用失败会抛出异常
     // this.checkSuccess(result);
     // 返回创建的 topic 的 id
@@ -35,8 +42,8 @@ class UserService extends Service {
 
   async find(id) {
     // 调用 CNode V1 版本 API
-    console.log(this.ctx.model.Users);
-    const result = await this.ctx.model.Users.findByPk(toInt(id));
+    console.log(this.ctx.model.User);
+    const result = await this.ctx.model.User.findByPk(toInt(id));
     // const result = await this.ctx.curl(`${this.root}/topics`, {
     //   method: 'get',
     //   data: params,
@@ -62,4 +69,4 @@ class UserService extends Service {
   }
 }
 
-module.exports = UserService;
+module.exports = Userervice;

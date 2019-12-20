@@ -1,3 +1,10 @@
+/**
+ * @description: Description
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2019-12-19 08:30:57
+ * @LastAuthor: lizlong
+ * @lastTime: 2019-12-20 14:29:35
+ */
 'use strict';
 const assert = require('assert');
 // app.js
@@ -10,19 +17,16 @@ module.exports = app => {
     assert(user.id, 'user.id should exists');
 
     // 从数据库中查找用户信息
-    //
-    // Authorization Table
-    // column   | desc
-    // ---      | --
-    // provider | provider name, like github, twitter, facebook, weibo and so on
-    // uid      | provider unique id
-    // user_id  | current application user id
-    const auth = await app.mysql.get('user', {
-      id: user.id,
-      provider: user.provider,
+    const auth = await ctx.model.UserAuths.findOne({
+      where: {
+        third_key: user.id,
+        third_type: user.provider,
+      },
     });
+    console.log(auth);
     // const existsUser = await ctx.model.User.findOne({ id: auth.user_id });
-    const existsUser = await app.mysql.get('user', { id: auth.id });
+    const existsUser = await ctx.model.User.findByPk(auth.id);
+    console.log(existsUser);
     if (existsUser) {
       return existsUser;
     }
@@ -34,15 +38,17 @@ module.exports = app => {
 
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
   app.passport.serializeUser(async (ctx, user) => {
-  // 处理 user
-  // ...
-  // return user;
+    // 处理 user
+    console.log('user----------------------');
+    console.log(ctx.config.keys);
+    console.log(user);
+    // return user;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
-  // 处理 user
-  // ...
-  // return user;
+    // 处理 user
+    // ...
+    // return user;
   });
 };

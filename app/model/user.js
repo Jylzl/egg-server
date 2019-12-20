@@ -1,10 +1,9 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, CHAR, INTEGER, TINYINT } = app.Sequelize;
+  const { STRING, CHAR, INTEGER, TINYINT, DATE } = app.Sequelize;
 
-  const Users = app.model.define('users', {
-    // 用户ID
+  const User = app.model.define('user', {
     user_id: {
       type: INTEGER(8),
       primaryKey: true,
@@ -12,126 +11,116 @@ module.exports = app => {
       autoIncrement: true,
       comment: '用户ID',
     },
-    // 用户名
-    user_name: {
+    name: {
       type: STRING(10),
       allowNull: false,
       comment: '用户名',
     },
-    // 密码
-    user_pwd: {
+    pswd: {
       type: CHAR(32),
       allowNull: false,
       comment: '密码',
     },
-    // 手机号码
-    user_phone: {
+    phone: {
       type: CHAR(11),
       allowNull: false,
       comment: '手机号码',
     },
-    // 邮箱号码
-    user_email: {
+    email: {
       type: STRING(320),
       allowNull: false,
       comment: '邮箱号码',
     },
-    // QQ账号
-    user_qq: {
+    qq: {
       type: STRING(11),
       allowNull: true,
       comment: 'QQ账号',
     },
-    // GitHub地址
-    user_github: {
+    github: {
       type: STRING(32),
       allowNull: true,
       comment: 'GitHub地址',
     },
-    // 密保问题编号
-    security_no: {
+    security_id: {
       type: INTEGER(8),
       allowNull: false,
-      comment: '密保问题编号',
+      comment: '密保问题id',
     },
-    // 密保答案
-    user_security_answer: {
+    security_answer: {
       type: STRING(32),
       allowNull: false,
       comment: '密保答案',
     },
-    // 博客称呼
-    user_blog_title: {
+    blog_title: {
       type: STRING(16),
       allowNull: true,
       comment: '博客称呼',
     },
-    // 博客简介
-    user_blog_introduction: {
+    blog_introduction: {
       type: STRING(32),
       allowNull: true,
       comment: '博客简介',
     },
-    // 用户访问量
-    user_view: {
-      type: INTEGER(8),
-      allowNull: false,
-      defaultValue: 0,
-      comment: '用户访问量',
-    },
-    // 用户头像地址
-    user_image_url: {
+    image_url: {
       type: STRING(320),
       allowNull: true,
       comment: '用户头像地址',
     },
-    // 用户头像选择
-    user_image_type: {
+    image_type: {
       type: TINYINT(3),
       allowNull: false,
       comment: '用户头像选择',
     },
-    // 用户注册IP
-    user_register_ip: {
+    register_ip: {
       type: CHAR(16),
       allowNull: false,
       comment: '用户注册IP',
     },
-    // 用户最后登录IP
-    user_last_login_ip: {
+    register_time: {
+      type: DATE,
+      allowNull: false,
+      comment: '用户注册时间',
+    },
+    last_login_ip: {
       type: CHAR(16),
       allowNull: true,
       comment: '用户最后登录IP',
     },
-    // 用户状态: 1表示在线，0离线
-    user_type: {
+    last_login_time: {
+      type: DATE,
+      allowNull: true,
+      comment: '用户最后登录时间',
+    },
+    status: {
       type: TINYINT(1),
       allowNull: false,
       defaultValue: 0,
       comment: '用户状态: 1表示在线，0离线',
     },
-    // 账户状态，0表示正常，1表示锁定
-    user_lock: {
+    login_count: {
       type: TINYINT(1),
       allowNull: false,
       defaultValue: 0,
-      comment: '账户状态，0表示正常，1表示锁定',
+      comment: '用户状态: 1表示在线，0离线',
     },
-    // 用户session_id
     session_id: {
       type: CHAR(32),
       allowNull: true,
       comment: '用户session_id',
     },
   }, {
-    // 数据库中的表明与程序中的保持一致，否则数据库中的表名会以复数的形式命名
-    freezeTableName: true,
-    // 定义表名
-    tableName: 'users',
-    // 表描述
+    tableName: 'user',
     comment: '用户表',
-    timestamps: false,
   });
 
-  return Users;
+  User.associate = function() {
+    // 与Article存在一对多关系，所以是hasMany()
+    app.model.User.hasMany(app.model.Article, { foreignKey: 'article_id', targetKey: 'user_id' });
+    // 与Classify存在一对多关系，所以是hasMany()
+    app.model.User.hasMany(app.model.Classify, { foreignKey: 'classify_id', targetKey: 'user_id' });
+    // 与UserAuths存在一对多关系，所以是hasMany()
+    app.model.User.hasMany(app.model.UserAuths, { foreignKey: 'id', targetKey: 'user_id' });
+  };
+
+  return User;
 };

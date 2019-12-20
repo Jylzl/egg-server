@@ -1,11 +1,10 @@
 'use strict';
 
 module.exports = {
-  // 在执行数据库升级时调用的函数，创建 users 表
+  // 在执行数据库升级时调用的函数，创建 user 表
   up: async (queryInterface, Sequelize) => {
-    const { STRING, CHAR, INTEGER, TINYINT } = Sequelize;
-    await queryInterface.createTable('users', {
-      // 用户ID
+    const { STRING, CHAR, INTEGER, TINYINT, DATE } = Sequelize;
+    await queryInterface.createTable('user', {
       user_id: {
         type: INTEGER(8),
         primaryKey: true,
@@ -13,112 +12,98 @@ module.exports = {
         autoIncrement: true,
         comment: '用户ID',
       },
-      // 用户名
-      user_name: {
+      name: {
         type: STRING(10),
         allowNull: false,
         comment: '用户名',
       },
-      // 密码
-      user_pwd: {
+      pswd: {
         type: CHAR(32),
         allowNull: false,
         comment: '密码',
       },
-      // 手机号码
-      user_phone: {
+      phone: {
         type: CHAR(11),
         allowNull: false,
         comment: '手机号码',
       },
-      // 邮箱号码
-      user_email: {
+      email: {
         type: STRING(320),
         allowNull: false,
         comment: '邮箱号码',
       },
-      // QQ账号
-      user_qq: {
+      qq: {
         type: STRING(11),
         allowNull: true,
         comment: 'QQ账号',
       },
-      // GitHub地址
-      user_github: {
+      github: {
         type: STRING(32),
         allowNull: true,
         comment: 'GitHub地址',
       },
-      // 密保问题编号
-      security_no: {
+      security_id: {
         type: INTEGER(8),
         allowNull: false,
-        comment: '密保问题编号',
+        comment: '密保问题id',
       },
-      // 密保答案
-      user_security_answer: {
+      security_answer: {
         type: STRING(32),
         allowNull: false,
         comment: '密保答案',
       },
-      // 博客称呼
-      user_blog_title: {
+      blog_title: {
         type: STRING(16),
         allowNull: true,
         comment: '博客称呼',
       },
-      // 博客简介
-      user_blog_introduction: {
+      blog_introduction: {
         type: STRING(32),
         allowNull: true,
         comment: '博客简介',
       },
-      // 用户访问量
-      user_view: {
-        type: INTEGER(8),
-        allowNull: false,
-        defaultValue: 0,
-        comment: '用户访问量',
-      },
-      // 用户头像地址
-      user_image_url: {
+      image_url: {
         type: STRING(320),
         allowNull: true,
         comment: '用户头像地址',
       },
-      // 用户头像选择
-      user_image_type: {
+      image_type: {
         type: TINYINT(3),
         allowNull: false,
         comment: '用户头像选择',
       },
-      // 用户注册IP
-      user_register_ip: {
+      register_ip: {
         type: CHAR(16),
         allowNull: false,
         comment: '用户注册IP',
       },
-      // 用户最后登录IP
-      user_last_login_ip: {
+      register_time: {
+        type: DATE,
+        allowNull: false,
+        comment: '用户注册时间',
+      },
+      last_login_ip: {
         type: CHAR(16),
         allowNull: true,
         comment: '用户最后登录IP',
       },
-      // 用户状态: 1表示在线，0离线
-      user_type: {
+      last_login_time: {
+        type: DATE,
+        allowNull: true,
+        comment: '用户最后登录时间',
+      },
+      status: {
         type: TINYINT(1),
         allowNull: false,
         defaultValue: 0,
         comment: '用户状态: 1表示在线，0离线',
       },
-      // 账户状态，0表示正常，1表示锁定
-      user_lock: {
+      login_count: {
         type: TINYINT(1),
         allowNull: false,
         defaultValue: 0,
-        comment: '账户状态，0表示正常，1表示锁定',
+        comment: '用户状态: 1表示在线，0离线',
       },
-      // 用户session_id
       session_id: {
         type: CHAR(32),
         allowNull: true,
@@ -126,8 +111,8 @@ module.exports = {
       },
     });
   },
-  // 在执行数据库降级时调用的函数，删除 users 表
+  // 在执行数据库降级时调用的函数，删除 user 表
   down: async queryInterface => {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('user');
   },
 };
