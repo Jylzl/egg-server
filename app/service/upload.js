@@ -7,7 +7,7 @@ const Service = require('egg').Service;
 class UploadService extends Service {
 
   async create(payload) {
-    return this.ctx.model.Attachment.create(payload);
+    return this.ctx.model.Upload.create(payload);
   }
 
   // 删除资源==destroy============================================================================================>
@@ -17,20 +17,20 @@ class UploadService extends Service {
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     } else {
-      const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id}${attachment.extname}`);
+      const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment.id}${attachment.extname}`);
       fs.unlinkSync(target);
     }
-    return ctx.model.Attachment.findByIdAndRemove(_id);
+    return ctx.model.Upload.findByIdAndRemove(_id);
   }
 
   // update======================================================================================================>
   async updatePre(_id) {
     const { ctx } = this;
-    const attachment = await ctx.service.upload.find(_id);
+    const attachment = await ctx.service.Upload.find(_id);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     } else {
-      const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id}${attachment.extname}`);
+      const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment.id}${attachment.extname}`);
       fs.unlinkSync(target);
     }
     return attachment;
@@ -38,24 +38,24 @@ class UploadService extends Service {
 
   async extra(_id, values) {
     const { ctx } = this;
-    const attachment = await ctx.service.upload.find(_id);
+    const attachment = await ctx.service.Upload.find(_id);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     }
-    return this.ctx.model.Attachment.findByIdAndUpdate(_id, values);
+    return this.ctx.model.Upload.findByIdAndUpdate(_id, values);
   }
 
   async update(_id, values) {
-    return this.ctx.model.Attachment.findByIdAndUpdate(_id, values);
+    return this.ctx.model.Upload.findByIdAndUpdate(_id, values);
   }
 
   // show======================================================================================================>
   async show(_id) {
-    const attachment = await this.ctx.service.upload.find(_id);
+    const attachment = await this.ctx.model.UploadService.find(_id);
     if (!attachment) {
       this.ctx.throw(404, 'attachment not found');
     }
-    return this.ctx.model.Attachment.findById(_id);
+    return this.ctx.model.Upload.findById(_id);
   }
 
   // index======================================================================================================>
@@ -80,43 +80,45 @@ class UploadService extends Service {
     if (isPaging) {
       if (search) {
         if (kind) {
-          res = await this.ctx.model.Attachment.find({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
+          res = await this.ctx.model.Upload.find({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
             .sort({ createdAt: -1 })
             .exec();
         } else {
-          res = await this.ctx.model.Attachment.find({ filename: { $regex: search } }).skip(skip).limit(Number(pageSize))
+          res = await this.ctx.model.Upload.find({ filename: { $regex: search } }).skip(skip).limit(Number(pageSize))
             .sort({ createdAt: -1 })
             .exec();
         }
         totals = res.length;
       } else {
         if (kind) {
-          res = await this.ctx.model.Attachment.find({ extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
+          res = await this.ctx.model.Upload.find({ extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
             .sort({ createdAt: -1 })
             .exec();
-          totals = await this.ctx.model.Attachment.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
+          totals = await this.ctx.model.Upload.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
         } else {
-          res = await this.ctx.model.Attachment.find({}).skip(skip).limit(Number(pageSize))
+          res = await this.ctx.model.Upload.find({}).skip(skip).limit(Number(pageSize))
             .sort({ createdAt: -1 })
             .exec();
-          totals = await this.ctx.model.Attachment.count({}).exec();
+          totals = await this.ctx.model.Upload.count({}).exec();
         }
       }
     } else {
       if (search) {
         if (kind) {
-          res = await this.ctx.model.Attachment.find({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
+          res = await this.ctx.model.Upload.find({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
         } else {
-          res = await this.ctx.model.Attachment.find({ filename: { $regex: search } }).sort({ createdAt: -1 }).exec();
+          res = await this.ctx.model.Upload.find({ filename: { $regex: search } }).sort({ createdAt: -1 }).exec();
         }
         totals = res.length;
       } else {
         if (kind) {
-          res = await this.ctx.model.Attachment.find({ extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
-          totals = await this.ctx.model.Attachment.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
+          res = await this.ctx.model.Upload.find({ extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
+          totals = await this.ctx.model.Upload.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
         } else {
-          res = await this.ctx.model.Attachment.find({}).sort({ createdAt: -1 }).exec();
-          totals = await this.ctx.model.Attachment.count({}).exec();
+          console.log(this.ctx.model.Upload);
+          res = await this.ctx.model.Upload.find();
+          // res = await this.ctx.model.Upload.find({}).sort({ createdAt: -1 }).exec();
+          totals = await this.ctx.model.Upload.count({}).exec();
         }
       }
     }
@@ -133,7 +135,7 @@ class UploadService extends Service {
 
   // Commons======================================================================================================>
   async find(id) {
-    return this.ctx.model.Attachment.findById(id);
+    return this.ctx.model.Upload.findById(id);
   }
 }
 

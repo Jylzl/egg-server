@@ -11,5 +11,6 @@ module.exports = app => {
   const { router, controller } = app;
   router.resources('home', '/', controller.home.render);
   router.resources('users', '/api/users', controller.users);
+  router.resources('uploads', '/api/uploads', controller.uploads);
   app.passport.mount('github');
 };
