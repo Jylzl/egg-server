@@ -3,15 +3,13 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-20 14:29:35
+ * @lastTime: 2019-12-23 13:09:10
  */
 'use strict';
 const assert = require('assert');
 // app.js
 module.exports = app => {
   app.passport.verify(async (ctx, user) => {
-    console.log(user);
-    console.log(user.id);
     // 检查用户
     assert(user.provider, 'user.provider should exists');
     assert(user.id, 'user.id should exists');
@@ -23,10 +21,7 @@ module.exports = app => {
         third_type: user.provider,
       },
     });
-    console.log(auth);
-    // const existsUser = await ctx.model.User.findOne({ id: auth.user_id });
     const existsUser = await ctx.model.User.findByPk(auth.id);
-    console.log(existsUser);
     if (existsUser) {
       return existsUser;
     }
@@ -40,8 +35,8 @@ module.exports = app => {
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
     console.log('user----------------------');
-    console.log(ctx.config.keys);
     console.log(user);
+    ctx.session.sessionid = user.id;
     // return user;
   });
 

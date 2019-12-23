@@ -51,11 +51,11 @@ class UploadService extends Service {
 
   // show======================================================================================================>
   async show(_id) {
-    const attachment = await this.ctx.model.UploadService.find(_id);
+    const attachment = await this.ctx.model.Upload.findByPk(_id);
     if (!attachment) {
       this.ctx.throw(404, 'attachment not found');
     }
-    return this.ctx.model.Upload.findById(_id);
+    return this.ctx.model.Upload.findByPk(_id);
   }
 
   // index======================================================================================================>

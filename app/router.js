@@ -3,14 +3,15 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-19 14:18:47
+ * @lastTime: 2019-12-23 10:01:40
  */
 'use strict';
 
 module.exports = app => {
   const { router, controller } = app;
+  app.passport.mount('github');
   router.resources('home', '/', controller.home.render);
+  router.resources('account', '/api/account', controller.users);
   router.resources('users', '/api/users', controller.users);
   router.resources('uploads', '/api/uploads', controller.uploads);
-  app.passport.mount('github');
 };

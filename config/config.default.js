@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-20 16:08:59
+ * @lastTime: 2019-12-23 14:25:10
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -18,11 +18,25 @@ module.exports = appInfo => {
    * @type {Egg.EggAppConfig}
    **/
   const config = exports = {};
+
+  // jwt
+  config.jwt = {
+    secret: '123456',
+  };
+  // 安全配置 （https://eggjs.org/zh-cn/core/security.html）
   config.security = {
     csrf: {
-      // enable: false,
+      enable: false,
+      ignoreJSON: true,
       headerName: 'x-csrf-token', // 自定义请求头
     },
+    // 允许访问接口的白名单
+    domainWhiteList: [ 'http://localhost:8080' ],
+  };
+  // 跨域配置
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
 
   // use for cookie sign key, should change to your own and keep security

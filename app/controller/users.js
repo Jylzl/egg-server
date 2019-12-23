@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-19 14:17:02
+ * @lastTime: 2019-12-23 09:05:31
  */
 'use strict';
 
@@ -32,13 +32,9 @@ class UserController extends Controller {
 
   // GET:查询指定id
   async show() {
-    const ctx = this.ctx;
-    ctx.status = 200;
-    ctx.body = {
-      code: 200,
-      msg: 'success',
-      data: await ctx.service.user.find(ctx.helper.parseInt(ctx.params.id)),
-    };
+    const { ctx, service } = this;
+    const res = await service.user.find(ctx.helper.parseInt(ctx.params.id));
+    ctx.helper.success(ctx, res);
   }
 
   // POST:创建
