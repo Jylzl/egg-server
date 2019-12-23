@@ -19,13 +19,16 @@ class UploadController extends Controller {
     // 所有表单字段都能通过 `stream.fields` 获取到
     const filename = path.basename(stream.filename); // 文件名称
     const extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
+    console.log(filename);
+    console.log(extname);
     // 组装参数 model
-    const attachment = new this.ctx.model.Attachment();
-    attachment.extname = extname;
-    attachment.filename = filename;
-    attachment.url = `/uploads/${attachment._id.toString()}${extname}`;
+    // const attachment = new ctx.model.Upload();
+    // attachment.extname = extname;
+    // attachment.name = filename;
+    // attachment.url = `/uploads/${attachment.id.toString()}${extname}`;
     // 组装参数 stream
-    const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${attachment.extname}`);
+    // const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment.id.toString()}${attachment.extname}`);
+    const target = path.join(this.config.baseDir, 'app/public/uploads', `${filename}${extname}`);
     const writeStream = fs.createWriteStream(target);
     // 文件处理，上传到云存储等等
     try {

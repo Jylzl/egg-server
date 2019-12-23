@@ -8,7 +8,22 @@
 'use strict';
 const assert = require('assert');
 // app.js
+const LocalStrategy = require('passport-local').Strategy;
+
 module.exports = app => {
+  // 挂载 strategy
+  app.passport.use(new LocalStrategy({
+    passReqToCallback: true,
+  }, (req, username, password, done) => {
+    // format user
+    const user = {
+      provider: 'local',
+      username,
+      password,
+    };
+    app.passport.doVerify(req, user, done);
+  }));
+
   app.passport.verify(async (ctx, user) => {
     // 检查用户
     assert(user.provider, 'user.provider should exists');

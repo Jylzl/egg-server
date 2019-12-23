@@ -10,9 +10,9 @@
 const Controller = require('egg').Controller;
 
 const createRule = {
-  user_name: 'string',
-  user_pwd: 'string',
-  user_phone: 'string',
+  name: 'string',
+  pswd: 'string',
+  phone: 'string',
 };
 
 class UserController extends Controller {
@@ -34,23 +34,20 @@ class UserController extends Controller {
   async show() {
     const { ctx, service } = this;
     const res = await service.user.find(ctx.helper.parseInt(ctx.params.id));
-    ctx.helper.success(ctx, res);
+    ctx.helper.success({ ctx, res });
   }
 
   // POST:创建
   async create() {
-    const ctx = this.ctx;
+    const { ctx, service } = this;
     console.log('ctx.csrf');
     console.log(ctx.csrf);
+    console.log(ctx.request.body);
     // 校验 `ctx.request.body` 是否符合我们预期的格式
     // 如果参数校验未通过，将会抛出一个 status = 422 的异常
     ctx.validate(createRule, ctx.request.body);
-    ctx.status = 201;
-    ctx.body = {
-      code: 200,
-      msg: 'success',
-      data: await ctx.service.user.create(ctx.request.body),
-    };
+    const res = await service.user.create(ctx.request.body);
+    ctx.helper.success({ ctx, res });
   }
 
   // PUT:修改指定id
