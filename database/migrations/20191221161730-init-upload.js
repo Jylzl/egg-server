@@ -22,6 +22,11 @@ module.exports = {
         allowNull: false,
         comment: '文件扩展名',
       },
+      mimeType: {
+        type: CHAR(16),
+        allowNull: false,
+        comment: '文件类型',
+      },
       size: {
         type: INTEGER(64),
         allowNull: false,

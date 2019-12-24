@@ -26,7 +26,11 @@ class Userervice extends Service {
   async find(id) {
     const { ctx } = this;
     const result = await ctx.model.User.findByPk(id);
-    return result;
+    if (!result) {
+      ctx.throw(404, 'user not found');
+    } else {
+      return result;
+    }
   }
 
   // 封装统一的调用检查函数，可以在查询、创建和更新等 Service 中复用

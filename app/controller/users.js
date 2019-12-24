@@ -18,16 +18,13 @@ const createRule = {
 class UserController extends Controller {
   // GET:查询所有
   async index() {
-    const ctx = this.ctx;
+    const { ctx, service } = this;
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
     };
-    ctx.body = {
-      code: 200,
-      msg: 'success',
-      data: await ctx.service.user.list(query),
-    };
+    const res = await service.user.list(query);
+    ctx.helper.success({ ctx, res });
   }
 
   // GET:查询指定id
@@ -40,9 +37,6 @@ class UserController extends Controller {
   // POST:创建
   async create() {
     const { ctx, service } = this;
-    console.log('ctx.csrf');
-    console.log(ctx.csrf);
-    console.log(ctx.request.body);
     // 校验 `ctx.request.body` 是否符合我们预期的格式
     // 如果参数校验未通过，将会抛出一个 status = 422 的异常
     ctx.validate(createRule, ctx.request.body);
@@ -52,21 +46,23 @@ class UserController extends Controller {
 
   // PUT:修改指定id
   async update() {
-    const ctx = this.ctx;
+    const { ctx, service } = this;
     const id = ctx.helper.parseInt(ctx.params.id);
     const body = ctx.request.body;
-    ctx.body = await ctx.service.user.update({
+    const res = await service.user.update({
       id,
       updates: body,
     });
+    ctx.helper.success({ ctx, res });
   }
 
   // DELETE:删除指定id
   async destroy() {
-    const ctx = this.ctx;
+    const { ctx, service } = this;
     const id = ctx.helper.parseInt(ctx.params.id);
+    const res = await service.user.del(id);
     await ctx.service.user.del(id);
-    ctx.status = 200;
+    ctx.helper.success({ ctx, res });
   }
 }
 

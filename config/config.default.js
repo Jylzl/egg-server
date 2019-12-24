@@ -92,6 +92,9 @@ module.exports = appInfo => {
     // proxy: false,
   };
 
+  // config.multipart = {
+  //   mode: 'file',
+  // };
 
   // add your user config here
   const userConfig = {

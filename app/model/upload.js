@@ -8,7 +8,7 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, CHAR, INTEGER, DATE } = app.Sequelize;
+  const { STRING, CHAR, INTEGER, DATE, NOW } = app.Sequelize;
 
   const Upload = app.model.define('upload', {
     upload_id: {
@@ -28,6 +28,11 @@ module.exports = app => {
       allowNull: false,
       comment: '文件扩展名',
     },
+    mimeType: {
+      type: CHAR(16),
+      allowNull: false,
+      comment: '文件类型',
+    },
     size: {
       type: INTEGER(64),
       allowNull: false,
@@ -42,11 +47,13 @@ module.exports = app => {
       type: DATE,
       allowNull: false,
       comment: '创建时间',
+      defaultValue: NOW,
     },
     update_time: {
       type: DATE,
       allowNull: false,
       comment: '修改时间',
+      defaultValue: NOW,
     },
   }, {
     tableName: 'upload',
