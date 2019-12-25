@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "a blog server",
   "private": true,
   "egg": {
     "declarations": true
@@ -46,15 +46,18 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "migrate:new": "egg-sequelize migration:create --name init",
+    "migrate:up": "egg-sequelize db:migrate",
+    "migrate:down": "egg-sequelize db:migrate:undo"
   },
   "ci": {
     "version": "10"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Jylzl/egg-server"
   },
-  "author": "",
+  "author": "lizilong<94648929@qq.com>",
   "license": "MIT"
 }
