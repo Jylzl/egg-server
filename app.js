@@ -27,23 +27,37 @@ module.exports = app => {
   app.passport.verify(async (ctx, user) => {
     // 检查用户
     assert(user.provider, 'user.provider should exists');
-    assert(user.id, 'user.id should exists');
-
+    assert(user.username, 'user.username should exists');
+    let existsUser;
     // 从数据库中查找用户信息
-    const auth = await ctx.model.UserAuths.findOne({
-      where: {
-        third_key: user.id,
-        third_type: user.provider,
-      },
-    });
-    const existsUser = await ctx.model.User.findByPk(auth.id);
-    if (existsUser) {
+    console.log('user');
+    console.log(user);
+
+    if (user.provider === 'local') {
+      existsUser = await ctx.service.account.login({
+        user: user.username,
+        pswd: user.password,
+      });
+      console.log(existsUser);
+      // existsUser = await ctx.model.User.findOne({
+      //   name: 'lizilong',
+      //   pswd: 'long1234',
+      // });
+    } else {
+      const auth = await ctx.model.UserAuths.findOne({
+        where: {
+          name: user.username,
+          pswd: user.password,
+        },
+      });
+      existsUser = await ctx.model.User.findByPk(auth.id);
+    }
+
+    if (!existsUser) {
+      ctx.throw(401, 'Wrong user name or password');
+    } else {
       return existsUser;
     }
-    // 调用 service 注册新用户
-    const newUser = await app.mysql.insert('user', user);
-    // const newUser = await ctx.service.user.register(user);
-    return newUser;
   });
 
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
