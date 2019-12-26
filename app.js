@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-23 13:09:10
+ * @lastTime: 2019-12-26 13:08:56
  */
 'use strict';
 const assert = require('assert');
@@ -31,14 +31,14 @@ module.exports = app => {
     let existsUser;
     // 从数据库中查找用户信息
     console.log('user');
-    console.log(user);
+    // console.log(user);
 
     if (user.provider === 'local') {
       existsUser = await ctx.service.account.login({
         user: user.username,
         pswd: user.password,
       });
-      console.log(existsUser);
+      // console.log(existsUser);
       // existsUser = await ctx.model.User.findOne({
       //   name: 'lizilong',
       //   pswd: 'long1234',
@@ -64,15 +64,17 @@ module.exports = app => {
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
     console.log('user----------------------');
-    console.log(user);
+    // console.log(user);
     ctx.session.sessionid = user.id;
-    // return user;
+    return user;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
     // 处理 user
     // ...
-    // return user;
+    // console.log(ctx);
+    // console.log(user);
+    return user;
   });
 };
