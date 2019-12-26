@@ -8,14 +8,19 @@
 'use strict';
 
 module.exports = app => {
-  const { router, controller } = app;
-  app.passport.mount('github');
+  const {
+    router,
+    controller,
+  } = app;
+  app.passport.mount('github', {
+    loginURL: '/api/account/github',
+    successRedirect: '/api/uploads',
+  });
   router.resources('home', '/', controller.home.render);
-  // router.resources('account', '/api/account', controller.users);
   // 登录校验
-  router.post('account', '/api/account/login', app.passport.authenticate('local'));
-
-  // router.post('account', '/api/account/login', controller.account.login);
+  router.post('account', '/api/account/login', app.passport.authenticate('local', {
+    successRedirect: '/api/users',
+  }));
   router.resources('users', '/api/users', controller.users);
   router.resources('uploads', '/api/uploads', controller.uploads);
 };
