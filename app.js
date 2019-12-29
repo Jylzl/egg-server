@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-26 13:08:56
+ * @lastTime: 2019-12-29 17:41:11
  */
 'use strict';
 const assert = require('assert');
@@ -48,7 +48,7 @@ module.exports = app => {
     }
 
     if (!existsUser) {
-      ctx.throw(401, 'Wrong user name or password');
+      ctx.throw(201, 'Wrong user name or password');
     } else {
       return existsUser;
     }
@@ -57,7 +57,8 @@ module.exports = app => {
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
-    ctx.session.sessionid = user.user.session_id;
+    console.log(user);
+    ctx.session.sessionid = user.session_id;
     return user;
   });
 

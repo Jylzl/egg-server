@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-23 14:25:10
+ * @lastTime: 2019-12-29 17:31:32
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -31,7 +31,7 @@ module.exports = appInfo => {
       headerName: 'x-csrf-token', // 自定义请求头
     },
     // 允许访问接口的白名单
-    domainWhiteList: [ 'http://localhost:8080' ],
+    domainWhiteList: [ '*' ],
   };
   // 跨域配置
   config.cors = {
