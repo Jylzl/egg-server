@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-29 17:31:32
+ * @lastTime: 2020-07-30 18:29:30
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -23,6 +23,15 @@ module.exports = appInfo => {
   config.jwt = {
     secret: '123456',
   };
+
+  // 不需要验证token的路由
+  config.routerAuth = [ '/passport/github', '/passport/github/callback' ];
+
+  // 静态资源地址
+  config.assets = {
+    publicPath: '/public/',
+  };
+
   // 安全配置 （https://eggjs.org/zh-cn/core/security.html）
   config.security = {
     csrf: {
@@ -33,6 +42,7 @@ module.exports = appInfo => {
     // 允许访问接口的白名单
     domainWhiteList: [ '*' ],
   };
+
   // 跨域配置
   config.cors = {
     origin: '*',
@@ -43,7 +53,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1576679752309_3203';
 
   // add your middleware config here
-  config.middleware = [ 'errorHandler', 'gzip' ];
+  config.middleware = [ 'errorHandler', 'gzip', 'jwtErr' ];
 
   // 配置 gzip 中间件的配置
   config.gzip = {
@@ -59,6 +69,7 @@ module.exports = appInfo => {
     // validateRoot: false,
   };
 
+  // 数据库配置
   config.sequelize = {
     dialect: 'mysql', // 数据库类型
     host: '39.108.161.110', // host
@@ -85,6 +96,7 @@ module.exports = appInfo => {
     },
   };
 
+  // GitHub登录
   config.passportGithub = {
     key: 'acfcd0190ec95436f272',
     secret: '4a2a59ff108b6b915010ac085cfb8cd38bf00bde',
@@ -92,6 +104,12 @@ module.exports = appInfo => {
     // proxy: false,
   };
 
+  // session自更新
+  config.session = {
+    renew: true,
+  };
+
+  // 文件上传,注意使用stream流方式需要把之前配置里的multipart删掉，这两种方法不能一起用，否则会报错。
   // config.multipart = {
   //   mode: 'file',
   // };

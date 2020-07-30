@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-23 09:15:11
+ * @lastTime: 2020-07-30 15:21:20
  */
 'use strict';
 
@@ -28,5 +28,17 @@ module.exports = {
       msg,
     };
     ctx.status = 200;
+  },
+  // 处理失败响应
+  error({ ctx, res = null, msg = 'fail' }) {
+    ctx.body = {
+      code: 201,
+      data: res,
+      msg,
+    };
+    ctx.status = 200;
+  },
+  formatTime() {
+    return '1';
   },
 };

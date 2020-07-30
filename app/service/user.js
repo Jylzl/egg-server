@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-25 08:46:06
+ * @lastTime: 2020-07-30 16:44:03
  */
 'use strict';
 
@@ -17,15 +17,34 @@ class Userervice extends Service {
     return result;
   }
 
-  async list(query) {
+  async index(query) {
     const { ctx } = this;
-    const result = await ctx.model.User.findAll(query);
+    const { currentPage, pageSize } = query;
+    console.log(pageSize);
+    let result = [];
+    if (pageSize) {
+      const _offset = (currentPage - 1) * pageSize;
+      result = await ctx.model.User.findAndCountAll({
+        // offet去掉前多少个数据
+        offset: _offset,
+        // limit每页数据数量
+        limit: pageSize,
+      }, {
+        attributes: { exclude: [ 'pswd' ] },
+      });
+    } else {
+      result = await ctx.model.User.findAll({
+        attributes: { exclude: [ 'pswd' ] },
+      });
+    }
     return result;
   }
 
   async find(id) {
     const { ctx } = this;
-    const result = await ctx.model.User.findByPk(id);
+    const result = await ctx.model.User.findByPk(id, {
+      attributes: { exclude: [ 'pswd' ] },
+    });
     if (!result) {
       ctx.throw(404, 'user not found');
     } else {

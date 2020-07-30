@@ -1,9 +1,9 @@
 /**
- * @description: Description
+ * @description: 第三方登录关联表
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:55:05
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-20 10:41:15
+ * @lastTime: 2020-07-30 09:39:30
  */
 'use strict';
 
@@ -23,12 +23,12 @@ module.exports = app => {
       allowNull: false,
       comment: '关联user用户id',
     },
-    third_key: {
+    uid: {
       type: CHAR(32),
       allowNull: false,
       comment: '三方登陆唯一标识',
     },
-    third_type: {
+    provider: {
       type: CHAR(10),
       allowNull: false,
       comment: '三方登陆类型',
@@ -37,6 +37,11 @@ module.exports = app => {
     tableName: 'user_auths',
     comment: '第三方登陆',
   });
+
+  UserAuths.associate = function() {
+    // 与UserAuths存在一对多关系，所以是hasMany()
+    app.model.UserAuths.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'id' });
+  };
 
   return UserAuths;
 };

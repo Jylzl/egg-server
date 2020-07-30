@@ -8,34 +8,53 @@ const sendToWormhole = require('stream-wormhole');
 const download = require('image-downloader');
 const moment = require('moment');
 moment().format();
+// 上传基础目录
+const uplaodBasePath = 'app/public/uploads/';
 
 class UploadController extends Controller {
 
-  // 上传单个文件
+  // 单文件上传
   async create() {
     const {
       ctx,
       service,
     } = this;
-    // 要通过 ctx.getFileStream 便捷的获取到用户上传的文件，需要满足两个条件：
-    // 只支持上传一个文件。
-    // 上传文件必须在所有其他的 fields 后面，否则在拿到文件流时可能还获取不到 fields。
+    /**
+     * 要通过 ctx.getFileStream 便捷的获取到用户上传的文件，需要满足两个条件：
+     * 只支持上传一个文件。
+     * 上传文件必须在所有其他的 fields 后面，否则在拿到文件流时可能还获取不到 fields
+     */
     const stream = await ctx.getFileStream();
-    // 所有表单字段都能通过 `stream.fields` 获取到
+    const res = await service.upload.create(stream);
+    // 设置响应内容和响应状态码
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  // 修改单个文件
+  async update() {
+    const {
+      ctx,
+      service,
+    } = this;
+    // 组装参数
+    const {
+      id,
+    } = ctx.params; // 传入要修改的文档ID
+    // 调用Service 删除旧文件，如果存在
+    const attachment = await service.upload.updatePre(id);
+    // 获取用户上传的替换文件
+    const stream = await ctx.getFileStream();
+    const extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
     const filename = path.basename(stream.filename); // 文件名称
-    const _extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
-    const _mimeType = stream.mimeType; // 文件类型
-    // 上传基础目录
-    const uplaodBasePath = 'app/public/uploads/';
-    // 生成文件名
-    const file = Date.now() + '' + Number.parseInt(Math.random() * 10000) + _extname;
-    // 生成文件夹
-    const dirName = moment(Date.now()).format('YYYYMM');
-    // 判断文件夹是否存在
-    if (!fs.existsSync(uplaodBasePath + dirName)) fs.mkdirSync(path.join(this.config.baseDir, uplaodBasePath, dirName));
-    // 创建文件
-    const target = path.join(this.config.baseDir, uplaodBasePath, dirName, file);
-    const writeStream = fs.createWriteStream(target);
+    // 组装更新参数
+    attachment.extname = extname;
+    attachment.filename = filename;
+    attachment.url = `/uploads/${attachment._id.toString()}${extname}`;
+    const target_U = path.join(this.config.baseDir, uplaodBasePath, `${attachment._id}${extname}`);
+    const writeStream = fs.createWriteStream(target_U);
     // 文件处理，上传到云存储等等
     try {
       await awaitWriteStream(stream.pipe(writeStream));
@@ -44,18 +63,11 @@ class UploadController extends Controller {
       await sendToWormhole(stream);
       throw err;
     }
-    // 调用 Service 进行业务处理
-    const res = await service.upload.create({
-      name: filename,
-      extname: _extname,
-      mimeType: _mimeType,
-      size: 11,
-      url: `/public/uploads/${dirName}/${file}`,
-    });
+    // 调用Service 保持原图片ID不变，更新其他属性
+    await service.upload.update(id, attachment);
     // 设置响应内容和响应状态码
     ctx.helper.success({
       ctx,
-      res,
     });
   }
 
@@ -75,7 +87,7 @@ class UploadController extends Controller {
     const extname = path.extname(url).toLowerCase(); // 文件扩展名称
     const options = {
       url: _url,
-      dest: path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${extname}`),
+      dest: path.join(this.config.baseDir, uplaodBasePath, `${attachment._id.toString()}${extname}`),
     };
     let res;
     try {
@@ -134,7 +146,7 @@ class UploadController extends Controller {
         attachment.filename = filename;
         attachment.url = `/uploads/${attachment._id.toString()}${extname}`;
         // const target = path.join(this.config.baseDir, 'app/public/uploads', filename)
-        const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${extname}`);
+        const target = path.join(this.config.baseDir, uplaodBasePath, `${attachment._id.toString()}${extname}`);
         const writeStream = fs.createWriteStream(target);
         // 文件处理，上传到云存储等等
         try {
@@ -170,44 +182,6 @@ class UploadController extends Controller {
     } = ctx.params;
     // 调用 Service 进行业务处理
     await service.upload.destroy(id);
-    // 设置响应内容和响应状态码
-    ctx.helper.success({
-      ctx,
-    });
-  }
-
-  // 修改单个文件
-  async update() {
-    const {
-      ctx,
-      service,
-    } = this;
-    // 组装参数
-    const {
-      id,
-    } = ctx.params; // 传入要修改的文档ID
-    // 调用Service 删除旧文件，如果存在
-    const attachment = await service.upload.updatePre(id);
-    // 获取用户上传的替换文件
-    const stream = await ctx.getFileStream();
-    const extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
-    const filename = path.basename(stream.filename); // 文件名称
-    // 组装更新参数
-    attachment.extname = extname;
-    attachment.filename = filename;
-    attachment.url = `/uploads/${attachment._id.toString()}${extname}`;
-    const target_U = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id}${extname}`);
-    const writeStream = fs.createWriteStream(target_U);
-    // 文件处理，上传到云存储等等
-    try {
-      await awaitWriteStream(stream.pipe(writeStream));
-    } catch (err) {
-      // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
-      await sendToWormhole(stream);
-      throw err;
-    }
-    // 调用Service 保持原图片ID不变，更新其他属性
-    await service.upload.update(id, attachment);
     // 设置响应内容和响应状态码
     ctx.helper.success({
       ctx,
@@ -258,9 +232,12 @@ class UploadController extends Controller {
       service,
     } = this;
     // 组装参数
-    const payload = ctx.query;
+    const query = {
+      currentPage: ctx.helper.parseInt(ctx.query.currentPage),
+      pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+    };
     // 调用 Service 进行业务处理
-    const res = await service.upload.index(payload);
+    const res = await service.upload.index(query);
     // 设置响应内容和响应状态码
     ctx.helper.success({
       ctx,

@@ -1,9 +1,9 @@
 /**
- * @description: Description
+ * @description: 第三方登录关联表
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 09:30:26
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-20 09:55:23
+ * @lastTime: 2020-07-30 09:20:59
  */
 'use strict';
 
@@ -24,12 +24,12 @@ module.exports = {
         allowNull: false,
         comment: '关联user用户id',
       },
-      third_key: {
+      uid: {
         type: CHAR(32),
         allowNull: false,
         comment: '三方登陆唯一标识',
       },
-      third_type: {
+      provider: {
         type: CHAR(10),
         allowNull: false,
         comment: '三方登陆类型',

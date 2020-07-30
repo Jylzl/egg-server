@@ -1,3 +1,10 @@
+/**
+ * @description: 附件表
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2020-07-29 17:56:24
+ * @LastAuthor: lizlong
+ * @lastTime: 2020-07-30 08:44:06
+ */
 'use strict';
 
 module.exports = {
@@ -5,7 +12,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const { STRING, CHAR, INTEGER, DATE } = Sequelize;
     await queryInterface.createTable('upload', {
-      upload_id: {
+      id: {
         type: INTEGER(8),
         primaryKey: true,
         allowNull: false,
@@ -15,7 +22,7 @@ module.exports = {
       name: {
         type: STRING(64),
         allowNull: false,
-        comment: '附件',
+        comment: '附件原名称',
       },
       extname: {
         type: CHAR(8),

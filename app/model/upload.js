@@ -1,9 +1,9 @@
 /**
- * @description: 附件数据模型
+ * @description: 附件表
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 18:15:34
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-20 18:23:38
+ * @lastTime: 2020-07-30 08:44:16
  */
 'use strict';
 
@@ -11,7 +11,7 @@ module.exports = app => {
   const { STRING, CHAR, INTEGER, DATE, NOW } = app.Sequelize;
 
   const Upload = app.model.define('upload', {
-    upload_id: {
+    id: {
       type: INTEGER(8),
       primaryKey: true,
       allowNull: false,
@@ -21,7 +21,7 @@ module.exports = app => {
     name: {
       type: STRING(64),
       allowNull: false,
-      comment: '附件',
+      comment: '附件原名称',
     },
     extname: {
       type: CHAR(8),

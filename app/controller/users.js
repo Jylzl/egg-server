@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-23 09:05:31
+ * @lastTime: 2020-07-30 16:45:30
  */
 'use strict';
 
@@ -20,10 +20,10 @@ class UserController extends Controller {
   async index() {
     const { ctx, service } = this;
     const query = {
-      limit: ctx.helper.parseInt(ctx.query.limit),
-      offset: ctx.helper.parseInt(ctx.query.offset),
+      currentPage: ctx.helper.parseInt(ctx.query.currentPage),
+      pageSize: ctx.helper.parseInt(ctx.query.pageSize),
     };
-    const res = await service.user.list(query);
+    const res = await service.user.index(query);
     ctx.helper.success({ ctx, res });
   }
 

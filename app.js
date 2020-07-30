@@ -3,73 +3,61 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2019-12-30 11:53:20
+ * @lastTime: 2020-07-30 18:09:42
  */
 'use strict';
 const assert = require('assert');
-// app.js
+const ms = require('ms');
+const { decode } = require('querystring');
 const LocalStrategy = require('passport-local').Strategy;
 
 module.exports = app => {
-  // 挂载 strategy
-  app.passport.use(new LocalStrategy({
-    passReqToCallback: true,
-  }, (req, username, password, done) => {
-    const user = {
-      provider: 'local',
-      username,
-      password,
-    };
-    console.log('1=========================');
-    app.passport.doVerify(req, user, done);
-  }));
+  app.once('server', server => {
+    // websocket
+  });
+  app.on('error', (err, ctx) => {
+    // report error
+  });
+  app.on('request', ctx => {
+    // log receive request
+  });
+  app.on('response', ctx => {
+    // ctx.starttime is set by framework
+    const used = Date.now() - ctx.starttime;
+    // log total cost
+  });
 
+  // 检查用户
   app.passport.verify(async (ctx, user) => {
-    // 检查用户
-    console.log('2=========================');
-
     assert(user.provider, 'user.provider should exists');
-
-    let existsUser;
-    // 从数据库中查找用户信息
-    if (user.provider === 'local') {
-      console.log('local-------------');
-      assert(user.username, 'user.username should exists');
-      assert(user.password, 'user.password should exists');
-      existsUser = await ctx.service.account.login({
-        user: user.username,
-        pswd: user.password,
-      });
-    } else {
-      console.log('other-------------');
-      assert(user.id, 'user.id should exists');
-      existsUser = await ctx.model.UserAuths.findOne({
-        third_type: user.provider,
-        third_key: user.id,
-      });
-    }
-
-    if (!existsUser) {
-      ctx.throw(401, 'Wrong user name or password');
-    } else {
-      return existsUser;
-    }
+    assert(user.id, 'user.id should exists');
+    const existsUser = await ctx.service.account.tLogin({
+      uid: user.id,
+      provider: user.provider,
+    });
+    return existsUser;
   });
 
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
-    console.log('3=========================');
-
-    console.log(user);
-    const token = app.jwt.sign({ id: user.user_id, name: user.name }, app.config.jwt.secret);
-    ctx.session.sessionid = token;
-    return user;
+    const token = app.jwt.sign({ id: user.id }, app.config.jwt.secret);
+    console.log(token);
+    ctx.session.user = token;
+    ctx.set({ authorization: token });
+    return user.id;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
     // 处理 user
-    return user;
+    const token = ctx.request.header.authorization || ctx.session.user;
+    console.log(token);
+    console.log(ctx.session.user);
+    const decode = ctx.app.jwt.verify(token, app.config.jwt.secret);
+    console.log('0--------------');
+    console.log(decode);
+    const existsUser = await ctx.service.user.find(decode.id);
+    return existsUser;
   });
 };
