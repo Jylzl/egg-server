@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 12:04:56
+ * @lastTime: 2020-07-31 18:01:33
  */
 'use strict';
 
@@ -28,7 +28,13 @@ class AccountController extends Controller {
     const {
       ctx,
     } = this;
+    console.log('=============================================1');
+    console.log(ctx.session.token);
+    console.log(ctx.session.user);
+    console.log(ctx.user);
+    console.log(ctx.isAuthenticated());
     if (ctx.isAuthenticated()) {
+      console.log('=============================================2');
       const res = ctx.user;
       ctx.helper.success({
         ctx,

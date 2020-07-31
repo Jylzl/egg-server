@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 11:49:50
+ * @lastTime: 2020-07-31 17:12:57
  */
 'use strict';
 
@@ -22,26 +22,35 @@ class AccountService extends Service {
         uid: params.uid,
         provider: params.provider,
       },
-      include: [{ model: ctx.model.User, attributes: { exclude: [ 'pswd' ] } }],
+      // include: [{ model: ctx.model.User, attributes: { exclude: [ 'pswd' ] } }],
     });
-    if (!result) {
+    const result1 = await ctx.model.User.findOne({
+      where: {
+        id: result.user_id,
+      },
+      attributes: { exclude: [ 'pswd' ] },
+    });
+    if (!result1) {
       ctx.throw(403, 'Wrong user name or password');
     } else {
-      return result;
+      return result1;
     }
   }
+
+  // 账户密码登录
   async login(params) {
     const {
       ctx,
     } = this;
     const result = await ctx.model.User.findOne({
       where: {
-        name: params.user,
-        pswd: params.pswd,
+        name: params.username,
+        pswd: params.password,
       },
+      attributes: { exclude: [ 'pswd' ] },
     });
     if (!result) {
-      ctx.throw(401, 'Wrong user name or password');
+      ctx.throw(403, 'Wrong user name or password');
     } else {
       return result;
     }
@@ -52,7 +61,7 @@ class AccountService extends Service {
       ctx,
     } = this;
     console.log('=============================================1');
-    return ctx.user;
+    return ctx.session.token;
   }
 }
 
