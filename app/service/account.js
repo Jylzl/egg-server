@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-31 17:12:57
+ * @lastTime: 2020-08-03 18:30:20
  */
 'use strict';
 
@@ -16,7 +16,6 @@ class AccountService extends Service {
     const {
       ctx,
     } = this;
-    console.log(params);
     const result = await ctx.model.UserAuths.findOne({
       where: {
         uid: params.uid,
@@ -60,7 +59,6 @@ class AccountService extends Service {
     const {
       ctx,
     } = this;
-    console.log('=============================================1');
     return ctx.session.token;
   }
 }

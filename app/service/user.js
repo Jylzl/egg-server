@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 16:44:03
+ * @lastTime: 2020-08-03 16:41:35
  */
 'use strict';
 
@@ -20,7 +20,6 @@ class Userervice extends Service {
   async index(query) {
     const { ctx } = this;
     const { currentPage, pageSize } = query;
-    console.log(pageSize);
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;

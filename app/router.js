@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-31 17:11:27
+ * @lastTime: 2020-08-03 14:31:11
  */
 'use strict';
 
@@ -11,6 +11,7 @@ module.exports = app => {
   const {
     router,
     controller,
+    jwt,
   } = app;
   // 挂载鉴权路由
   // 登录校验
@@ -22,8 +23,10 @@ module.exports = app => {
   router.get('/passport/local/callback', controller.account.authCallback);
 
   router.get('/api/logout', controller.account.logout);
+  router.post('/account/login', controller.account.login);
+  router.get('/account/getperms', jwt, controller.account.getPerms);
   // 用户模块
-  router.resources('users', '/api/users', app.jwt, controller.users);
+  router.resources('users', '/api/users', jwt, controller.users);
   // 附件模块
-  router.resources('uploads', '/api/uploads', app.jwt, controller.uploads);
+  router.resources('uploads', '/api/uploads', jwt, controller.uploads);
 };

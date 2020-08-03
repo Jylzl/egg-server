@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-31 18:11:51
+ * @lastTime: 2020-08-03 18:27:09
  */
 'use strict';
 const assert = require('assert');
@@ -37,8 +37,6 @@ module.exports = app => {
       username,
       password,
     };
-    console.log('11111111111111111112');
-    console.log(user);
     // debug('%s %s get user: %j', req.method, req.url, user);
     app.passport.doVerify(req, user, done);
   }));
@@ -67,26 +65,14 @@ module.exports = app => {
     // 处理 user
     const token = app.jwt.sign({ id: user.id }, app.config.jwt.secret);
     console.log('将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段');
-    // console.log(user);
-    console.log(token);
-    ctx.session.user = token;
-    // ctx.set({ authorization: token });
-    // console.log(user);
-    return user;
+    return token;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
-    // 处理 user
-    // const token = ctx.session.token;
-    const decode = ctx.app.jwt.verify(user, app.config.jwt.secret);
-
     console.log('反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息');
-    console.log(user);
-    console.log(decode);
-    // console.log(token);
-    // console.log(decode);
-    // const existsUser = await ctx.service.user.find(decode.id);
-    return user;
+    const decode = ctx.app.jwt.verify(user, app.config.jwt.secret);
+    const existsUser = await ctx.service.user.find(decode.id);
+    return existsUser;
   });
 };

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-31 17:11:16
+ * @lastTime: 2020-08-03 15:14:20
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -25,7 +25,7 @@ module.exports = appInfo => {
   };
 
   // 不需要验证token的路由
-  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/uploads' ];
+  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/uploads', '/api/logout' ];
 
   // 静态资源地址
   config.assets = {
@@ -54,6 +54,7 @@ module.exports = appInfo => {
 
   // add your middleware config here
   // config.middleware = [ 'errorHandler', 'gzip', 'jwtErr' ];
+  // config.middleware = [ 'errorHandler', 'gzip', 'jwtInterceptor' ];
   config.middleware = [ 'errorHandler', 'gzip', 'jwtInterceptor' ];
 
   // 配置 gzip 中间件的配置

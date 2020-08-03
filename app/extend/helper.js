@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-31 08:40:38
+ * @lastTime: 2020-08-03 15:30:14
  */
 'use strict';
 
@@ -43,6 +43,14 @@ module.exports = {
     ctx.body = {
       code: 201,
       data: res,
+      msg,
+    };
+    ctx.status = 200;
+  },
+  // token信息无效
+  noPermission({ ctx, msg = 'invalid token' }) {
+    ctx.body = {
+      code: 401,
       msg,
     };
     ctx.status = 200;
