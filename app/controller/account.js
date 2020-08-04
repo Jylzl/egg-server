@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 15:16:06
+ * @lastTime: 2020-08-04 12:54:47
  */
 'use strict';
 
@@ -25,7 +25,7 @@ class AccountController extends Controller {
         },
       });
     } else {
-      ctx.helper.error({
+      ctx.helper.success({
         ctx,
       });
     }

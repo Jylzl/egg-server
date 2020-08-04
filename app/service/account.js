@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 18:30:20
+ * @lastTime: 2020-08-04 13:11:40
  */
 'use strict';
 
@@ -18,7 +18,7 @@ class AccountService extends Service {
     } = this;
     const result = await ctx.model.UserAuths.findOne({
       where: {
-        uid: params.uid,
+        uid: params.id,
         provider: params.provider,
       },
       // include: [{ model: ctx.model.User, attributes: { exclude: [ 'pswd' ] } }],
