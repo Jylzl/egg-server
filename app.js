@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-04 13:12:31
+ * @lastTime: 2020-08-06 16:13:28
  */
 'use strict';
 const assert = require('assert');
@@ -43,8 +43,8 @@ module.exports = app => {
 
   // 检查用户
   app.passport.verify(async (ctx, user) => {
-    let existsUser = {};
     console.log('检查用户');
+    let existsUser = {};
     if (user.provider === 'local') {
       // 本地登录
       assert(user.username, 'user.username should exists');
@@ -56,22 +56,36 @@ module.exports = app => {
       assert(user.id, 'user.id should exists');
       existsUser = await ctx.service.account.tLogin(user);
     }
-    return existsUser;
+    return existsUser ? existsUser : false;
   });
 
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
-    const token = app.jwt.sign({ id: user.id }, app.config.jwt.secret);
+    // const token = app.jwt.sign({ id: user.id }, app.config.jwt.secret);
     console.log('将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段');
-    return token;
+    console.log(user);
+    // ctx.session.user = token;
+    // ctx.login(user);
+    // console.log(ctx.user);
+    // console.log(ctx.isAuthenticated());
+    return user;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
     console.log('反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息');
-    const decode = ctx.app.jwt.verify(user, app.config.jwt.secret);
-    const existsUser = await ctx.service.user.find(decode.id);
-    return existsUser;
+    console.log(user);
+    return user;
+    // console.log(ctx.isAuthenticated());
+    // console.log(ctx.query);
+    // console.log(user);
+    // console.log('user');
+    // // console.log(user);
+    // const token = ctx.headers.authorization ? ctx.headers.authorization.substring(7) : '' || ctx.query.access_token || '';
+    // const decode = ctx.app.jwt.verify(token, app.config.jwt.secret);
+    // console.log(decode);
+    // const existsUser = await ctx.service.user.find(decode.id);
+    // return existsUser;
   });
 };

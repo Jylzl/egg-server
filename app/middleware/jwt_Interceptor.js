@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-30 17:01:11
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 15:32:09
+ * @lastTime: 2020-08-06 16:17:32
  */
 'use strict';
 
@@ -15,12 +15,17 @@ module.exports = (options, app) => {
     const url = ctx.url.replace(/\?.*/, '');
     // 判断当前路由是否需要验证token
     const flag = routerAuth.includes(url);
-    const token = ctx.headers.authorization ? ctx.headers.authorization.substring(7) : '';
+    // 从请求头里面或者url参数里面获取token
+    const token = ctx.headers.authorization ? ctx.headers.authorization.substring(7) : '' || ctx.query.access_token || '';
+    console.log(token);
     if (flag) {
       await next();
     } else {
       if (token) {
-        if (ctx.isAuthenticated()) {
+        const decode = ctx.app.jwt.verify(token, app.config.jwt.secret);
+        console.log(decode);
+        const existsUser = await ctx.service.user.find(decode.id);
+        if (existsUser) {
           try {
             // 解码token
             const decode = ctx.app.jwt.verify(token, options.secret);

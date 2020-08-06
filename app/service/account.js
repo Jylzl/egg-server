@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-04 13:11:40
+ * @lastTime: 2020-08-06 11:56:11
  */
 'use strict';
 
@@ -48,11 +48,7 @@ class AccountService extends Service {
       },
       attributes: { exclude: [ 'pswd' ] },
     });
-    if (!result) {
-      ctx.throw(403, 'Wrong user name or password');
-    } else {
-      return result;
-    }
+    return result;
   }
 
   async authCallback() {

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 15:14:20
+ * @lastTime: 2020-08-06 18:21:14
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -25,7 +25,7 @@ module.exports = appInfo => {
   };
 
   // 不需要验证token的路由
-  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/uploads', '/api/logout' ];
+  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/uploads', '/api/logout', '/account/login' ];
 
   // 静态资源地址
   config.assets = {

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 15:30:14
+ * @lastTime: 2020-08-06 15:51:20
  */
 'use strict';
 
@@ -41,7 +41,7 @@ module.exports = {
   // 处理失败响应
   fail({ ctx, res = null, msg = 'fail' }) {
     ctx.body = {
-      code: 201,
+      code: -200,
       data: res,
       msg,
     };
