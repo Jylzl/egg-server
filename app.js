@@ -3,27 +3,29 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-06 16:13:28
+ * @lastTime: 2020-08-10 10:47:43
  */
 'use strict';
 const assert = require('assert');
-const ms = require('ms');
-const { decode } = require('querystring');
 const LocalStrategy = require('passport-local').Strategy;
 
 module.exports = app => {
+  // eslint-disable-next-line no-unused-vars
   app.once('server', server => {
     // websocket
   });
+  // eslint-disable-next-line no-unused-vars
   app.on('error', (err, ctx) => {
     // report error
   });
+  // eslint-disable-next-line no-unused-vars
   app.on('request', ctx => {
     // log receive request
   });
+  // eslint-disable-next-line no-unused-vars
   app.on('response', ctx => {
     // ctx.starttime is set by framework
-    const used = Date.now() - ctx.starttime;
+    // const used = Date.now() - ctx.starttime;
     // log total cost
   });
 
@@ -62,30 +64,16 @@ module.exports = app => {
   // 将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段
   app.passport.serializeUser(async (ctx, user) => {
     // 处理 user
-    // const token = app.jwt.sign({ id: user.id }, app.config.jwt.secret);
     console.log('将用户信息序列化后存进 session 里面，一般需要精简，只保存个别字段');
-    console.log(user);
-    // ctx.session.user = token;
-    // ctx.login(user);
-    // console.log(ctx.user);
-    // console.log(ctx.isAuthenticated());
+    // console.log(user);
     return user;
   });
 
   // 反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息
   app.passport.deserializeUser(async (ctx, user) => {
+    // 处理 user
     console.log('反序列化后把用户信息从 session 中取出来，反查数据库拿到完整信息');
-    console.log(user);
-    return user;
-    // console.log(ctx.isAuthenticated());
-    // console.log(ctx.query);
     // console.log(user);
-    // console.log('user');
-    // // console.log(user);
-    // const token = ctx.headers.authorization ? ctx.headers.authorization.substring(7) : '' || ctx.query.access_token || '';
-    // const decode = ctx.app.jwt.verify(token, app.config.jwt.secret);
-    // console.log(decode);
-    // const existsUser = await ctx.service.user.find(decode.id);
-    // return existsUser;
+    return user;
   });
 };

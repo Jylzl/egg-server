@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-06 15:51:20
+ * @lastTime: 2020-08-10 18:17:22
  */
 'use strict';
 
@@ -19,6 +19,36 @@ module.exports = {
     if (typeof string === 'number') return string;
     if (!string) return string;
     return parseInt(string) || 0;
+  },
+  // 数组转树结构数组
+  translateDataToTree(sNodes, key, parentKey, childKey) {
+    let i;
+    let l;
+    key = key || 'id';
+    parentKey = parentKey || 'pId';
+    childKey = childKey || 'children';
+    if (!key || key === '' || !sNodes) return [];
+    if (Object.prototype.toString.call(sNodes) === '[object Array]') {
+      const r = [];
+      const tmpMap = [];
+      for (i = 0, l = sNodes.length; i < l; i++) {
+        tmpMap[sNodes[i][key]] = sNodes[i];
+      }
+      for (i = 0, l = sNodes.length; i < l; i++) {
+        if (tmpMap[sNodes[i][parentKey]] && sNodes[i][key] !== sNodes[i][parentKey]) {
+          if (!tmpMap[sNodes[i][parentKey]][childKey]) {
+            tmpMap[sNodes[i][parentKey]][childKey] = [];
+          }
+          tmpMap[sNodes[i][parentKey]][childKey].push(sNodes[i]);
+        } else {
+          r.push(sNodes[i]);
+        }
+      }
+      return r;
+    // eslint-disable-next-line no-else-return
+    } else {
+      return [ sNodes ];
+    }
   },
   // 处理成功响应
   success({ ctx, res = null, msg = 'success' }) {
