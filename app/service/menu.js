@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-11 09:41:01
+ * @lastTime: 2020-08-11 21:34:05
  */
 'use strict';
 
@@ -61,7 +61,12 @@ class MenueService extends Service {
         },
       });
     } else {
-      result = await ctx.model.Menu.findAll({ raw: true });
+      result = await ctx.model.Menu.findAll({
+        where: {
+          type: 2,
+        },
+        raw: true,
+      });
       result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
     }
     return result;
