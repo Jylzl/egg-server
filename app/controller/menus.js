@@ -1,9 +1,16 @@
 /**
- * @description: Description
+ * @description: 菜单
+ * GET	/menus	menus	app.controllers.menus.index
+ * GET	/menus/new	new_post	app.controllers.menus.new
+ * GET	/menus/:id	post	app.controllers.menus.show
+ * GET	/menus/:id/edit	edit_post	app.controllers.menus.edit
+ * POST	/menus	menus	app.controllers.menus.create
+ * PUT	/menus/:id	post	app.controllers.menus.update
+ * DELETE	/menus/:id	post	app.controllers.menus.destroy
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 18:31:09
+ * @lastTime: 2020-08-11 09:31:42
  */
 'use strict';
 
@@ -92,24 +99,24 @@ class MenuController extends Controller {
   async update() {
     const {
       ctx,
+      service,
     } = this;
+    const res = await service.menu.update(ctx.request.body);
     ctx.helper.success({
       ctx,
-      res: {
-        a: 111,
-      },
+      res,
     });
   }
 
   async destroy() {
     const {
       ctx,
+      service,
     } = this;
+    const res = await service.menu.destroy(ctx.params);
     ctx.helper.success({
       ctx,
-      res: {
-        a: 111,
-      },
+      res,
     });
   }
 }

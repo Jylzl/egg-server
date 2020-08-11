@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 18:17:22
+ * @lastTime: 2020-08-11 09:42:53
  */
 'use strict';
 
@@ -45,7 +45,7 @@ module.exports = {
         }
       }
       return r;
-    // eslint-disable-next-line no-else-return
+      // eslint-disable-next-line no-else-return
     } else {
       return [ sNodes ];
     }
