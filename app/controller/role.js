@@ -1,31 +1,32 @@
 /**
- * @description: 菜单
- * GET	/menus	menus	app.controllers.menus.index
- * GET	/menus/new	new_post	app.controllers.menus.new
- * GET	/menus/:id	post	app.controllers.menus.show
- * GET	/menus/:id/edit	edit_post	app.controllers.menus.edit
- * POST	/menus	menus	app.controllers.menus.create
- * PUT	/menus/:id	post	app.controllers.menus.update
- * DELETE	/menus/:id	post	app.controllers.menus.destroy
+ * @description: 角色
+ * GET	/role	role	app.controllers.role.index
+ * GET	/role/new	new_post	app.controllers.role.new
+ * GET	/role/:id	post	app.controllers.role.show
+ * GET	/role/:id/edit	edit_post	app.controllers.role.edit
+ * POST	/role	role	app.controllers.role.create
+ * PUT	/role/:id	post	app.controllers.role.update
+ * DELETE	/role/:id	post	app.controllers.role.destroy
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-11 09:31:42
+ * @lastTime: 2020-08-12 10:46:59
  */
 'use strict';
 
 const Controller = require('egg').Controller;
 
-class MenuController extends Controller {
+class RoleController extends Controller {
   async index() {
     const {
       ctx,
       service,
     } = this;
     const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
+      currentPage: ctx.helper.parseInt(ctx.query.currentPage),
+      pageSize: ctx.helper.parseInt(ctx.query.pageSize),
     };
-    const res = await service.menu.index(query);
+    const res = await service.role.index(query);
     ctx.helper.success({
       ctx,
       res,
@@ -44,28 +45,12 @@ class MenuController extends Controller {
     });
   }
 
-  async tree() {
-    const {
-      ctx,
-      service,
-    } = this;
-    const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
-      lazy: ctx.query.lazy,
-    };
-    const res = await service.menu.tree(query);
-    ctx.helper.success({
-      ctx,
-      res,
-    });
-  }
-
   async create() {
     const {
       ctx,
       service,
     } = this;
-    const res = await service.menu.create(ctx.request.body);
+    const res = await service.role.create(ctx.request.body);
     ctx.helper.success({
       ctx,
       res,
@@ -101,7 +86,7 @@ class MenuController extends Controller {
       ctx,
       service,
     } = this;
-    const res = await service.menu.update(ctx.request.body);
+    const res = await service.role.update(ctx.request.body);
     ctx.helper.success({
       ctx,
       res,
@@ -113,7 +98,7 @@ class MenuController extends Controller {
       ctx,
       service,
     } = this;
-    const res = await service.menu.destroy(ctx.params);
+    const res = await service.role.destroy(ctx.params);
     ctx.helper.success({
       ctx,
       res,
@@ -121,4 +106,4 @@ class MenuController extends Controller {
   }
 }
 
-module.exports = MenuController;
+module.exports = RoleController;

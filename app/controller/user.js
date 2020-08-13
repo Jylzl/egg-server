@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 16:45:30
+ * @lastTime: 2020-08-12 14:38:53
  */
 'use strict';
 
@@ -39,6 +39,7 @@ class UserController extends Controller {
     const { ctx, service } = this;
     // 校验 `ctx.request.body` 是否符合我们预期的格式
     // 如果参数校验未通过，将会抛出一个 status = 422 的异常
+    console.log(ctx.request.body);
     ctx.validate(createRule, ctx.request.body);
     const res = await service.user.create(ctx.request.body);
     ctx.helper.success({ ctx, res });
@@ -46,14 +47,15 @@ class UserController extends Controller {
 
   // PUT:修改指定id
   async update() {
-    const { ctx, service } = this;
-    const id = ctx.helper.parseInt(ctx.params.id);
-    const body = ctx.request.body;
-    const res = await service.user.update({
-      id,
-      updates: body,
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.user.update(ctx.request.body);
+    ctx.helper.success({
+      ctx,
+      res,
     });
-    ctx.helper.success({ ctx, res });
   }
 
   // DELETE:删除指定id

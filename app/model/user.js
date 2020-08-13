@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 08:43:43
+ * @lastTime: 2020-08-12 14:12:28
  */
 'use strict';
 
@@ -23,10 +23,20 @@ module.exports = app => {
       allowNull: false,
       comment: '用户名',
     },
+    real_name: {
+      type: STRING(10),
+      allowNull: false,
+      comment: '真实姓名',
+    },
     pswd: {
       type: CHAR(32),
       allowNull: false,
       comment: '密码',
+    },
+    id_card: {
+      type: CHAR(18),
+      allowNull: false,
+      comment: '身份证号码',
     },
     phone: {
       type: CHAR(11),
@@ -53,19 +63,14 @@ module.exports = app => {
       allowNull: true,
       comment: '用户头像地址',
     },
-    image_type: {
-      type: TINYINT(3),
-      allowNull: false,
-      comment: '用户头像类型',
-    },
     register_ip: {
       type: CHAR(16),
-      allowNull: false,
+      allowNull: true,
       comment: '用户注册IP',
     },
     register_time: {
       type: DATE,
-      allowNull: false,
+      allowNull: true,
       comment: '用户注册时间',
     },
     last_login_ip: {
@@ -102,6 +107,8 @@ module.exports = app => {
 
   User.associate = function() {
     // 与UserAuths存在一对多关系，所以是hasMany()
+    app.model.User.hasMany(app.model.UserAuths, { foreignKey: 'id', targetKey: 'user_id' });
+    app.model.User.hasMany(app.model.UserRole, { foreignKey: 'id', targetKey: 'user_id' });
     app.model.User.hasMany(app.model.UserAuths, { foreignKey: 'id', targetKey: 'user_id' });
   };
 

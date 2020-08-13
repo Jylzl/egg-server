@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-03 16:41:35
+ * @lastTime: 2020-08-13 11:06:03
  */
 'use strict';
 
@@ -13,7 +13,29 @@ class Userervice extends Service {
 
   async create(params) {
     const { ctx } = this;
+    console.log(params);
     const result = await ctx.model.User.create(params);
+    return result;
+  }
+
+  async update(params) {
+    const { ctx } = this;
+    console.log(params);
+    const result = await ctx.model.User.update(params, {
+      where: {
+        id: params.id,
+      },
+    });
+    return result;
+  }
+
+  async destroy(params) {
+    const { ctx } = this;
+    const result = await ctx.model.User.destroy({
+      where: {
+        id: params.id,
+      },
+    });
     return result;
   }
 
@@ -28,7 +50,6 @@ class Userervice extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
-      }, {
         attributes: { exclude: [ 'pswd' ] },
       });
     } else {

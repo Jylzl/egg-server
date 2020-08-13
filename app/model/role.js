@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-11 22:19:44
+ * @lastTime: 2020-08-12 09:16:08
  */
 'use strict';
 
@@ -28,7 +28,7 @@ module.exports = app => {
       allowNull: false,
       comment: '角色标识',
     },
-    describe: {
+    desc: {
       type: STRING(200),
       allowNull: false,
       comment: '角色描述',
@@ -37,6 +37,12 @@ module.exports = app => {
     tableName: 'role',
     comment: '角色表',
   });
+
+
+  Role.associate = function() {
+    // 与RoleMenu存在一对多关系，所以是hasMany()
+    app.model.Role.hasMany(app.model.RoleMenu, { foreignKey: 'id', targetKey: 'role_id' });
+  };
 
   return Role;
 };
