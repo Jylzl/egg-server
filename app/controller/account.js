@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 11:51:05
+ * @lastTime: 2020-08-14 11:30:24
  */
 'use strict';
 
@@ -64,14 +64,22 @@ class AccountController extends Controller {
     const {
       ctx,
     } = this;
-    ctx.helper.success({
-      ctx,
-      res: {
-        user: ctx.user || {},
-        menus: [],
-        perms: [],
-      },
-    });
+    if (ctx.isAuthenticated()) {
+      ctx.helper.success({
+        ctx,
+        res: {
+          user: ctx.user || {},
+          menus: [],
+          perms: [],
+        },
+      });
+    } else {
+      ctx.helper.noPermission({
+        ctx,
+        msg: '身份过期,重新登录',
+      });
+    }
+
   }
 
   // 退出登录

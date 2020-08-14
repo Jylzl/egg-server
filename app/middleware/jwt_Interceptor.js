@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-30 17:01:11
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 14:44:54
+ * @lastTime: 2020-08-14 11:32:47
  */
 'use strict';
 
@@ -23,29 +23,13 @@ module.exports = (options, app) => {
     } else {
       if (token) {
         try {
-          // 解码token
-          const decode = ctx.app.jwt.verify(token, options.secret);
-          if (!decode) {
-            ctx.helper.noPermission({
-              ctx,
-              msg: '没有权限，请登录',
-            });
-          }
-          if (Date.now() - decode.expire > 0) {
+          if (!ctx.isAuthenticated()) {
             ctx.helper.noPermission({
               ctx,
               msg: '身份过期,重新登录',
             });
-          }
-          const existsUser = await ctx.service.user.find(decode.id);
-          if (existsUser) {
-            await next();
           } else {
-            ctx.helper.noPermission({
-              ctx,
-              msg: '身份过期,重新登录',
-            });
-            return;
+            await next();
           }
         } catch (error) {
           ctx.helper.noPermission({
