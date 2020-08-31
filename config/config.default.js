@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 10:57:55
+ * @lastTime: 2020-08-19 10:17:18
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -35,7 +35,7 @@ module.exports = appInfo => {
   // 安全配置 （https://eggjs.org/zh-cn/core/security.html）
   config.security = {
     csrf: {
-      enable: false,
+      enable: true,
       ignoreJSON: true,
       headerName: 'x-csrf-token', // 自定义请求头
     },
