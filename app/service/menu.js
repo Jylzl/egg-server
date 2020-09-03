@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-11 21:34:05
+ * @lastTime: 2020-09-03 09:12:33
  */
 'use strict';
 
@@ -63,7 +63,7 @@ class MenueService extends Service {
     } else {
       result = await ctx.model.Menu.findAll({
         where: {
-          type: 2,
+          type: [ 1, 2 ],
         },
         raw: true,
       });
