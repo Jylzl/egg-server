@@ -19,6 +19,7 @@ class UploadService extends Service {
     const { ctx } = this;
     // 项目路径
     const baseDir = this.config.baseDir;
+    console.log(stream.filename);
     // 所有表单字段都能通过 `stream.fields` 获取到
     const filename = path.basename(stream.filename); // 文件名称
     const _extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
