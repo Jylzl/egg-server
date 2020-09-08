@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-04 16:51:16
+ * @lastTime: 2020-09-08 08:44:44
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -25,7 +25,7 @@ module.exports = appInfo => {
   };
 
   // 不需要验证token的路由
-  config.routerAuth = ['/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/logout', '/account/login'];
+  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/logout', '/account/login' ];
 
   // 静态资源地址
   config.assets = {
@@ -36,11 +36,10 @@ module.exports = appInfo => {
   config.security = {
     csrf: {
       enable: true,
-      ignoreJSON: true,
       headerName: 'x-csrf-token', // 自定义请求头
     },
     // 允许访问接口的白名单
-    domainWhiteList: ['http://127.0.0.1:8082'],
+    domainWhiteList: [ 'http://127.0.0.1:8082' ],
   };
 
   // 跨域配置
@@ -56,7 +55,7 @@ module.exports = appInfo => {
   // add your middleware config here
   // config.middleware = [ 'errorHandler', 'gzip', 'jwtErr' ];
   // config.middleware = [ 'errorHandler', 'gzip', 'jwtInterceptor' ];
-  config.middleware = ['jwtInterceptor', 'errorHandler', 'gzip'];
+  config.middleware = [ 'jwtInterceptor', 'errorHandler', 'gzip' ];
 
   // 配置 gzip 中间件的配置
   config.gzip = {
