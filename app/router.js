@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-13 09:20:18
+ * @lastTime: 2020-09-28 00:04:10
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { account, user, role, dept, upload, menu } = controller;
+  const { account, user, role, dept, area, upload, menu } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -30,6 +30,9 @@ module.exports = app => {
   router.resources('user', '/api/user', jwt, user);
   // 角色模块
   router.resources('role', '/api/role', jwt, role);
+  // 地区模块
+  router.get('/api/area/tree', jwt, area.tree);
+  router.resources('area', '/api/area', jwt, area);
   // 部门模块
   router.get('/api/dept/tree', jwt, dept.tree);
   router.resources('dept', '/api/dept', jwt, dept);
