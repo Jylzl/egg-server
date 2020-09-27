@@ -7,9 +7,9 @@
     "declarations": true
   },
   "dependencies": {
-    "acorn": "^7.3.1",
+    "acorn": "^7.4.0",
     "await-stream-ready": "^1.0.1",
-    "egg": "^2.27.0",
+    "egg": "^2.28.0",
     "egg-bcrypt": "^1.1.0",
     "egg-cors": "^2.2.3",
     "egg-jwt": "^3.1.7",
@@ -19,18 +19,18 @@
     "egg-sequelize": "^5.2.2",
     "egg-validate": "^2.0.2",
     "image-downloader": "^4.0.1",
-    "moment": "^2.27.0",
-    "mysql2": "^2.1.0",
+    "moment": "^2.28.0",
+    "mysql2": "^2.2.3",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
     "egg-bin": "^4.15.0",
-    "egg-ci": "^1.15.0",
-    "egg-mock": "^4.0.0",
-    "eslint": "^7.5.0",
-    "eslint-config-egg": "^8.0.1",
+    "egg-ci": "^1.18.0",
+    "egg-mock": "^4.0.1",
+    "eslint": "^7.9.0",
+    "eslint-config-egg": "^8.1.2",
     "sequelize-cli": "^6.2.0"
   },
   "engines": {
