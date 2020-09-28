@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-08 08:44:44
+ * @lastTime: 2020-09-28 12:44:13
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -25,7 +25,7 @@ module.exports = appInfo => {
   };
 
   // 不需要验证token的路由
-  config.routerAuth = [ '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/logout', '/account/login' ];
+  config.routerAuth = [ '/public/uploads', '/uploads', '/passport/github', '/passport/github/callback', '/passport/local', '/passport/local/callback', '/api/logout', '/account/login' ];
 
   // 静态资源地址
   config.assets = {
@@ -37,6 +37,11 @@ module.exports = appInfo => {
     csrf: {
       enable: true,
       headerName: 'x-csrf-token', // 自定义请求头
+      ignore: ctx => {
+        if (ctx.request.url === '/account/login') {
+          return true;
+        }
+      },
     },
     // 允许访问接口的白名单
     domainWhiteList: [ 'http://127.0.0.1:8082' ],
