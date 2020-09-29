@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-10 16:53:05
+ * @lastTime: 2020-09-29 11:10:53
  */
 'use strict';
 
@@ -37,6 +37,11 @@ module.exports = app => {
       type: STRING(200),
       allowNull: false,
       comment: '菜单路径',
+    },
+    rurl: {
+      type: STRING(200),
+      allowNull: false,
+      comment: '重定向路径',
     },
     type: {
       type: TINYINT(1),
