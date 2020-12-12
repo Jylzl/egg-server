@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-30 17:01:11
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-14 11:32:47
+ * @lastTime: 2020-12-09 15:23:13
  */
 'use strict';
 
@@ -18,6 +18,7 @@ module.exports = (options, app) => {
     // 从请求头里面或者url参数里面获取token
     const token = ctx.headers.authorization ? ctx.headers.authorization.substring(7) : '' || ctx.query.access_token || '';
     console.log('路由拦截器' + url);
+    console.log('路由拦截器' + token);
     if (flag) {
       await next();
     } else {
@@ -26,7 +27,7 @@ module.exports = (options, app) => {
           if (!ctx.isAuthenticated()) {
             ctx.helper.noPermission({
               ctx,
-              msg: '身份过期,重新登录',
+              msg: '身份过期,重新登录1',
             });
           } else {
             await next();

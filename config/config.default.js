@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-28 12:44:13
+ * @lastTime: 2020-12-09 12:02:34
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -79,10 +79,10 @@ module.exports = appInfo => {
   // 数据库配置
   config.sequelize = {
     dialect: 'mysql', // 数据库类型
-    host: '39.108.161.110', // host
+    host: 'localhost', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
-    password: '929924', // 密码
+    password: 'root', // 密码
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {
