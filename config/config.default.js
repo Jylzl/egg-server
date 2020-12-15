@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-09 12:02:34
+ * @lastTime: 2020-12-15 09:34:26
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -38,7 +38,7 @@ module.exports = appInfo => {
       enable: true,
       headerName: 'x-csrf-token', // 自定义请求头
       ignore: ctx => {
-        if (ctx.request.url === '/account/login') {
+        if (ctx.request.url === '/passport/local') {
           return true;
         }
       },
