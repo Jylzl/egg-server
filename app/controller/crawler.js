@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-10 22:50:01
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 17:43:42
+ * @lastTime: 2020-12-16 23:39:34
  */
 'use strict';
 
@@ -18,6 +18,15 @@ class CrawlerController extends Controller {
       list: res,
       total: res.length,
     };
+  }
+  async getColumn() {
+    const { ctx, service } = this;
+    const query = {
+      currentPage: ctx.helper.parseInt(ctx.query.currentPage),
+      pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+    };
+    const res = await service.crawler.getColumn(query);
+    ctx.helper.success({ ctx, res });
   }
 
   async article() {

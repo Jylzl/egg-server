@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:12:29
+ * @lastTime: 2020-12-16 23:34:01
  */
 'use strict';
 
@@ -42,6 +42,8 @@ module.exports = app => {
   // 附件模块
   router.resources('upload', '/api/upload', jwt, upload);
   // 采集任务模块
-  router.get('/crawler/column', crawler.column);
-  router.get('/crawler/article', crawler.article);
+  router.get('/api/crawler/column', crawler.getColumn);
+  router.post('/api/crawler/column', crawler.column);
+  router.get('/api/crawler/article', crawler.article);
+  router.post('/api/crawler/article', crawler.article);
 };
