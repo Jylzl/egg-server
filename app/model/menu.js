@@ -3,14 +3,14 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-29 11:10:53
+ * @lastTime: 2020-12-16 18:02:03
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
 
-  const Menu = app.model.define('user', {
+  const Menu = app.model.define('menu', {
     id: {
       type: INTEGER(8),
       primaryKey: true,
@@ -56,12 +56,6 @@ module.exports = app => {
       type: STRING(100),
       comment: '图标',
     },
-    delete: {
-      type: TINYINT(1),
-      allowNull: false,
-      defaultValue: 0,
-      comment: '删除: （1删除 0否）',
-    },
     vidible: {
       type: TINYINT(1),
       allowNull: false,
@@ -85,6 +79,9 @@ module.exports = app => {
       allowNull: false,
       comment: '排序号',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'menu',
     comment: '菜单表',

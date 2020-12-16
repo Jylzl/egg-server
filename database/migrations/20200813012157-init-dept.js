@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: Do not edit
+ * @lastTime: 2020-12-16 18:01:00
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, TINYINT } = Sequelize;
+    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('dept', {
       id: {
         type: INTEGER(8),
@@ -54,6 +54,9 @@ module.exports = {
         allowNull: false,
         comment: '排序号',
       },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
 

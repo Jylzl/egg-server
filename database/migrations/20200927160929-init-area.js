@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-28 00:28:32
+ * @lastTime: 2020-12-16 18:00:06
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, TINYINT } = Sequelize;
+    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('area', {
       id: {
         type: INTEGER(8),
@@ -27,7 +27,7 @@ module.exports = {
       parent_id: {
         type: INTEGER(8),
         allowNull: false,
-        comment: '父地区ID：顶级为-1',
+        comment: '父部门ID：顶级为-1',
       },
       name: {
         type: STRING(64),
@@ -54,6 +54,9 @@ module.exports = {
         allowNull: false,
         comment: '排序号',
       },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
 

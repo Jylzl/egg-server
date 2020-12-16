@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 09:16:08
+ * @lastTime: 2020-12-16 17:57:09
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER } = app.Sequelize;
+  const { STRING, INTEGER, DATE } = app.Sequelize;
 
   const Role = app.model.define('role', {
     id: {
@@ -33,6 +33,9 @@ module.exports = app => {
       allowNull: false,
       comment: '角色描述',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'role',
     comment: '角色表',

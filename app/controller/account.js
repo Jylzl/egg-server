@@ -62,14 +62,16 @@ class AccountController extends Controller {
   // 获取权限
   async getPerms() {
     const {
-      ctx,
+      ctx, service,
     } = this;
+    const menus = await service.account.menusByUser(ctx.user);
+    const perms = await service.account.permsByUser(ctx.user);
     ctx.helper.success({
       ctx,
       res: {
         user: ctx.user || {},
-        menus: [],
-        perms: [],
+        menus,
+        perms,
       },
     });
   }

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-29 11:11:18
+ * @lastTime: 2020-12-16 18:02:40
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, TINYINT } = Sequelize;
+    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('menu', {
       id: {
         type: INTEGER(8),
@@ -62,12 +62,6 @@ module.exports = {
         type: STRING(100),
         comment: '图标',
       },
-      delete: {
-        type: TINYINT(1),
-        allowNull: false,
-        defaultValue: 0,
-        comment: '删除: （1删除 0否）',
-      },
       vidible: {
         type: TINYINT(1),
         allowNull: false,
@@ -91,6 +85,9 @@ module.exports = {
         allowNull: false,
         comment: '排序号',
       },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
 

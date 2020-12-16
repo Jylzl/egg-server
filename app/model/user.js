@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 14:12:28
+ * @lastTime: 2020-12-16 18:32:59
  */
 'use strict';
 
@@ -100,16 +100,19 @@ module.exports = app => {
       allowNull: true,
       comment: '用户session_id',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'user',
     comment: '用户表',
   });
 
   User.associate = function() {
-    // 与UserAuths存在一对多关系，所以是hasMany()
-    app.model.User.hasMany(app.model.UserAuths, { foreignKey: 'id', targetKey: 'user_id' });
+    // 与UserAuth存在一对多关系，所以是hasMany()
+    app.model.User.hasMany(app.model.UserAuth, { foreignKey: 'id', targetKey: 'user_id' });
     app.model.User.hasMany(app.model.UserRole, { foreignKey: 'id', targetKey: 'user_id' });
-    app.model.User.hasMany(app.model.UserAuths, { foreignKey: 'id', targetKey: 'user_id' });
+    app.model.User.hasMany(app.model.UserAuth, { foreignKey: 'id', targetKey: 'user_id' });
   };
 
   return User;

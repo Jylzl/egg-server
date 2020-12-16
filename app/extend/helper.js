@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-11 09:42:53
+ * @lastTime: 2020-12-16 18:15:04
  */
 'use strict';
 
@@ -87,5 +87,18 @@ module.exports = {
   },
   formatTime() {
     return '1';
+  },
+  moment(date, type) {
+    return moment(date).format(type || 'YYYY-MM-DD HH:mm:ss');
+  },
+  urlSplicing(baseUrl, url) {
+    let _url = '';
+    // 如果是绝对路径直接返回
+    if (url.startsWith('http')) {
+      _url = url;
+    } else {
+      _url = new URL(url, baseUrl).href;
+    }
+    return _url;
   },
 };

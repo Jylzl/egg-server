@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:56:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-07 10:31:37
+ * @lastTime: 2020-12-16 18:04:18
  */
 'use strict';
 
@@ -44,16 +44,9 @@ module.exports = {
         allowNull: false,
         comment: '资源地址',
       },
-      create_time: {
-        type: DATE,
-        allowNull: false,
-        comment: '创建时间',
-      },
-      update_time: {
-        type: DATE,
-        allowNull: false,
-        comment: '修改时间',
-      },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
   // 在执行数据库降级时调用的函数，删除 upload 表

@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-28 10:47:48
+ * @lastTime: 2020-12-16 17:56:12
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
 
   const Area = app.model.define('area', {
     id: {
@@ -48,6 +48,9 @@ module.exports = app => {
       allowNull: false,
       comment: '排序号',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'area',
     comment: '地区表',

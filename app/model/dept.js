@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-13 09:00:56
+ * @lastTime: 2020-12-16 17:56:30
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
 
   const Dept = app.model.define('dept', {
     id: {
@@ -48,6 +48,9 @@ module.exports = app => {
       allowNull: false,
       comment: '排序号',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'dept',
     comment: '部门表',

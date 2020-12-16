@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 18:15:34
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-07 10:31:04
+ * @lastTime: 2020-12-16 17:57:48
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, CHAR, INTEGER, DATE, NOW } = app.Sequelize;
+  const { STRING, CHAR, INTEGER, DATE } = app.Sequelize;
 
   const Upload = app.model.define('upload', {
     id: {
@@ -43,18 +43,9 @@ module.exports = app => {
       allowNull: false,
       comment: '资源地址',
     },
-    create_time: {
-      type: DATE,
-      allowNull: false,
-      comment: '创建时间',
-      defaultValue: NOW,
-    },
-    update_time: {
-      type: DATE,
-      allowNull: false,
-      comment: '修改时间',
-      defaultValue: NOW,
-    },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
     tableName: 'upload',
     comment: '附件表',

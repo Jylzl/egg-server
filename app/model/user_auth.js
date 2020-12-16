@@ -3,14 +3,14 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:55:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 09:39:30
+ * @lastTime: 2020-12-16 18:09:51
  */
 'use strict';
 
 module.exports = app => {
-  const { CHAR, INTEGER } = app.Sequelize;
+  const { CHAR, INTEGER, DATE } = app.Sequelize;
 
-  const UserAuths = app.model.define('user_auths', {
+  const UserAuth = app.model.define('user_auth', {
     id: {
       type: INTEGER(8),
       primaryKey: true,
@@ -33,15 +33,18 @@ module.exports = app => {
       allowNull: false,
       comment: '三方登陆类型',
     },
+    created_at: DATE,
+    deleted_at: DATE,
+    updated_at: DATE,
   }, {
-    tableName: 'user_auths',
+    tableName: 'user_auth',
     comment: '第三方登陆',
   });
 
-  UserAuths.associate = function() {
-    // 与UserAuths存在一对多关系，所以是hasMany()
-    app.model.UserAuths.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'id' });
+  UserAuth.associate = function() {
+    // 与UserAuth存在一对多关系，所以是hasMany()
+    app.model.UserAuth.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'id' });
   };
 
-  return UserAuths;
+  return UserAuth;
 };

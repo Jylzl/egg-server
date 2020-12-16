@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-15 09:34:26
+ * @lastTime: 2020-12-16 17:48:52
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -86,10 +86,10 @@ module.exports = appInfo => {
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {
-      timestamps: false, // 添加create,update,delete时间戳
+      timestamps: true, // 添加create,update,delete时间戳
       paranoid: true, // 添加软删除
       freezeTableName: true, // 防止修改表名为复数
-      underscored: false, // 防止驼峰式字段被默认转为下划线
+      underscored: true, // 防止驼峰式字段被默认转为下划线
     },
     timezone: '+08:00', // 由于orm用的UTC时间，这里必须加上东八区，否则取出来的时间相差8小时
     dialectOptions: { // 让读取date类型数据时返回字符串而不是UTC时间

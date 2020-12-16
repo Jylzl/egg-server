@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-06 11:56:11
+ * @lastTime: 2020-12-16 18:24:22
  */
 'use strict';
 
@@ -16,7 +16,7 @@ class AccountService extends Service {
     const {
       ctx,
     } = this;
-    const result = await ctx.model.UserAuths.findOne({
+    const result = await ctx.model.UserAuth.findOne({
       where: {
         uid: params.id,
         provider: params.provider,
@@ -56,6 +56,33 @@ class AccountService extends Service {
       ctx,
     } = this;
     return ctx.session.token;
+  }
+
+  async menusByUser() {
+    const {
+      ctx,
+    } = this;
+    let result = await ctx.model.Menu.findAll({
+      where: {
+        type: [ 1, 2 ],
+      },
+      raw: true,
+    });
+    result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
+    return result;
+  }
+
+  async permsByUser() {
+    const {
+      ctx,
+    } = this;
+    const result = await ctx.model.Menu.findAll({
+      where: {
+        type: [ 3 ],
+      },
+      raw: true,
+    });
+    return result;
   }
 }
 

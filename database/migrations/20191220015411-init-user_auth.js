@@ -3,15 +3,15 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 09:30:26
  * @LastAuthor: lizlong
- * @lastTime: 2020-07-30 09:20:59
+ * @lastTime: 2020-12-16 18:08:44
  */
 'use strict';
 
 module.exports = {
-  // 在执行数据库升级时调用的函数，创建 user_auths 表
+  // 在执行数据库升级时调用的函数，创建 user_auth 表
   up: async (queryInterface, Sequelize) => {
-    const { CHAR, INTEGER } = Sequelize;
-    await queryInterface.createTable('user_auths', {
+    const { CHAR, INTEGER, DATE } = Sequelize;
+    await queryInterface.createTable('user_auth', {
       id: {
         type: INTEGER(8),
         primaryKey: true,
@@ -34,10 +34,13 @@ module.exports = {
         allowNull: false,
         comment: '三方登陆类型',
       },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
-  // 在执行数据库降级时调用的函数，删除 user_auths 表
+  // 在执行数据库降级时调用的函数，删除 user_auth 表
   down: async queryInterface => {
-    await queryInterface.dropTable('user_auths');
+    await queryInterface.dropTable('user_auth');
   },
 };

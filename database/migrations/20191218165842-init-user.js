@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:59:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 14:28:18
+ * @lastTime: 2020-12-16 18:33:11
  */
 'use strict';
 
@@ -101,6 +101,9 @@ module.exports = {
         allowNull: true,
         comment: '用户session_id',
       },
+      created_at: DATE,
+      deleted_at: DATE,
+      updated_at: DATE,
     });
   },
   // 在执行数据库降级时调用的函数，删除 user 表

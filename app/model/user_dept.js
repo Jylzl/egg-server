@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-13 11:03:48
+ * @lastTime: 2020-12-16 18:09:12
  */
 'use strict';
 
@@ -27,8 +27,8 @@ module.exports = app => {
   });
 
   UserDept.associate = function() {
-    // 与UserAuths存在一对多关系，所以是hasMany()
-    app.model.UserAuths.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'id' });
+    // 与UserAuth存在一对多关系，所以是hasMany()
+    app.model.UserAuth.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'id' });
   };
   return UserDept;
 };
