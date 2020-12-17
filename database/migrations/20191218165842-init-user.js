@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:59:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:33:11
+ * @lastTime: 2020-12-17 14:16:18
  */
 'use strict';
 
@@ -24,45 +24,15 @@ module.exports = {
         allowNull: false,
         comment: '用户名',
       },
-      real_name: {
-        type: STRING(10),
-        allowNull: false,
-        comment: '真实姓名',
-      },
       pswd: {
         type: CHAR(32),
         allowNull: false,
         comment: '密码',
       },
-      id_card: {
-        type: CHAR(18),
+      dept_id: {
+        type: INTEGER(8),
         allowNull: false,
-        comment: '身份证号码',
-      },
-      phone: {
-        type: CHAR(11),
-        allowNull: false,
-        comment: '手机号码',
-      },
-      email: {
-        type: STRING(320),
-        allowNull: false,
-        comment: '邮箱号码',
-      },
-      qq: {
-        type: STRING(11),
-        allowNull: true,
-        comment: 'QQ账号',
-      },
-      github: {
-        type: STRING(32),
-        allowNull: true,
-        comment: 'GitHub地址',
-      },
-      image_url: {
-        type: STRING(320),
-        allowNull: true,
-        comment: '用户头像地址',
+        comment: '部门ID',
       },
       register_ip: {
         type: CHAR(16),

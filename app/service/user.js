@@ -3,45 +3,91 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-13 11:06:03
+ * @lastTime: 2020-12-17 16:33:20
  */
 'use strict';
 
 const Service = require('egg').Service;
 
 class Userervice extends Service {
-
+  // 创建用户
   async create(params) {
     const { ctx } = this;
     console.log(params);
-    const result = await ctx.model.User.create(params);
-    return result;
+    const result = await ctx.model.User.create(params, {
+      include: [{
+        model: ctx.model.UserInf,
+      }, {
+        model: ctx.model.Role,
+        attributes: [ 'id' ],
+      }],
+    });
+    const user_role = params.roles.map(item => {
+      return {
+        user_id: result.id,
+        role_id: item,
+      };
+    });
+    const result1 = await ctx.model.UserRole.bulkCreate(user_role);
+    return result1;
   }
-
+  // 更新用户
   async update(params) {
     const { ctx } = this;
     console.log(params);
+    // eslint-disable-next-line no-unused-vars
     const result = await ctx.model.User.update(params, {
       where: {
         id: params.id,
       },
+      include: [{
+        model: ctx.model.UserInf,
+      }, {
+        model: ctx.model.Role,
+        attributes: [ 'id' ],
+      }],
     });
-    return result;
+    // eslint-disable-next-line no-unused-vars
+    const del_result = await ctx.model.UserRole.destroy({
+      where: {
+        user_id: params.id,
+      },
+    });
+    const user_role = params.roles.map(item => {
+      return {
+        user_id: params.id,
+        role_id: item,
+      };
+    });
+    const result1 = await ctx.model.UserRole.bulkCreate(user_role);
+    return result1;
   }
-
+  // 删除用户
   async destroy(params) {
     const { ctx } = this;
+    // eslint-disable-next-line no-unused-vars
+    const del_result = await ctx.model.UserRole.destroy({
+      where: {
+        user_id: params.id,
+      },
+    });
     const result = await ctx.model.User.destroy({
       where: {
         id: params.id,
       },
+      include: [{
+        model: ctx.model.UserInf,
+      }, {
+        model: ctx.model.Role,
+        attributes: [ 'id' ],
+      }],
     });
     return result;
   }
-
+  // 查询所有用户
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize } = query;
+    const { currentPage, pageSize, dept_id } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
@@ -50,19 +96,43 @@ class Userervice extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
+        where: {
+          dept_id,
+        },
+        include: [{
+          model: ctx.model.UserInf,
+        }, {
+          model: ctx.model.Role,
+          attributes: [ 'id' ],
+        }],
         attributes: { exclude: [ 'pswd' ] },
       });
     } else {
       result = await ctx.model.User.findAll({
+        where: {
+          dept_id,
+        },
+        include: [{
+          model: ctx.model.UserInf,
+        }, {
+          model: ctx.model.Role,
+          attributes: [ 'id' ],
+        }],
         attributes: { exclude: [ 'pswd' ] },
       });
     }
     return result;
   }
-
+  // 查询指定用户
   async find(id) {
     const { ctx } = this;
     const result = await ctx.model.User.findByPk(id, {
+      include: [{
+        model: ctx.model.UserInf,
+      }, {
+        model: ctx.model.Role,
+        attributes: [ 'id' ],
+      }],
       attributes: { exclude: [ 'pswd' ] },
     });
     if (!result) {

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 09:08:31
+ * @lastTime: 2020-12-17 12:59:07
  */
 'use strict';
 
@@ -24,7 +24,12 @@ module.exports = app => {
   }, {
     tableName: 'role_menu',
     comment: '角色菜单表',
+    timestamps: false,
   });
+
+  RoleMenu.associate = () => {
+    app.model.RoleMenu.removeAttribute('id');
+  };
 
   return RoleMenu;
 };

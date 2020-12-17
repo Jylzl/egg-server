@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 14:38:53
+ * @lastTime: 2020-12-17 14:43:54
  */
 'use strict';
 
@@ -22,6 +22,7 @@ class UserController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+      dept_id: ctx.helper.parseInt(ctx.query.dept_id),
     };
     const res = await service.user.index(query);
     ctx.helper.success({ ctx, res });

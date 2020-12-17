@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 17:57:09
+ * @lastTime: 2020-12-17 12:58:23
  */
 'use strict';
 
@@ -42,9 +42,15 @@ module.exports = app => {
   });
 
 
-  Role.associate = function() {
+  Role.associate = () => {
     // 与RoleMenu存在一对多关系，所以是hasMany()
     app.model.Role.hasMany(app.model.RoleMenu, { foreignKey: 'id', targetKey: 'role_id' });
+    // 与role存在多对多关系，使用belongsToMany()
+    app.model.Role.belongsToMany(app.model.Menu, {
+      through: app.model.RoleMenu,
+      foreignKey: 'role_id',
+      otherKey: 'menu_id',
+    });
   };
 
   return Role;

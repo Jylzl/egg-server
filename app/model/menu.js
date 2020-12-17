@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:02:03
+ * @lastTime: 2020-12-17 12:57:36
  */
 'use strict';
 
@@ -86,6 +86,15 @@ module.exports = app => {
     tableName: 'menu',
     comment: '菜单表',
   });
+
+  Menu.associate = () => {
+    // 与role存在多对多关系，使用belongsToMany()
+    app.model.Menu.belongsToMany(app.model.Role, {
+      through: app.model.RoleMenu,
+      foreignKey: 'menu_id',
+      otherKey: 'role_id',
+    });
+  };
 
   return Menu;
 };

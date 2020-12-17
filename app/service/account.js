@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:24:22
+ * @lastTime: 2020-12-17 18:43:24
  */
 'use strict';
 
@@ -27,6 +27,9 @@ class AccountService extends Service {
       where: {
         id: result.user_id,
       },
+      include: {
+        model: ctx.model.UserInf,
+      },
       attributes: { exclude: [ 'pswd' ] },
     });
     if (!result1) {
@@ -46,6 +49,9 @@ class AccountService extends Service {
         name: params.username,
         pswd: params.password,
       },
+      include: {
+        model: ctx.model.UserInf,
+      },
       attributes: { exclude: [ 'pswd' ] },
     });
     return result;
@@ -58,29 +64,57 @@ class AccountService extends Service {
     return ctx.session.token;
   }
 
-  async menusByUser() {
+  async menusByUser(id) {
     const {
       ctx,
     } = this;
-    let result = await ctx.model.Menu.findAll({
-      where: {
-        type: [ 1, 2 ],
-      },
-      raw: true,
+    const result = await ctx.model.User.findByPk(id, {
+      include: [{
+        model: ctx.model.UserInf,
+        // as: 'ui',
+      }, {
+        model: ctx.model.Role,
+        // as: 'r',
+        attributes: [ 'id' ],
+        include: [{
+          model: ctx.model.Menu,
+          // as: 'm',
+          where: {
+            type: [ 1, 2 ],
+          },
+          raw: true,
+        }],
+        raw: true,
+      }],
+      // as: 'u',
+      attributes: { exclude: [ 'pswd' ] },
+      // attributes: [ ctx.Sequelize.col('userinf.role.menu') ],
+      // attributes: [ 'u.r.m' ],
     });
-    result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
+    // result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
     return result;
   }
 
-  async permsByUser() {
+  async permsByUser(id) {
     const {
       ctx,
     } = this;
-    const result = await ctx.model.Menu.findAll({
-      where: {
-        type: [ 3 ],
-      },
-      raw: true,
+    const result = await ctx.model.User.findByPk(id, {
+      include: [{
+        model: ctx.model.UserInf,
+      }, {
+        model: ctx.model.Role,
+        attributes: [ 'id' ],
+        include: [{
+          model: ctx.model.Menu,
+          where: {
+            type: [ 3 ],
+          },
+          raw: true,
+        }],
+        raw: true,
+      }],
+      attributes: { exclude: [ 'pswd' ] },
     });
     return result;
   }
