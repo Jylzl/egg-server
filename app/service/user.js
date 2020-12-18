@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-17 16:33:20
+ * @lastTime: 2020-12-18 16:32:21
  */
 'use strict';
 
@@ -106,6 +106,7 @@ class Userervice extends Service {
           attributes: [ 'id' ],
         }],
         attributes: { exclude: [ 'pswd' ] },
+        distinct: true,
       });
     } else {
       result = await ctx.model.User.findAll({
@@ -119,6 +120,7 @@ class Userervice extends Service {
           attributes: [ 'id' ],
         }],
         attributes: { exclude: [ 'pswd' ] },
+        distinct: true,
       });
     }
     return result;

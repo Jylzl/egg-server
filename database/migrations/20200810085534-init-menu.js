@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:02:40
+ * @lastTime: 2020-12-18 11:55:27
  */
 'use strict';
 
@@ -30,7 +30,7 @@ module.exports = {
         comment: '父菜单ID：顶级为-1',
       },
       name: {
-        type: STRING(10),
+        type: STRING(32),
         allowNull: false,
         comment: '菜单名',
       },
