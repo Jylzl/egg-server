@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-09-03 09:12:33
+ * @lastTime: 2020-12-18 10:51:00
  */
 'use strict';
 
@@ -51,19 +51,20 @@ class MenueService extends Service {
 
   async tree(query) {
     const { ctx } = this;
-    const { lazy, parent_id } = query;
+    const { lazy, parent_id, type } = query;
     let result;
     // 懒加载
     if (lazy === 'true') {
       result = await ctx.model.Menu.findAll({
         where: {
           parent_id,
+          type,
         },
       });
     } else {
       result = await ctx.model.Menu.findAll({
         where: {
-          type: [ 1, 2 ],
+          type,
         },
         raw: true,
       });

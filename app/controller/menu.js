@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-08-12 09:52:51
+ * @lastTime: 2020-12-18 11:16:32
  */
 'use strict';
 
@@ -52,7 +52,10 @@ class MenuController extends Controller {
     const query = {
       parent_id: ctx.helper.parseInt(ctx.query.parent_id),
       lazy: ctx.query.lazy,
+      type: ctx.query.type.split(','),
     };
+    console.log(ctx.query);
+    console.log(ctx.query.type);
     const res = await service.menu.tree(query);
     ctx.helper.success({
       ctx,

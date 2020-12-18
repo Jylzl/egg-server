@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-17 18:34:00
+ * @lastTime: 2020-12-18 09:40:22
  */
 'use strict';
 
@@ -64,8 +64,8 @@ class AccountController extends Controller {
     const {
       ctx, service,
     } = this;
-    const menus = await service.account.menusByUser(ctx.user.id);
-    const perms = await service.account.permsByUser(ctx.user.id);
+    const menus = await service.account.menusByUser(ctx.user.id, [ 1, 2 ]);
+    const perms = await service.account.menusByUser(ctx.user.id, [ 3 ]);
     ctx.helper.success({
       ctx,
       res: {

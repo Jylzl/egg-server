@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-17 18:43:24
+ * @lastTime: 2020-12-18 10:43:27
  */
 'use strict';
 
@@ -64,59 +64,40 @@ class AccountService extends Service {
     return ctx.session.token;
   }
 
-  async menusByUser(id) {
+  // 根据用户id获取对应角色的菜单及按钮
+  async menusByUser(id, type) {
     const {
       ctx,
     } = this;
     const result = await ctx.model.User.findByPk(id, {
       include: [{
-        model: ctx.model.UserInf,
-        // as: 'ui',
-      }, {
-        model: ctx.model.Role,
-        // as: 'r',
-        attributes: [ 'id' ],
-        include: [{
-          model: ctx.model.Menu,
-          // as: 'm',
-          where: {
-            type: [ 1, 2 ],
-          },
-          raw: true,
-        }],
-        raw: true,
-      }],
-      // as: 'u',
-      attributes: { exclude: [ 'pswd' ] },
-      // attributes: [ ctx.Sequelize.col('userinf.role.menu') ],
-      // attributes: [ 'u.r.m' ],
-    });
-    // result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
-    return result;
-  }
-
-  async permsByUser(id) {
-    const {
-      ctx,
-    } = this;
-    const result = await ctx.model.User.findByPk(id, {
-      include: [{
-        model: ctx.model.UserInf,
-      }, {
         model: ctx.model.Role,
         attributes: [ 'id' ],
         include: [{
           model: ctx.model.Menu,
           where: {
-            type: [ 3 ],
+            type,
           },
+          attributes: [ 'id', 'name', 'title', 'icon' ].concat(type.length === 1 ? [ 'perms' ] : [ 'parent_id', 'rurl', 'leaf', 'url', 'display' ]),
           raw: true,
         }],
         raw: true,
       }],
-      attributes: { exclude: [ 'pswd' ] },
+      attributes: [ 'id' ],
     });
-    return result;
+    const arr = [];
+    result.roles.forEach(role => {
+      role.menus.forEach(menu => {
+        const has = arr.findIndex(item => {
+          return item.id === menu.id;
+        });
+        if (has === -1) {
+          arr.push(menu);
+        }
+      });
+    });
+    return arr;
+    // return type.length === 1 ? arr : ctx.helper.translateDataToTree(arr, 'id', 'parent_id', 'children');
   }
 }
 
