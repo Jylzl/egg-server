@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:25:04
+ * @lastTime: 2020-12-21 12:59:45
  */
 'use strict';
 const assert = require('assert');
@@ -51,12 +51,12 @@ module.exports = app => {
       // 本地登录
       assert(user.username, 'user.username should exists');
       assert(user.password, 'user.password should exists');
-      existsUser = await ctx.service.account.login(user);
+      existsUser = await ctx.service.powAccount.login(user);
     } else {
       // 第三方登录
       assert(user.provider, 'user.provider should exists');
       assert(user.id, 'user.id should exists');
-      existsUser = await ctx.service.account.tLogin(user);
+      existsUser = await ctx.service.powAccount.tLogin(user);
     }
     return existsUser ? existsUser : false;
   });
