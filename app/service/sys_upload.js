@@ -46,7 +46,7 @@ class SysUploadService extends Service {
     return ctx.model.SysUpload.create({
       name: filename,
       extname: _extname,
-      mimeType: _mimeType,
+      mime_type: _mimeType,
       size: _size,
       url: `/public/uploads/${dirName}/${file}`,
     });

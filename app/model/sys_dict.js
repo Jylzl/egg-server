@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 16:28:10
+ * @lastTime: 2020-12-22 10:29:29
  */
 'use strict';
 
@@ -21,7 +21,12 @@ module.exports = app => {
     name: {
       type: STRING(100),
       allowNull: false,
-      comment: '分类',
+      comment: '名称',
+    },
+    value_type: {
+      type: STRING(64),
+      allowNull: false,
+      comment: '数据类型',
     },
     type: {
       type: TINYINT(1),

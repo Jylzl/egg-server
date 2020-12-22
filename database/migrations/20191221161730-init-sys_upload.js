@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:56:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 11:54:04
+ * @lastTime: 2020-12-22 16:55:25
  */
 'use strict';
 
@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
         comment: '文件扩展名',
       },
-      mimeType: {
+      mime_type: {
         type: CHAR(32),
         allowNull: false,
         comment: '文件类型',

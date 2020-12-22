@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 16:04:30
+ * @lastTime: 2020-12-22 11:50:33
  */
 'use strict';
 
@@ -114,7 +114,7 @@ class SysDictController extends Controller {
     const res = await service.sysDict.type(ctx.params.type);
     ctx.helper.success({
       ctx,
-      res: res.sys_dict_items,
+      res,
     });
   }
 }
