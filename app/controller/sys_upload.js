@@ -235,6 +235,9 @@ class SysUploadController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+      new_name: ctx.query.new_name,
+      startTime: ctx.query.startTime,
+      endTime: ctx.query.endTime,
     };
     // 调用 Service 进行业务处理
     const res = await service.sysUpload.index(query);

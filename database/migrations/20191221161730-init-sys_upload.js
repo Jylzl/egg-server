@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:56:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 16:55:25
+ * @lastTime: 2020-12-22 23:31:32
  */
 'use strict';
 
@@ -19,10 +19,20 @@ module.exports = {
         autoIncrement: true,
         comment: '附件ID',
       },
-      name: {
+      folder: {
         type: STRING(64),
         allowNull: false,
+        comment: '存放文件夹',
+      },
+      name: {
+        type: STRING(128),
+        allowNull: false,
         comment: '附件原名称',
+      },
+      new_name: {
+        type: STRING(64),
+        allowNull: false,
+        comment: '附件新名称',
       },
       extname: {
         type: CHAR(8),
@@ -30,7 +40,7 @@ module.exports = {
         comment: '文件扩展名',
       },
       mime_type: {
-        type: CHAR(32),
+        type: CHAR(128),
         allowNull: false,
         comment: '文件类型',
       },
@@ -38,11 +48,6 @@ module.exports = {
         type: INTEGER(64),
         allowNull: false,
         comment: '文件大小',
-      },
-      url: {
-        type: STRING(128),
-        allowNull: false,
-        comment: '资源地址',
       },
       created_at: DATE,
       deleted_at: DATE,

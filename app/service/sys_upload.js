@@ -21,18 +21,21 @@ class SysUploadService extends Service {
     const baseDir = this.config.baseDir;
     console.log(stream.filename);
     // 所有表单字段都能通过 `stream.fields` 获取到
-    const filename = path.basename(stream.filename); // 文件名称
-    const _extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
-    const _size = stream._readableState.length; // 文件大小,字节
-    const _mimeType = stream.mimeType; // 文件类型
+    const name = path.basename(stream.filename); // 文件名称
+    const extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
+    const size = stream._readableState.length; // 文件大小,字节
+    const mime_type = stream.mimeType; // 文件类型
+    console.log('mime_type==========');
+    console.log(mime_type);
     // 生成文件名
-    const file = Date.now() + '' + Number.parseInt(Math.random() * 10000) + _extname;
+    const new_name = Date.now() + '' + Number.parseInt(Math.random() * 10000) + extname;
     // 生成文件夹(YYYY-MM)
-    const dirName = moment(Date.now()).format('YYYYMM');
+    // const folder = moment(Date.now()).format('YYYYMM');
+    const folder = 'system';
     // 判断目录文件夹是否存在,不存在就创建
-    if (!fs.existsSync(uplaodBasePath + dirName)) fs.mkdirSync(path.join(baseDir, uplaodBasePath, dirName));
+    if (!fs.existsSync(uplaodBasePath + folder)) fs.mkdirSync(path.join(baseDir, uplaodBasePath, folder));
     // 创建文件
-    const target = path.join(baseDir, uplaodBasePath, dirName, file);
+    const target = path.join(baseDir, uplaodBasePath, folder, new_name);
     const writeStream = fs.createWriteStream(target);
     // 文件处理，上传到云存储等等
     try {
@@ -44,11 +47,12 @@ class SysUploadService extends Service {
     }
     // 插入数据库
     return ctx.model.SysUpload.create({
-      name: filename,
-      extname: _extname,
-      mime_type: _mimeType,
-      size: _size,
-      url: `/public/uploads/${dirName}/${file}`,
+      folder,
+      name,
+      new_name,
+      extname,
+      mime_type,
+      size,
     });
   }
 
@@ -56,7 +60,7 @@ class SysUploadService extends Service {
   // update======================================================================================================>
   async updatePre(_id) {
     const { ctx } = this;
-    const attachment = await ctx.service.Upload.findOne(_id);
+    const attachment = await ctx.service.sysUpload.findOne(_id);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     } else {
@@ -68,7 +72,7 @@ class SysUploadService extends Service {
 
   async extra(_id, values) {
     const { ctx } = this;
-    const attachment = await ctx.service.Upload.findOne(_id);
+    const attachment = await ctx.service.sysUpload.findOne(_id);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     }
@@ -83,7 +87,7 @@ class SysUploadService extends Service {
   // index======================================================================================================>
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize } = query;
+    const { currentPage, pageSize, new_name, startTime, endTime } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
@@ -92,6 +96,15 @@ class SysUploadService extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
+        // where: {
+        //   // new_name: {
+        //   //   $like: `%${new_name}%`,
+        //   // },
+        //   created_at: {
+        //     $gt: startTime === '' ? new Date() : startTime,
+        //     $lt: endTime === '' ? new Date(new Date() - 24 * 60 * 60 * 1000) : startTime,
+        //   },
+        // },
       });
     } else {
       result = await ctx.model.SysUpload.findAll();
@@ -174,16 +187,21 @@ class SysUploadService extends Service {
   // 删除单个资源
   async destroy(id) {
     const { ctx } = this;
-    const attachment = await ctx.service.upload.findOne(id);
+    const attachment = await ctx.model.SysUpload.findByPk(id);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     } else {
       // 物理删除磁盘文件
-      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.url);
+      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
       fs.unlinkSync(target);
     }
     // 数据库删除文件
-    return ctx.model.SysUpload.findByIdAndRemove(id);
+    const del_result = await ctx.model.SysUpload.destroy({
+      where: {
+        id,
+      },
+    });
+    return del_result;
   }
 
   // 查询单个附件

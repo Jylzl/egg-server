@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-17 10:04:21
+ * @lastTime: 2020-12-22 22:46:40
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -82,7 +82,7 @@ module.exports = appInfo => {
     host: 'localhost', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
-    password: 'root', // 密码
+    password: '929924', // 密码
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {
@@ -119,7 +119,7 @@ module.exports = appInfo => {
   // 文件上传,注意使用stream流方式需要把之前配置里的multipart删掉，这两种方法不能一起用，否则会报错。
   config.multipart = {
     mode: 'stream', // file stream
-    fileSize: '100mb',
+    fileSize: '500mb',
     whitelist: [
       // images
       '.jpg', '.jpeg', // image/jpeg
