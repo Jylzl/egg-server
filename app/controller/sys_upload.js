@@ -270,7 +270,42 @@ class SysUploadController extends Controller {
       ctx,
     });
   }
-}
 
+  // 通过id下载单个文件
+  async down() {
+    const {
+      ctx,
+      service,
+    } = this;
+    // 组装参数
+    const {
+      id,
+    } = ctx.params;
+    // 调用 Service 进行业务处理
+    // const res = await service.sysUpload.down(id);
+    // ctx.attachment(res.attachment.new_name);
+    // ctx.set('Content-Length', res.attachment.size);
+    // ctx.set('Content-Type', res.attachment.mine_type);
+    // ctx.body = fs.createReadStream(res.target);
+    const url = 'http://xiaogan.gov.cn/u/cms/www/202012/15150650vy41.jpg';
+
+    const result = await ctx.curl(url, {
+      streaming: true,
+    });
+    ctx.set(result.header);
+    // result.res 是一个 stream
+    ctx.body = result.res;
+
+    // 设置响应内容和响应状态码
+    // ctx.helper.success({
+    //   ctx,
+    //   res: fs.createReadStream(res.target),
+    // });
+    // const filePath = path.resolve(this.app.config.static.dir, 'hello.txt');
+    // this.ctx.attachment('hello.txt');
+    // this.ctx.set('Content-Type', 'application/octet-stream');
+    // this.ctx.body = fs.createReadStream(filePath);
+  }
+}
 
 module.exports = SysUploadController;

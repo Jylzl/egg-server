@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 16:57:25
+ * @lastTime: 2020-12-23 10:07:51
  */
 'use strict';
 
@@ -57,6 +57,18 @@ class SysDictItemService extends Service {
       where: {
         id: params.id,
       },
+    });
+    return result;
+  }
+
+  async check(query) {
+    const { ctx } = this;
+    const result = await ctx.model.SysDictItem.findAll({
+      where: {
+        dict_id: query.dict_id,
+        value: query.value,
+      },
+      attributes: [ 'id' ],
     });
     return result;
   }

@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 11:50:33
+ * @lastTime: 2020-12-23 09:29:08
  */
 'use strict';
 
@@ -112,6 +112,19 @@ class SysDictController extends Controller {
       service,
     } = this;
     const res = await service.sysDict.type(ctx.params.type);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async check() {
+    console.log('check1-------------');
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.sysDict.check(ctx.query.name);
     ctx.helper.success({
       ctx,
       res,

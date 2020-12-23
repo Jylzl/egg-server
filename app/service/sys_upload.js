@@ -19,15 +19,12 @@ class SysUploadService extends Service {
     const { ctx } = this;
     // 项目路径
     const baseDir = this.config.baseDir;
-    console.log(stream.filename);
     // 所有表单字段都能通过 `stream.fields` 获取到
     const name = path.basename(stream.filename); // 文件名称
     const extname = path.extname(stream.filename).toLowerCase(); // 文件扩展名称
     const size = stream._readableState.length; // 文件大小,字节
     const mime_type = stream.mimeType; // 文件类型
-    console.log('mime_type==========');
-    console.log(mime_type);
-    // 生成文件名
+    // 生成文件名(默认system)
     const new_name = Date.now() + '' + Number.parseInt(Math.random() * 10000) + extname;
     // 生成文件夹(YYYY-MM)
     // const folder = moment(Date.now()).format('YYYYMM');
@@ -96,6 +93,7 @@ class SysUploadService extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
+        order: [[ 'created_at', 'DESC' ]],
         // where: {
         //   // new_name: {
         //   //   $like: `%${new_name}%`,
@@ -166,7 +164,6 @@ class SysUploadService extends Service {
     //       res = await ctx.model.SysUpload.findOne({ extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
     //       totals = await ctx.model.SysUpload.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
     //     } else {
-    //       console.log(ctx.model.SysUpload);
     //       res = await ctx.model.SysUpload.findAll();
     //       // res = await ctx.model.SysUpload.findOne({}).sort({ createdAt: -1 }).exec();
     //       // totals = await ctx.model.SysUpload.count({}).exec();
@@ -193,25 +190,41 @@ class SysUploadService extends Service {
     } else {
       // 物理删除磁盘文件
       const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
-      fs.unlinkSync(target);
+      // 文件存在则删除文件
+      if (fs.existsSync(target)) {
+        fs.unlinkSync(target);
+      }
+      // 数据库删除文件
+      const del_result = await ctx.model.SysUpload.destroy({
+        where: {
+          id,
+        },
+      });
+      return del_result;
     }
-    // 数据库删除文件
-    const del_result = await ctx.model.SysUpload.destroy({
-      where: {
-        id,
-      },
-    });
-    return del_result;
   }
 
   // 查询单个附件
   async show(id) {
     const { ctx } = this;
     const attachment = await ctx.model.SysUpload.findByPk(id);
+    const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     }
-    return attachment;
+    return target;
+  }
+
+  // 通过id下载单个文件
+  async down(id) {
+    const { ctx } = this;
+    const attachment = await ctx.model.SysUpload.findByPk(id);
+    if (!attachment) {
+      ctx.throw(404, 'attachment not found');
+    } else {
+      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
+      return { target, attachment };
+    }
   }
 }
 

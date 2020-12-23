@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 15:16:58
+ * @lastTime: 2020-12-23 09:46:06
  */
 'use strict';
 
@@ -100,6 +100,22 @@ class SysDictItemController extends Controller {
       service,
     } = this;
     const res = await service.sysDictitem.destroy(ctx.params);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async check() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const query = {
+      dict_id: ctx.query.dict_id,
+      value: ctx.query.value,
+    };
+    const res = await service.sysDictitem.check(query);
     ctx.helper.success({
       ctx,
       res,

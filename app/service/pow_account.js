@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 13:13:15
+ * @lastTime: 2020-12-23 17:40:34
  */
 'use strict';
 
@@ -85,7 +85,7 @@ class PowAccountService extends Service {
       }],
       attributes: [ 'id' ],
     });
-    const arr = [];
+    let arr = [];
     result.pow_roles.forEach(role => {
       role.pow_menus.forEach(menu => {
         const has = arr.findIndex(item => {
@@ -96,6 +96,27 @@ class PowAccountService extends Service {
         }
       });
     });
+    // return arr;
+    // 组装前端的路由结构
+    if (type.length !== 1) {
+      arr = arr.map(item => {
+        return {
+          id: item.id,
+          parent_id: item.parent_id,
+          meta: {
+            title: item.title,
+            hidden: item.vidible,
+            leaf: item.leaf,
+            iconCls: item.icon,
+            topPath: item.url.indexOf('/') === 0 ? '/' + item.url.split('/')[1] : '/',
+          },
+          path: item.url,
+          name: item.name,
+          component: item.name,
+        };
+      });
+      arr = ctx.helper.translateDataToTree(arr, 'id', 'parent_id', 'children');
+    }
     return arr;
     // return type.length === 1 ? arr : ctx.helper.translateDataToTree(arr, 'id', 'parent_id', 'children');
   }

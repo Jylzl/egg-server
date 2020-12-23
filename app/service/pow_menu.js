@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:42:14
+ * @lastTime: 2020-12-23 17:32:17
  */
 'use strict';
 
@@ -45,6 +45,7 @@ class PowMenueService extends Service {
       where: {
         parent_id,
       },
+      order: [[ 'order_num', 'ASC' ]],
     });
     return result;
   }
@@ -60,12 +61,14 @@ class PowMenueService extends Service {
           parent_id,
           type,
         },
+        order: [[ 'order_num', 'ASC' ]],
       });
     } else {
       result = await ctx.model.PowMenu.findAll({
         where: {
           type,
         },
+        order: [[ 'order_num', 'ASC' ]],
         raw: true,
       });
       result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');

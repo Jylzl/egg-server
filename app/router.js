@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 15:11:49
+ * @lastTime: 2020-12-23 15:40:45
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -40,6 +40,7 @@ module.exports = app => {
   router.get('/api/menu/tree', jwt, powMenu.tree);
   router.resources('menu', '/api/menu', jwt, powMenu);
   // 附件模块
+  router.get('/api/upload/down/:id', jwt, sysUpload.down);
   router.resources('upload', '/api/upload', jwt, sysUpload);
   // 采集任务模块
   router.get('/api/crawler/column', crawler.getColumn);
@@ -48,6 +49,10 @@ module.exports = app => {
   router.post('/api/crawler/article', crawler.article);
   // 字典模块
   router.get('/api/dict/type/:type', jwt, sysDict.type);
+  router.get('/api/dict/check', jwt, sysDict.check);
   router.resources('dict', '/api/dict', jwt, sysDict);
+  router.get('/api/dictitem/check', jwt, sysDictitem.check);
   router.resources('dictitem', '/api/dictitem', jwt, sysDictitem);
+  // 密钥管理
+  router.resources('secretkey', '/api/secretkey', jwt, sysSecretkey);
 };

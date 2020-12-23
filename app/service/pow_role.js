@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 13:16:42
+ * @lastTime: 2020-12-23 17:45:54
  */
 'use strict';
 
@@ -14,7 +14,7 @@ class PowRoleService extends Service {
   async create(params) {
     const { ctx } = this;
     const result = await ctx.model.PowRole.create(params);
-    const role_menu = params.menus.map(item => {
+    const role_menu = params.pow_menus.map(item => {
       return {
         role_id: result.id,
         menu_id: item,
@@ -40,7 +40,7 @@ class PowRoleService extends Service {
         role_id: params.id,
       },
     });
-    const role_menu = params.menus.map(item => {
+    const role_menu = params.pow_menus.map(item => {
       return {
         role_id: params.id,
         menu_id: item,

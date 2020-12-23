@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:41:44
+ * @lastTime: 2020-12-23 16:42:20
  */
 'use strict';
 
@@ -51,12 +51,14 @@ class PowDeptService extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
+        order: [[ 'order_num', 'ASC' ]],
       });
     } else {
       result = await ctx.model.PowDept.findAll({
         where: {
           parent_id,
         },
+        order: [[ 'order_num', 'ASC' ]],
       });
     }
     return result;
@@ -72,10 +74,12 @@ class PowDeptService extends Service {
         where: {
           parent_id,
         },
+        order: [[ 'order_num', 'ASC' ]],
       });
     } else {
       result = await ctx.model.PowDept.findAll({
         raw: true,
+        order: [[ 'order_num', 'ASC' ]],
       });
       result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
     }

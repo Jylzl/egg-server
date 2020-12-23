@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 14:41:14
+ * @lastTime: 2020-12-23 10:07:41
  */
 'use strict';
 
@@ -63,8 +63,6 @@ class SysDictService extends Service {
   }
 
   async type(type) {
-    console.log('-----------------');
-    console.log(type);
     const { ctx } = this;
     const result = await ctx.model.SysDict.findOne({
       where: {
@@ -76,8 +74,6 @@ class SysDictService extends Service {
       }],
       distinct: true,
     });
-    console.log('result.type=================');
-    console.log(result.type);
     const res = result.sys_dict_items.map(item => {
       if (result.value_type.toLowerCase() === 'number') {
         item.value = Number(item.value);
@@ -87,6 +83,17 @@ class SysDictService extends Service {
       return item;
     });
     return res;
+  }
+
+  async check(name) {
+    const { ctx } = this;
+    const result = await ctx.model.SysDict.findAll({
+      where: {
+        name,
+      },
+      attributes: [ 'id' ],
+    });
+    return result;
   }
 }
 
