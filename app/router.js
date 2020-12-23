@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysInf } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -55,4 +55,6 @@ module.exports = app => {
   router.resources('dictitem', '/api/dictitem', jwt, sysDictitem);
   // 密钥管理
   router.resources('secretkey', '/api/secretkey', jwt, sysSecretkey);
+  // 服务器信息模块
+  router.get('/api/sysinf', jwt, sysInf.getSysInf);
 };
