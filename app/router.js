@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 15:40:45
+ * @lastTime: 2020-12-24 15:30:56
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysInf } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -55,6 +55,8 @@ module.exports = app => {
   router.resources('dictitem', '/api/dictitem', jwt, sysDictitem);
   // 密钥管理
   router.resources('secretkey', '/api/secretkey', jwt, sysSecretkey);
+  // 日志管理
+  router.resources('log', '/api/log', jwt, sysLog);
   // 服务器信息模块
   router.get('/api/sysinf', jwt, sysInf.getSysInf);
 };

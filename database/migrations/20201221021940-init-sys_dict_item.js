@@ -13,7 +13,7 @@ module.exports = {
      * Add altering commands here.
      *
      * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
+     * await queryInterface.createTable('sys_dict_item', { id: Sequelize.INTEGER });
      */
     const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('sys_dict_item', {

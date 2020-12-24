@@ -1,9 +1,9 @@
 /**
- * @description: 字典表
+ * @description: 日志表
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-24 15:24:32
+ * @lastTime: 2020-12-24 15:26:37
  */
 'use strict';
 
@@ -13,41 +13,45 @@ module.exports = {
      * Add altering commands here.
      *
      * Example:
-     * await queryInterface.createTable('sys_dict', { id: Sequelize.INTEGER });
+     * await queryInterface.createTable('sys_log', { id: Sequelize.INTEGER });
      */
     const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
-    await queryInterface.createTable('sys_dict', {
+    await queryInterface.createTable('sys_log', {
       id: {
-        type: INTEGER(8),
+        type: INTEGER(16),
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        comment: '字典ID',
-      },
-      name: {
-        type: STRING(100),
-        allowNull: false,
-        comment: '名称',
-      },
-      value_type: {
-        type: STRING(64),
-        allowNull: false,
-        comment: '数据类型',
+        comment: '日志ID',
       },
       type: {
         type: TINYINT(1),
         allowNull: false,
-        comment: '类型: （1系统类 2业务类）',
+        comment: '类型: （1登录日志 2操作日志）',
       },
-      description: {
+      title: {
         type: STRING(100),
-        allowNull: false,
-        comment: '描述',
+        comment: '标题',
       },
-      remarks: {
+      ip: {
+        type: STRING(16),
+        comment: 'IP',
+      },
+      user_name: {
+        type: STRING(16),
+        comment: '创建人',
+      },
+      user_id: {
         type: STRING(100),
-        allowNull: false,
-        comment: '备注信息',
+        comment: '用户ID',
+      },
+      request_type: {
+        type: STRING(100),
+        comment: '请求类型',
+      },
+      time: {
+        type: STRING(100),
+        comment: '耗时毫秒',
       },
       created_at: DATE,
       deleted_at: DATE,
@@ -61,8 +65,8 @@ module.exports = {
      * Add reverting commands here.
      *
      * Example:
-     * await queryInterface.dropTable('sys_dict');
+     * await queryInterface.dropTable('sys_log');
      */
-    await queryInterface.dropTable('sys_dict');
+    await queryInterface.dropTable('sys_log');
   },
 };
