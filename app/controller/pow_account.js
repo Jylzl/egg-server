@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-24 08:49:30
+ * @lastTime: 2020-12-25 00:19:06
  */
 'use strict';
 
@@ -24,6 +24,19 @@ class PowAccountController extends Controller {
       const token = app.jwt.sign({ id: ctx.user.id }, app.config.jwt.secret);
       const menus = await service.powAccount.menusByUser(ctx.user.id, [ 1, 2 ]);
       const perms = await service.powAccount.menusByUser(ctx.user.id, [ 3 ]);
+      console.log(ctx.ip);
+      console.log(ctx.host);
+      console.log(ctx.protocol);
+      service.sysLog.create({
+        type: 1,
+        title: `用户${ctx.user.name}登录成功`,
+        ip: ctx.ip,
+        user_name: ctx.user.name,
+        user_id: ctx.user.id,
+        request_type: 'post',
+        time: 123,
+      });
+      console.log(ctx.request.ip.replace(/::ffff:/, ''));
       ctx.helper.success({
         ctx,
         res: {
@@ -87,8 +100,20 @@ class PowAccountController extends Controller {
 
   // 退出登录
   async logout() {
-    const ctx = this.ctx;
+    const {
+      ctx, service,
+    } = this;
+    const user = ctx.user;
     ctx.logout();
+    service.sysLog.create({
+      type: 1,
+      title: `用户${user.name}登出成功`,
+      ip: ctx.ip,
+      user_name: user.name,
+      user_id: user.id,
+      request_type: 'get',
+      time: 123,
+    });
     ctx.helper.success({
       ctx,
     });

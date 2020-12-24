@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 19:23:04
+ * @lastTime: 2020-12-24 20:39:49
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -82,7 +82,7 @@ module.exports = appInfo => {
     host: 'localhost', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
-    password: 'root', // 密码
+    password: '929924', // 密码
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {
@@ -90,6 +90,9 @@ module.exports = appInfo => {
       paranoid: true, // 添加软删除
       freezeTableName: true, // 防止修改表名为复数
       underscored: true, // 防止驼峰式字段被默认转为下划线
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: 'deleted_at',
     },
     timezone: '+08:00', // 由于orm用的UTC时间，这里必须加上东八区，否则取出来的时间相差8小时
     dialectOptions: { // 让读取date类型数据时返回字符串而不是UTC时间
