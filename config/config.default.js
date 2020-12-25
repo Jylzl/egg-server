@@ -82,7 +82,7 @@ module.exports = appInfo => {
     host: 'localhost', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
-    password: '929924', // 密码
+    password: 'root', // 密码
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {

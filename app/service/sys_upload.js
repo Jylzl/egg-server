@@ -1,3 +1,10 @@
+/**
+ * @description: Description
+ * @author: lizlong<94648929@qq.com>
+ * @since: 2020-12-25 17:06:16
+ * @LastAuthor: lizlong
+ * @lastTime: 2020-12-25 17:44:46
+ */
 'use strict';
 
 const fs = require('fs');
@@ -28,7 +35,7 @@ class SysUploadService extends Service {
     const new_name = Date.now() + '' + Number.parseInt(Math.random() * 10000) + extname;
     // 生成文件夹(YYYY-MM)
     // const folder = moment(Date.now()).format('YYYYMM');
-    const folder = 'system';
+    const folder = stream.fields.folder || 'default';
     // 判断目录文件夹是否存在,不存在就创建
     if (!fs.existsSync(uplaodBasePath + folder)) fs.mkdirSync(path.join(baseDir, uplaodBasePath, folder));
     // 创建文件
@@ -43,7 +50,7 @@ class SysUploadService extends Service {
       throw err;
     }
     // 插入数据库
-    return ctx.model.SysUpload.create({
+    const result = ctx.model.SysFile.create({
       folder,
       name,
       new_name,
@@ -51,179 +58,18 @@ class SysUploadService extends Service {
       mime_type,
       size,
     });
-  }
-
-
-  // update======================================================================================================>
-  async updatePre(_id) {
-    const { ctx } = this;
-    const attachment = await ctx.service.sysUpload.findOne(_id);
-    if (!attachment) {
-      ctx.throw(404, 'attachment not found');
+    if (!result) {
+      ctx.throw(500, 'upload err!!!');
     } else {
-      const target = path.join(this.config.baseDir, uplaodBasePath, `${attachment.url}`);
-      fs.unlinkSync(target);
-    }
-    return attachment;
-  }
-
-  async extra(_id, values) {
-    const { ctx } = this;
-    const attachment = await ctx.service.sysUpload.findOne(_id);
-    if (!attachment) {
-      ctx.throw(404, 'attachment not found');
-    }
-    return ctx.model.SysUpload.findByIdAndUpdate(_id, values);
-  }
-
-  async update(_id, values) {
-    const { ctx } = this;
-    return ctx.model.SysUpload.findByIdAndUpdate(_id, values);
-  }
-
-  // index======================================================================================================>
-  async index(query) {
-    const { ctx } = this;
-    const { currentPage, pageSize, new_name, startTime, endTime } = query;
-    let result = [];
-    if (pageSize) {
-      const _offset = (currentPage - 1) * pageSize;
-      result = await ctx.model.SysUpload.findAndCountAll({
-        // offet去掉前多少个数据
-        offset: _offset,
-        // limit每页数据数量
-        limit: pageSize,
-        order: [[ 'created_at', 'DESC' ]],
-        // where: {
-        //   // new_name: {
-        //   //   $like: `%${new_name}%`,
-        //   // },
-        //   created_at: {
-        //     $gt: startTime === '' ? new Date() : startTime,
-        //     $lt: endTime === '' ? new Date(new Date() - 24 * 60 * 60 * 1000) : startTime,
-        //   },
-        // },
-      });
-    } else {
-      result = await ctx.model.SysUpload.findAll();
-    }
-    return result;
-
-    // 支持全部all 无需传入kind
-    // 图像kind = image ['.jpg', '.jpeg', '.png', '.gif']
-    // 文档kind = document ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.csv', '.key', '.numbers', '.pages', '.pdf', '.txt', '.psd', '.zip', '.gz', '.tgz', '.gzip' ]
-    // 视频kind = video ['.mov', '.mp4', '.avi']
-    // 音频kind = audio ['.mp3', '.wma', '.wav', '.ogg', '.ape', '.acc']
-
-    // const attachmentKind = {
-    //   image: [ '.jpg', '.jpeg', '.png', '.gif' ],
-    //   document: [ '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.csv', '.key', '.numbers', '.pages', '.pdf', '.txt', '.psd', '.zip', '.gz', '.tgz', '.gzip' ],
-    //   video: [ '.mov', '.mp4', '.avi' ],
-    //   audio: [ '.mp3', '.wma', '.wav', '.ogg', '.ape', '.acc' ],
-    // };
-
-    // const { currentPage, pageSize, isPaging, search, kind } = query;
-    // let res = [];
-    // let totals = 0;
-    // const skip = ((Number(currentPage)) - 1) * Number(pageSize || 10);
-    // if (isPaging) {
-    //   if (search) {
-    //     if (kind) {
-    //       res = await ctx.model.SysUpload.findOne({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
-    //         .sort({ createdAt: -1 })
-    //         .exec();
-    //     } else {
-    //       res = await ctx.model.SysUpload.findOne({ filename: { $regex: search } }).skip(skip).limit(Number(pageSize))
-    //         .sort({ createdAt: -1 })
-    //         .exec();
-    //     }
-    //     totals = res.length;
-    //   } else {
-    //     if (kind) {
-    //       res = await ctx.model.SysUpload.findOne({ extname: { $in: attachmentKind[`${kind}`] } }).skip(skip).limit(Number(pageSize))
-    //         .sort({ createdAt: -1 })
-    //         .exec();
-    //       totals = await ctx.model.SysUpload.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
-    //     } else {
-    //       res = await ctx.model.SysUpload.findOne({}).skip(skip).limit(Number(pageSize))
-    //         .sort({ createdAt: -1 })
-    //         .exec();
-    //       totals = await ctx.model.SysUpload.count({}).exec();
-    //     }
-    //   }
-    // } else {
-    //   if (search) {
-    //     if (kind) {
-    //       res = await ctx.model.SysUpload.findOne({ filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
-    //     } else {
-    //       res = await ctx.model.SysUpload.findOne({ filename: { $regex: search } }).sort({ createdAt: -1 }).exec();
-    //     }
-    //     totals = res.length;
-    //   } else {
-    //     if (kind) {
-    //       res = await ctx.model.SysUpload.findOne({ extname: { $in: attachmentKind[`${kind}`] } }).sort({ createdAt: -1 }).exec();
-    //       totals = await ctx.model.SysUpload.count({ extname: { $in: attachmentKind[`${kind}`] } }).exec();
-    //     } else {
-    //       res = await ctx.model.SysUpload.findAll();
-    //       // res = await ctx.model.SysUpload.findOne({}).sort({ createdAt: -1 }).exec();
-    //       // totals = await ctx.model.SysUpload.count({}).exec();
-    //     }
-    //   }
-    // }
-    // // 整理数据源 -> Ant Design Pro
-    // const data = res.map((e, i) => {
-    //   const jsonObject = Object.assign({}, e._doc);
-    //   jsonObject.key = i;
-    //   jsonObject.createdAt = ctx.helper.formatTime(e.createdAt);
-    //   return jsonObject;
-    // });
-
-    // return { count: totals, list: data, pageSize: Number(pageSize || 0), currentPage: Number(currentPage || 0) };
-  }
-
-  // 删除单个资源
-  async destroy(id) {
-    const { ctx } = this;
-    const attachment = await ctx.model.SysUpload.findByPk(id);
-    if (!attachment) {
-      ctx.throw(404, 'attachment not found');
-    } else {
-      // 物理删除磁盘文件
-      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
-      // 文件存在则删除文件
-      if (fs.existsSync(target)) {
-        fs.unlinkSync(target);
-      }
-      // 数据库删除文件
-      const del_result = await ctx.model.SysUpload.destroy({
-        where: {
-          id,
-        },
-      });
-      return del_result;
-    }
-  }
-
-  // 查询单个附件
-  async show(id) {
-    const { ctx } = this;
-    const attachment = await ctx.model.SysUpload.findByPk(id);
-    const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
-    if (!attachment) {
-      ctx.throw(404, 'attachment not found');
-    }
-    return target;
-  }
-
-  // 通过id下载单个文件
-  async down(id) {
-    const { ctx } = this;
-    const attachment = await ctx.model.SysUpload.findByPk(id);
-    if (!attachment) {
-      ctx.throw(404, 'attachment not found');
-    } else {
-      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
-      return { target, attachment };
+      return {
+        folder,
+        name,
+        new_name,
+        extname,
+        mime_type,
+        size,
+        url: `/public/uploads/${folder}/${new_name}`,
+      };
     }
   }
 }

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-25 00:19:06
+ * @lastTime: 2020-12-25 09:03:38
  */
 'use strict';
 
@@ -33,7 +33,7 @@ class PowAccountController extends Controller {
         ip: ctx.ip,
         user_name: ctx.user.name,
         user_id: ctx.user.id,
-        request_type: 'post',
+        request_type: ctx.request.method,
         time: 123,
       });
       console.log(ctx.request.ip.replace(/::ffff:/, ''));
@@ -111,7 +111,7 @@ class PowAccountController extends Controller {
       ip: ctx.ip,
       user_name: user.name,
       user_id: user.id,
-      request_type: 'get',
+      request_type: ctx.request.method,
       time: 123,
     });
     ctx.helper.success({

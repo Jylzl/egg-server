@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 17:56:24
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 23:31:32
+ * @lastTime: 2020-12-25 16:53:45
  */
 'use strict';
 
@@ -11,7 +11,7 @@ module.exports = {
   // 在执行数据库升级时调用的函数，创建 sys_user 表
   up: async (queryInterface, Sequelize) => {
     const { STRING, CHAR, INTEGER, DATE } = Sequelize;
-    await queryInterface.createTable('sys_upload', {
+    await queryInterface.createTable('sys_file', {
       id: {
         type: INTEGER(8),
         primaryKey: true,
@@ -54,8 +54,8 @@ module.exports = {
       updated_at: DATE,
     });
   },
-  // 在执行数据库降级时调用的函数，删除 sys_upload 表
+  // 在执行数据库降级时调用的函数，删除 sys_file 表
   down: async queryInterface => {
-    await queryInterface.dropTable('sys_upload');
+    await queryInterface.dropTable('sys_file');
   },
 };

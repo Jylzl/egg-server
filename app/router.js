@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-24 15:30:56
+ * @lastTime: 2020-12-25 17:16:41
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysFile, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -40,8 +40,10 @@ module.exports = app => {
   router.get('/api/menu/tree', jwt, powMenu.tree);
   router.resources('menu', '/api/menu', jwt, powMenu);
   // 附件模块
-  router.get('/api/upload/down/:id', jwt, sysUpload.down);
-  router.resources('upload', '/api/upload', jwt, sysUpload);
+  router.get('/api/file/down/:id', jwt, sysFile.down);
+  router.resources('file', '/api/file', jwt, sysFile);
+  // 上传模块
+  router.post('/api/upload', jwt, sysUpload.create);
   // 采集任务模块
   router.get('/api/crawler/column', crawler.getColumn);
   router.post('/api/crawler/column', crawler.column);

@@ -3,14 +3,14 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 18:15:34
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-22 23:31:41
+ * @lastTime: 2020-12-25 16:54:12
  */
 'use strict';
 
 module.exports = app => {
   const { STRING, CHAR, INTEGER, DATE } = app.Sequelize;
 
-  const SysUpload = app.model.define('sys_upload', {
+  const SysFile = app.model.define('sys_file', {
     id: {
       type: INTEGER(8),
       primaryKey: true,
@@ -52,9 +52,9 @@ module.exports = app => {
     deleted_at: DATE,
     updated_at: DATE,
   }, {
-    tableName: 'sys_upload',
+    tableName: 'sys_file',
     comment: '附件表',
   });
 
-  return SysUpload;
+  return SysFile;
 };
