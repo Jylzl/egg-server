@@ -94,7 +94,7 @@ class SysFileService extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
-        order: [['created_at', 'DESC']],
+        order: [[ 'created_at', 'DESC' ]],
         // where: {
         //   // new_name: {
         //   //   $like: `%${new_name}%`,

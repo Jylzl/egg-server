@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-25 17:16:41
+ * @lastTime: 2020-12-28 16:40:57
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysFile, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysFile, sysUpload, powMenu, crawler, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf, appEmail } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -61,4 +61,6 @@ module.exports = app => {
   router.resources('log', '/api/log', jwt, sysLog);
   // 服务器信息模块
   router.get('/api/sysinf', jwt, sysInf.getSysInf);
+  // 邮件模块
+  router.post('/api/email', jwt, appEmail.create);
 };
