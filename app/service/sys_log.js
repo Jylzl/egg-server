@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-24 15:29:46
+ * @lastTime: 2021-01-04 08:41:23
  */
 'use strict';
 
@@ -48,6 +48,7 @@ class PowAreaService extends Service {
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
+        order: [[ 'created_at', 'DESC' ]],
       });
     } else {
       result = await ctx.model.SysLog.findAll();
