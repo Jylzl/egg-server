@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 17:40:34
+ * @lastTime: 2021-01-05 18:20:42
  */
 'use strict';
 
@@ -49,11 +49,20 @@ class PowAccountService extends Service {
         name: params.username,
         pswd: params.password,
       },
-      include: {
+      include: [{
         model: ctx.model.PowUserInf,
-      },
+      }, {
+        model: ctx.model.PowRole,
+      }],
       attributes: { exclude: [ 'pswd' ] },
     });
+    if (result) {
+      ctx.model.PowUser.findById(result.id).then(user => {
+        user.increment('login_count').then(user => {
+          console.log(user);
+        });
+      });
+    }
     return result;
   }
 

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 15:58:27
+ * @lastTime: 2021-01-05 14:55:44
  */
 'use strict';
 
@@ -39,11 +39,19 @@ class PowAreaService extends Service {
 
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize } = query;
+    const { currentPage, pageSize, description, type } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.SysSecretkey.findAndCountAll({
+        where: {
+          description: {
+            $like: `%${description}%`,
+          },
+          // type: {
+          //   $eq: type,
+          // },
+        },
         // offet去掉前多少个数据
         offset: _offset,
         // limit每页数据数量

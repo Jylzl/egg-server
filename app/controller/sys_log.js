@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-24 15:29:04
+ * @lastTime: 2021-01-05 14:58:49
  */
 'use strict';
 
@@ -25,6 +25,7 @@ class SecretkeyController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+      title: ctx.query.title,
     };
     const res = await service.sysLog.index(query);
     ctx.helper.success({

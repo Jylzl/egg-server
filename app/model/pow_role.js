@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 11:41:53
+ * @lastTime: 2021-01-05 17:59:07
  */
 'use strict';
 
@@ -50,6 +50,11 @@ module.exports = app => {
       through: app.model.PowRoleMenu,
       foreignKey: 'role_id',
       otherKey: 'menu_id',
+    });
+    app.model.PowRole.belongsToMany(app.model.PowUser, {
+      through: app.model.PowUserRole,
+      foreignKey: 'user_id',
+      otherKey: 'role_id',
     });
   };
 

@@ -90,20 +90,16 @@ class SysFileService extends Service {
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.SysFile.findAndCountAll({
+        where: {
+          new_name: {
+            $like: `%${new_name}%`,
+          },
+        },
         // offet去掉前多少个数据
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
         order: [[ 'created_at', 'DESC' ]],
-        // where: {
-        //   // new_name: {
-        //   //   $like: `%${new_name}%`,
-        //   // },
-        //   created_at: {
-        //     $gt: startTime === '' ? new Date() : startTime,
-        //     $lt: endTime === '' ? new Date(new Date() - 24 * 60 * 60 * 1000) : startTime,
-        //   },
-        // },
       });
     } else {
       result = await ctx.model.SysFile.findAll();
