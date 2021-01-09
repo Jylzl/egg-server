@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-05 11:57:05
+ * @lastTime: 2021-01-08 09:57:41
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -77,10 +77,19 @@ module.exports = appInfo => {
     // validateRoot: false,
   };
 
+  config.redis = {
+    client: {
+      port: 6379, // Redis port
+      host: '127.0.0.1', // Redis host
+      password: '123456',
+      db: 0,
+    },
+  };
+
   // 数据库配置
   config.sequelize = {
     dialect: 'mysql', // 数据库类型
-    host: 'localhost', // host
+    host: '127.0.0.1', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
     password: 'root', // 密码

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-05 18:20:42
+ * @lastTime: 2021-01-08 10:42:42
  */
 'use strict';
 
@@ -56,13 +56,13 @@ class PowAccountService extends Service {
       }],
       attributes: { exclude: [ 'pswd' ] },
     });
-    if (result) {
-      ctx.model.PowUser.findById(result.id).then(user => {
-        user.increment('login_count').then(user => {
-          console.log(user);
-        });
-      });
-    }
+    // if (result) {
+    //   ctx.model.PowUser.findById(result.id).then(user => {
+    //     user.increment('login_count').then(user => {
+    //       console.log(user);
+    //     });
+    //   });
+    // }
     return result;
   }
 
