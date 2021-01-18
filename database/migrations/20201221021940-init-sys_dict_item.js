@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 10:26:45
+ * @lastTime: 2021-01-18 10:34:53
  */
 'use strict';
 
@@ -18,45 +18,64 @@ module.exports = {
     const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('sys_dict_item', {
       id: {
+        field: 'id',
         type: INTEGER(32),
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
         comment: '字典项ID',
       },
-      dict_id: {
+      dictId: {
+        field: 'dict_id',
         type: INTEGER(8),
         allowNull: false,
         comment: '字典ID',
       },
       label: {
+        field: 'label',
         type: STRING(100),
         allowNull: false,
         comment: '标签名',
       },
       value: {
+        field: 'value',
         type: STRING(100),
         allowNull: false,
         comment: '数据值',
       },
       description: {
+        field: 'description',
         type: STRING(100),
         allowNull: false,
         comment: '描述',
       },
       remarks: {
+        field: 'remarks',
         type: STRING(100),
         allowNull: false,
         comment: '备注信息',
       },
-      order_num: {
+      orderNum: {
+        field: 'order_num',
         type: TINYINT(8),
         allowNull: false,
         comment: '排序号',
       },
-      created_at: DATE,
-      deleted_at: DATE,
-      updated_at: DATE,
+      createdAt: {
+        field: 'created_at',
+        type: DATE,
+        comment: '创建时间',
+      },
+      deletedAt: {
+        field: 'deleted_at',
+        type: DATE,
+        comment: '删除时间',
+      },
+      updatedAt: {
+        field: 'updated_at',
+        type: DATE,
+        comment: '修改时间',
+      },
     });
   },
 

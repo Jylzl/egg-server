@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-07-29 15:07:27
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-08 10:42:42
+ * @lastTime: 2021-01-18 12:49:53
  */
 'use strict';
 
@@ -51,8 +51,10 @@ class PowAccountService extends Service {
       },
       include: [{
         model: ctx.model.PowUserInf,
+        as: 'powUserInf',
       }, {
         model: ctx.model.PowRole,
+        as: 'powRole',
       }],
       attributes: { exclude: [ 'pswd' ] },
     });
@@ -81,9 +83,11 @@ class PowAccountService extends Service {
     const result = await ctx.model.PowUser.findByPk(id, {
       include: [{
         model: ctx.model.PowRole,
+        as: 'powRole',
         attributes: [ 'id' ],
         include: [{
           model: ctx.model.PowMenu,
+          as: 'powMenu',
           where: {
             type,
           },
@@ -95,8 +99,8 @@ class PowAccountService extends Service {
       attributes: [ 'id' ],
     });
     let arr = [];
-    result.pow_roles.forEach(role => {
-      role.pow_menus.forEach(menu => {
+    result.powRole.forEach(role => {
+      role.powMenu.forEach(menu => {
         const has = arr.findIndex(item => {
           return item.id === menu.id;
         });
@@ -111,7 +115,7 @@ class PowAccountService extends Service {
       arr = arr.map(item => {
         return {
           id: item.id,
-          parent_id: item.parent_id,
+          parentId: item.parentId,
           meta: {
             title: item.title,
             hidden: item.vidible,
@@ -124,10 +128,10 @@ class PowAccountService extends Service {
           component: item.name,
         };
       });
-      arr = ctx.helper.translateDataToTree(arr, 'id', 'parent_id', 'children');
+      arr = ctx.helper.translateDataToTree(arr, 'id', 'parentId', 'children');
     }
     return arr;
-    // return type.length === 1 ? arr : ctx.helper.translateDataToTree(arr, 'id', 'parent_id', 'children');
+    // return type.length === 1 ? arr : ctx.helper.translateDataToTree(arr, 'id', 'parentId', 'children');
   }
 }
 

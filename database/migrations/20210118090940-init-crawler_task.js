@@ -1,9 +1,9 @@
 /**
- * @description: 字典表
+ * @description: 采集栏目配置
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 10:36:07
+ * @lastTime: 2021-01-18 17:18:02
  */
 'use strict';
 
@@ -13,47 +13,54 @@ module.exports = {
      * Add altering commands here.
      *
      * Example:
-     * await queryInterface.createTable('sys_dict', { id: Sequelize.INTEGER });
+     * await queryInterface.createTable('crawler_task', { id: Sequelize.INTEGER });
      */
     const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
-    await queryInterface.createTable('sys_dict', {
+    await queryInterface.createTable('crawler_task', {
       id: {
         field: 'id',
         type: INTEGER(8),
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        comment: '字典ID',
+        comment: '任务id',
       },
-      name: {
-        field: 'id',
-        type: STRING(100),
+      siteId: {
+        field: 'site_id',
+        type: INTEGER(8),
         allowNull: false,
-        comment: '名称',
+        comment: '站点ID',
       },
-      valueType: {
-        field: 'value_type',
-        type: STRING(64),
+      columnId: {
+        field: 'column_id',
+        type: INTEGER(8),
         allowNull: false,
-        comment: '数据类型',
+        comment: '栏目ID',
       },
-      type: {
-        field: 'type',
+      title: {
+        field: 'title',
+        type: STRING(128),
+        allowNull: false,
+        comment: '文章标题',
+      },
+      href: {
+        field: 'href',
+        type: STRING(128),
+        allowNull: false,
+        comment: '文章链接',
+      },
+      date: {
+        field: 'date',
+        type: DATE,
+        allowNull: true,
+        comment: '文章时间',
+      },
+      status: {
+        field: 'status',
         type: TINYINT(1),
         allowNull: false,
-        comment: '类型: （1系统类 2业务类）',
-      },
-      description: {
-        field: 'description',
-        type: STRING(100),
-        allowNull: false,
-        comment: '描述',
-      },
-      remarks: {
-        field: 'remarks',
-        type: STRING(100),
-        allowNull: false,
-        comment: '备注信息',
+        defaultValue: 0,
+        comment: '状态: 0入库',
       },
       createdAt: {
         field: 'created_at',
@@ -79,8 +86,8 @@ module.exports = {
      * Add reverting commands here.
      *
      * Example:
-     * await queryInterface.dropTable('sys_dict');
+     * await queryInterface.dropTable('crawler_task');
      */
-    await queryInterface.dropTable('sys_dict');
+    await queryInterface.dropTable('crawler_task');
   },
 };

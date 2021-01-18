@@ -1,33 +1,44 @@
 /**
- * @description: 菜单
- * GET	/menu	menu	app.controllers.powArea.index
- * GET	/menu/new	new_post	app.controllers.powArea.new
- * GET	/menu/:id	post	app.controllers.powArea.show
- * GET	/menu/:id/edit	edit_post	app.controllers.powArea.edit
- * POST	/menu	menu	app.controllers.powArea.create
- * PUT	/menu/:id	post	app.controllers.powArea.update
- * DELETE	/menu/:id	post	app.controllers.powArea.destroy
+ * @description: 采集站点
+ * GET	/crawlersite	crawlersite	app.controllers.crawlerSite.index
+ * GET	/crawlersite/new	new_post	app.controllers.crawlerSite.new
+ * GET	/crawlersite/:id	post	app.controllers.crawlerSite.show
+ * GET	/crawlersite/:id/edit	edit_post	app.controllers.crawlerSite.edit
+ * POST	/crawlersite	crawlersite	app.controllers.crawlerSite.create
+ * PUT	/crawlersite/:id	post	app.controllers.crawlerSite.update
+ * DELETE	/crawlersite/:id	post	app.controllers.crawlerSite.destroy
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 12:47:09
+ * @lastTime: 2021-01-18 15:46:15
  */
 'use strict';
 
 const Controller = require('egg').Controller;
 
-class PowAreaController extends Controller {
+class CrawlerSiteController extends Controller {
   async index() {
     const {
       ctx,
       service,
     } = this;
     const query = {
-      parentId: ctx.helper.parseInt(ctx.query.parentId),
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
     };
-    const res = await service.powArea.index(query);
+    const res = await service.crawlerSite.index(query);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async check() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.crawlerSite.check(ctx.query);
     ctx.helper.success({
       ctx,
       res,
@@ -46,28 +57,12 @@ class PowAreaController extends Controller {
     });
   }
 
-  async tree() {
-    const {
-      ctx,
-      service,
-    } = this;
-    const query = {
-      parentId: ctx.helper.parseInt(ctx.query.parentId),
-      lazy: ctx.query.lazy,
-    };
-    const res = await service.powArea.tree(query);
-    ctx.helper.success({
-      ctx,
-      res,
-    });
-  }
-
   async create() {
     const {
       ctx,
       service,
     } = this;
-    const res = await service.powArea.create(ctx.request.body);
+    const res = await service.crawlerSite.create(ctx.request.body);
     ctx.helper.success({
       ctx,
       res,
@@ -103,7 +98,7 @@ class PowAreaController extends Controller {
       ctx,
       service,
     } = this;
-    const res = await service.powArea.update(ctx.request.body);
+    const res = await service.crawlerSite.update(ctx.request.body);
     ctx.helper.success({
       ctx,
       res,
@@ -115,7 +110,7 @@ class PowAreaController extends Controller {
       ctx,
       service,
     } = this;
-    const res = await service.powArea.destroy(ctx.params);
+    const res = await service.crawlerSite.destroy(ctx.params);
     ctx.helper.success({
       ctx,
       res,
@@ -123,4 +118,4 @@ class PowAreaController extends Controller {
   }
 }
 
-module.exports = PowAreaController;
+module.exports = CrawlerSiteController;

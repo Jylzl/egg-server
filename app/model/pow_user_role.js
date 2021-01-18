@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 11:45:51
+ * @lastTime: 2021-01-18 10:09:55
  */
 'use strict';
 
@@ -11,12 +11,14 @@ module.exports = app => {
   const { INTEGER } = app.Sequelize;
 
   const PowUserRole = app.model.define('pow_user_role', {
-    user_id: {
+    userId: {
+      field: 'user_id',
       type: INTEGER(8),
       allowNull: false,
       comment: '用户ID',
     },
-    role_id: {
+    roleId: {
+      field: 'role_id',
       type: INTEGER(8),
       allowNull: false,
       comment: '角色ID',

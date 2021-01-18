@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:45:53
+ * @lastTime: 2021-01-18 12:57:19
  */
 'use strict';
 
@@ -17,18 +17,20 @@ class PowUserervice extends Service {
     const result = await ctx.model.PowUser.create(params, {
       include: [{
         model: ctx.model.UserInf,
+        as: 'powUserInf',
       }, {
         model: ctx.model.Role,
+        as: 'powRole',
         attributes: [ 'id' ],
       }],
     });
-    const user_role = params.roles.map(item => {
+    const userRole = params.roles.map(item => {
       return {
-        user_id: result.id,
-        role_id: item,
+        userId: result.id,
+        roleId: item,
       };
     });
-    const result1 = await ctx.model.PowUserRole.bulkCreate(user_role);
+    const result1 = await ctx.model.PowUserRole.bulkCreate(userRole);
     return result1;
   }
   // 更新用户
@@ -42,24 +44,26 @@ class PowUserervice extends Service {
       },
       include: [{
         model: ctx.model.UserInf,
+        as: 'powUserInf',
       }, {
         model: ctx.model.Role,
+        as: 'powRole',
         attributes: [ 'id' ],
       }],
     });
     // eslint-disable-next-line no-unused-vars
     const del_result = await ctx.model.PowUserRole.destroy({
       where: {
-        user_id: params.id,
+        userId: params.id,
       },
     });
-    const user_role = params.roles.map(item => {
+    const userRole = params.roles.map(item => {
       return {
-        user_id: params.id,
-        role_id: item,
+        userId: params.id,
+        roleId: item,
       };
     });
-    const result1 = await ctx.model.PowUserRole.bulkCreate(user_role);
+    const result1 = await ctx.model.PowUserRole.bulkCreate(userRole);
     return result1;
   }
   // 删除用户
@@ -68,7 +72,7 @@ class PowUserervice extends Service {
     // eslint-disable-next-line no-unused-vars
     const del_result = await ctx.model.PowUserRole.destroy({
       where: {
-        user_id: params.id,
+        userId: params.id,
       },
     });
     const result = await ctx.model.PowUser.destroy({
@@ -87,7 +91,7 @@ class PowUserervice extends Service {
   // 查询所有用户
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize, dept_id } = query;
+    const { currentPage, pageSize, deptId } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
@@ -97,12 +101,14 @@ class PowUserervice extends Service {
         // limit每页数据数量
         limit: pageSize,
         where: {
-          dept_id,
+          deptId,
         },
         include: [{
           model: ctx.model.PowUserInf,
+          as: 'powUserInf',
         }, {
           model: ctx.model.PowRole,
+          as: 'powRole',
           attributes: [ 'id' ],
         }],
         attributes: { exclude: [ 'pswd' ] },
@@ -111,12 +117,14 @@ class PowUserervice extends Service {
     } else {
       result = await ctx.model.PowUser.findAll({
         where: {
-          dept_id,
+          deptId,
         },
         include: [{
           model: ctx.model.PowUserInf,
+          as: 'powUserInf',
         }, {
           model: ctx.model.PowRole,
+          as: 'powRole',
           attributes: [ 'id' ],
         }],
         attributes: { exclude: [ 'pswd' ] },
@@ -131,8 +139,10 @@ class PowUserervice extends Service {
     const result = await ctx.model.PowUser.findByPk(id, {
       include: [{
         model: ctx.model.PowUserInf,
+        as: 'powUserInf',
       }, {
         model: ctx.model.PowRole,
+        as: 'powRole',
         attributes: [ 'id' ],
       }],
       attributes: { exclude: [ 'pswd' ] },

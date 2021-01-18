@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 11:56:59
+ * @lastTime: 2021-01-18 10:10:12
  */
 'use strict';
 
@@ -17,12 +17,14 @@ module.exports = {
      */
     const { INTEGER } = Sequelize;
     await queryInterface.createTable('pow_user_role', {
-      user_id: {
+      userId: {
+        field: 'user_id',
         type: INTEGER(8),
         allowNull: false,
         comment: '用户ID',
       },
-      role_id: {
+      roleId: {
+        field: 'role_id',
         type: INTEGER(8),
         allowNull: false,
         comment: '角色ID',

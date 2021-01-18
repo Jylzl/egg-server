@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 15:32:14
+ * @lastTime: 2021-01-18 10:40:33
  */
 'use strict';
 
@@ -12,6 +12,7 @@ module.exports = app => {
 
   const SysSecretkey = app.model.define('sys_secretkey', {
     id: {
+      field: 'id',
       type: INTEGER(8),
       primaryKey: true,
       allowNull: false,
@@ -19,32 +20,50 @@ module.exports = app => {
       comment: '密钥ID',
     },
     type: {
+      field: 'type',
       type: STRING(64),
       comment: '类型',
     },
     remarks: {
+      field: 'remarks',
       type: STRING(100),
       comment: '备注信息',
     },
-    app_id: {
+    appId: {
+      field: 'app_id',
       type: STRING(100),
       comment: 'app_id',
     },
-    app_secret: {
+    appSecret: {
+      field: 'app_secret',
       type: STRING(100),
       comment: 'app_secret',
     },
-    redirect_url: {
+    redirectUrl: {
+      field: 'redirect_url',
       type: STRING(100),
       comment: 'redirect_url',
     },
     description: {
+      field: 'description',
       type: STRING(100),
       comment: '描述',
     },
-    created_at: DATE,
-    deleted_at: DATE,
-    updated_at: DATE,
+    createdAt: {
+      field: 'created_at',
+      type: DATE,
+      comment: '创建时间',
+    },
+    deletedAt: {
+      field: 'deleted_at',
+      type: DATE,
+      comment: '删除时间',
+    },
+    updatedAt: {
+      field: 'updated_at',
+      type: DATE,
+      comment: '修改时间',
+    },
   }, {
     tableName: 'sys_secretkey',
     comment: '字典表',

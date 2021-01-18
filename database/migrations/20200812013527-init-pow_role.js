@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 11:55:38
+ * @lastTime: 2021-01-18 10:06:04
  */
 'use strict';
 
@@ -18,6 +18,7 @@ module.exports = {
     const { STRING, INTEGER, DATE } = Sequelize;
     await queryInterface.createTable('pow_role', {
       id: {
+        field: 'id',
         type: INTEGER(8),
         primaryKey: true,
         allowNull: false,
@@ -25,23 +26,38 @@ module.exports = {
         comment: '角色ID',
       },
       name: {
+        field: 'name',
         type: STRING(10),
         allowNull: false,
         comment: '角色名称',
       },
       code: {
+        field: 'code',
         type: STRING(10),
         allowNull: false,
         comment: '角色标识',
       },
       desc: {
+        field: 'desc',
         type: STRING(200),
         allowNull: false,
         comment: '角色描述',
       },
-      created_at: DATE,
-      deleted_at: DATE,
-      updated_at: DATE,
+      createdAt: {
+        field: 'created_at',
+        type: DATE,
+        comment: '创建时间',
+      },
+      deletedAt: {
+        field: 'deleted_at',
+        type: DATE,
+        comment: '删除时间',
+      },
+      updatedAt: {
+        field: 'updated_at',
+        type: DATE,
+        comment: '修改时间',
+      },
     });
   },
 

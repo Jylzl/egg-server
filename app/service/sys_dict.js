@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 10:07:41
+ * @lastTime: 2021-01-18 14:12:30
  */
 'use strict';
 
@@ -70,11 +70,12 @@ class SysDictService extends Service {
       },
       include: [{
         model: ctx.model.SysDictItem,
+        as: 'sysDictItem',
         attributes: [ 'id', 'label', 'value' ],
       }],
       distinct: true,
     });
-    const res = result.sys_dict_items.map(item => {
+    const res = result.sysDictItem.map(item => {
       if (result.value_type.toLowerCase() === 'number') {
         item.value = Number(item.value);
       } else if (result.value_type.toLowerCase() === 'string') {

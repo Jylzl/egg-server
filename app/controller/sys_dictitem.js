@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 09:46:06
+ * @lastTime: 2021-01-18 12:45:24
  */
 'use strict';
 
@@ -112,7 +112,7 @@ class SysDictItemController extends Controller {
       service,
     } = this;
     const query = {
-      dict_id: ctx.query.dict_id,
+      dictId: ctx.query.dictId,
       value: ctx.query.value,
     };
     const res = await service.sysDictitem.check(query);

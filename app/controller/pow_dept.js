@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:57:50
+ * @lastTime: 2021-01-18 12:44:17
  */
 'use strict';
 
@@ -23,7 +23,7 @@ class PowDeptController extends Controller {
       service,
     } = this;
     const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
+      parentId: ctx.helper.parseInt(ctx.query.parentId),
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
     };
@@ -52,7 +52,7 @@ class PowDeptController extends Controller {
       service,
     } = this;
     const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
+      parentId: ctx.helper.parseInt(ctx.query.parentId),
       lazy: ctx.query.lazy,
     };
     const res = await service.powDept.tree(query);

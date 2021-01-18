@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:57:25
+ * @lastTime: 2021-01-18 12:44:28
  */
 'use strict';
 
@@ -23,7 +23,7 @@ class PowMenuController extends Controller {
       service,
     } = this;
     const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
+      parentId: ctx.helper.parseInt(ctx.query.parentId),
     };
     const res = await service.powMenu.index(query);
     ctx.helper.success({
@@ -50,7 +50,7 @@ class PowMenuController extends Controller {
       service,
     } = this;
     const query = {
-      parent_id: ctx.helper.parseInt(ctx.query.parent_id),
+      parentId: ctx.helper.parseInt(ctx.query.parentId),
       lazy: ctx.query.lazy,
       type: ctx.query.type.split(','),
     };

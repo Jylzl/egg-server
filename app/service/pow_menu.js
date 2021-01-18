@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 17:32:17
+ * @lastTime: 2021-01-18 12:49:13
  */
 'use strict';
 
@@ -39,11 +39,11 @@ class PowMenueService extends Service {
 
   async index(query) {
     const { ctx } = this;
-    const { parent_id } = query;
+    const { parentId } = query;
     let result = [];
     result = await ctx.model.PowMenu.findAll({
       where: {
-        parent_id,
+        parentId,
       },
       order: [[ 'order_num', 'ASC' ]],
     });
@@ -52,13 +52,13 @@ class PowMenueService extends Service {
 
   async tree(query) {
     const { ctx } = this;
-    const { lazy, parent_id, type } = query;
+    const { lazy, parentId, type } = query;
     let result;
     // 懒加载
     if (lazy === 'true') {
       result = await ctx.model.PowMenu.findAll({
         where: {
-          parent_id,
+          parentId,
           type,
         },
         order: [[ 'order_num', 'ASC' ]],
@@ -71,7 +71,7 @@ class PowMenueService extends Service {
         order: [[ 'order_num', 'ASC' ]],
         raw: true,
       });
-      result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
+      result = ctx.helper.translateDataToTree(result, 'id', 'parentId', 'children');
     }
     return result;
   }

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-26 08:40:41
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-25 09:03:38
+ * @lastTime: 2021-01-18 12:00:48
  */
 'use strict';
 
@@ -31,9 +31,9 @@ class PowAccountController extends Controller {
         type: 1,
         title: `用户${ctx.user.name}登录成功`,
         ip: ctx.ip,
-        user_name: ctx.user.name,
-        user_id: ctx.user.id,
-        request_type: ctx.request.method,
+        userName: ctx.user.name,
+        userId: ctx.user.id,
+        requestType: ctx.request.method,
         time: 123,
       });
       console.log(ctx.request.ip.replace(/::ffff:/, ''));
@@ -109,9 +109,9 @@ class PowAccountController extends Controller {
       type: 1,
       title: `用户${user.name}登出成功`,
       ip: ctx.ip,
-      user_name: user.name,
-      user_id: user.id,
-      request_type: ctx.request.method,
+      userName: user.name,
+      userId: user.id,
+      requestType: ctx.request.method,
       time: 123,
     });
     ctx.helper.success({

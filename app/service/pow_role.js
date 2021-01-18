@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 17:45:54
+ * @lastTime: 2021-01-18 12:52:19
  */
 'use strict';
 
@@ -79,6 +79,7 @@ class PowRoleService extends Service {
         limit: pageSize,
         include: [{
           model: ctx.model.PowMenu,
+          as: 'powMenu',
           attributes: [ 'id' ],
         }],
         distinct: true,

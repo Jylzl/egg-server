@@ -235,7 +235,7 @@ class SysFileController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
-      new_name: ctx.query.new_name,
+      newName: ctx.query.newName,
       startTime: ctx.query.startTime,
       endTime: ctx.query.endTime,
     };
@@ -283,7 +283,7 @@ class SysFileController extends Controller {
     } = ctx.params;
     // 调用 Service 进行业务处理
     // const res = await service.sysFile.down(id);
-    // ctx.attachment(res.attachment.new_name);
+    // ctx.attachment(res.attachment.newName);
     // ctx.set('Content-Length', res.attachment.size);
     // ctx.set('Content-Type', res.attachment.mine_type);
     // ctx.body = fs.createReadStream(res.target);

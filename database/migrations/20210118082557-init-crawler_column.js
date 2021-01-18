@@ -1,9 +1,9 @@
 /**
- * @description: 部门表
+ * @description: 采集栏目配置
  * @author: lizlong<94648929@qq.com>
- * @since: Do not edit
+ * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 10:01:28
+ * @lastTime: 2021-01-18 16:38:48
  */
 'use strict';
 
@@ -13,53 +13,59 @@ module.exports = {
      * Add altering commands here.
      *
      * Example:
-     * await queryInterface.createTable('pow_dept', { id: Sequelize.INTEGER });
+     * await queryInterface.createTable('crawler_column', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
-    await queryInterface.createTable('pow_dept', {
+    const { STRING, INTEGER, DATE } = Sequelize;
+    await queryInterface.createTable('crawler_column', {
       id: {
         field: 'id',
         type: INTEGER(8),
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        comment: '部门ID',
+        comment: 'ID',
       },
-      parentId: {
-        field: 'parent_id',
+      siteId: {
+        field: 'site_id',
         type: INTEGER(8),
         allowNull: false,
-        comment: '父部门ID：顶级为-1',
+        comment: '所属站点Id',
       },
       name: {
         field: 'name',
         type: STRING(64),
         allowNull: false,
-        comment: '部门名称',
+        comment: '栏目名称',
       },
-      abbreviation: {
-        field: 'abbreviation',
-        type: STRING(32),
+      columnId: {
+        field: 'column_id',
+        type: INTEGER(8),
         allowNull: false,
-        comment: '部门简称',
+        comment: '栏目ID',
       },
-      code: {
-        field: 'code',
-        type: STRING(10),
+      crawlerColumnName: {
+        field: 'crawler_column_name',
+        type: STRING(64),
         allowNull: false,
-        comment: '部门编号',
+        comment: '采集栏目名称',
+      },
+      crawlerColumnUrl: {
+        field: 'crawler_column_url',
+        type: STRING(128),
+        allowNull: false,
+        comment: '采集栏目链接',
+      },
+      crawlerPageSize: {
+        field: 'crawler_page_size',
+        type: STRING(128),
+        allowNull: false,
+        comment: '栏目页数',
       },
       desc: {
         field: 'desc',
         type: STRING(200),
         allowNull: false,
-        comment: '部门描述',
-      },
-      orderNum: {
-        field: 'order_num',
-        type: TINYINT(8),
-        allowNull: false,
-        comment: '排序号',
+        comment: '描述',
       },
       createdAt: {
         field: 'created_at',
@@ -85,7 +91,8 @@ module.exports = {
      * Add reverting commands here.
      *
      * Example:
-     * await queryInterface.dropTable('pow_dept');
+     * await queryInterface.dropTable('crawler_column');
      */
+    await queryInterface.dropTable('crawler_column');
   },
 };

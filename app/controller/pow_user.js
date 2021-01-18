@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-21 12:53:11
+ * @lastTime: 2021-01-18 12:45:00
  */
 'use strict';
 
@@ -22,7 +22,7 @@ class PowUserController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
-      dept_id: ctx.helper.parseInt(ctx.query.dept_id),
+      deptId: ctx.helper.parseInt(ctx.query.deptId),
     };
     const res = await service.powUser.index(query);
     ctx.helper.success({ ctx, res });

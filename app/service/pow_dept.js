@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 16:42:20
+ * @lastTime: 2021-01-18 12:50:17
  */
 'use strict';
 
@@ -39,13 +39,13 @@ class PowDeptService extends Service {
 
   async index(query) {
     const { ctx } = this;
-    const { parent_id, currentPage, pageSize } = query;
+    const { parentId, currentPage, pageSize } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.PowDept.findAndCountAll({
         where: {
-          parent_id,
+          parentId,
         },
         // offet去掉前多少个数据
         offset: _offset,
@@ -56,7 +56,7 @@ class PowDeptService extends Service {
     } else {
       result = await ctx.model.PowDept.findAll({
         where: {
-          parent_id,
+          parentId,
         },
         order: [[ 'order_num', 'ASC' ]],
       });
@@ -66,13 +66,13 @@ class PowDeptService extends Service {
 
   async tree(query) {
     const { ctx } = this;
-    const { lazy, parent_id } = query;
+    const { lazy, parentId } = query;
     let result;
     // 懒加载
     if (lazy === 'true') {
       result = await ctx.model.PowDept.findAll({
         where: {
-          parent_id,
+          parentId,
         },
         order: [[ 'order_num', 'ASC' ]],
       });
@@ -81,7 +81,7 @@ class PowDeptService extends Service {
         raw: true,
         order: [[ 'order_num', 'ASC' ]],
       });
-      result = ctx.helper.translateDataToTree(result, 'id', 'parent_id', 'children');
+      result = ctx.helper.translateDataToTree(result, 'id', 'parentId', 'children');
     }
     return result;
   }
