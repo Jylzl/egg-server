@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 17:40:58
+ * @lastTime: 2021-01-19 17:58:28
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -84,7 +84,33 @@ class CrawlerColumnService extends Service {
     } catch (error) {
       ctx.throw(500, error);
     }
+  }
 
+  async collect(params) {
+    const { ctx } = this;
+    const arr = [];
+    const result = await ctx.model.CrawlerColumn.findByPk(params.id);
+    const currentPage = ctx.helper.parseInt(params.currentPage);
+    const url = currentPage === 1 ? result.crawlerColumnUrl : ctx.helper.render(result.crawlerReUrl, { page: currentPage });
+    const cresult = await ctx.curl(url);
+    // toString是为了解析出buffer数据
+    const pageXml = cresult.data.toString();
+    // decodeEntities参数是为了解决cheerio获取的中文乱码
+    const $ = cheerio.load(pageXml, { decodeEntities: false });
+    $(result.crawlerItem).each((index, element) => {
+      arr.push({
+        title: $($(element).find(result.crawlerItemTitle)).attr('title') || $($(element).find(result.crawlerItemTitle)).html(),
+        href: ctx.helper.urlSplicing(result.crawlerColumnUrl, $($(element).find(result.crawlerItemUrl)).attr('href')),
+        date: ctx.helper.moment($($(element).find(result.crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
+      });
+    });
+    // const sresult = await ctx.model.CrawlerTask.bulkCreate(arr);
+    // return sresult;
+    return {
+      rows: arr,
+      count: result.crawlerPageCount * result.crawlerPageSize,
+      size: result.crawlerPageSize,
+    };
   }
 }
 

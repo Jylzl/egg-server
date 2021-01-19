@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 14:14:17
+ * @lastTime: 2021-01-19 12:47:30
  */
 'use strict';
 
@@ -77,7 +77,7 @@ module.exports = app => {
 
   SysDictItem.associate = () => {
     // 与SysDict存在一对多关系，所以是hasMany()
-    app.model.SysDictItem.belongsTo(app.model.SysDict, { foreignKey: 'dict_id', targetKey: 'id' });
+    app.model.SysDictItem.belongsTo(app.model.SysDict, { foreignKey: 'dict_id', targetKey: 'id', as: 'sysDict' });
   };
 
   return SysDictItem;

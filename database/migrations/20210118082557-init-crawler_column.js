@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 16:38:48
+ * @lastTime: 2021-01-19 16:51:32
  */
 'use strict';
 
@@ -43,6 +43,12 @@ module.exports = {
         allowNull: false,
         comment: '栏目ID',
       },
+      templateId: {
+        field: 'template_id',
+        type: INTEGER(8),
+        allowNull: false,
+        comment: '栏目ID',
+      },
       crawlerColumnName: {
         field: 'crawler_column_name',
         type: STRING(64),
@@ -55,11 +61,55 @@ module.exports = {
         allowNull: false,
         comment: '采集栏目链接',
       },
-      crawlerPageSize: {
-        field: 'crawler_page_size',
-        type: STRING(128),
+      crawlerPageCount: {
+        field: 'crawler_page_count',
+        type: INTEGER(8),
         allowNull: false,
         comment: '栏目页数',
+      },
+      crawlerPageSize: {
+        field: 'crawler_page_size',
+        type: INTEGER(8),
+        allowNull: false,
+        comment: '每页条数',
+      },
+      crawlerReUrl: {
+        field: 'crawler_re_url',
+        type: STRING(128),
+        comment: '正则链接',
+      },
+      crawlerStartPage: {
+        field: 'crawler_start_page',
+        type: INTEGER(8),
+        comment: '起始页码',
+      },
+      crawlerEndPage: {
+        field: 'crawler_end_page',
+        type: INTEGER(8),
+        comment: '结束页码',
+      },
+      crawlerItem: {
+        field: 'crawler_item',
+        type: STRING(128),
+        allowNull: false,
+        comment: '列表项',
+      },
+      crawlerItemTitle: {
+        field: 'crawler_item_title',
+        type: STRING(128),
+        allowNull: false,
+        comment: '列表项标题',
+      },
+      crawlerItemUrl: {
+        field: 'crawler_item_url',
+        type: STRING(128),
+        allowNull: false,
+        comment: '列表项标题链接',
+      },
+      crawlerItemTime: {
+        field: 'crawler_item_time',
+        type: STRING(128),
+        comment: '列表项时间',
       },
       desc: {
         field: 'desc',

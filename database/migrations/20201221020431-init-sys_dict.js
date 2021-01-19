@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 10:36:07
+ * @lastTime: 2021-01-19 13:05:48
  */
 'use strict';
 
@@ -26,7 +26,7 @@ module.exports = {
         comment: '字典ID',
       },
       name: {
-        field: 'id',
+        field: 'name',
         type: STRING(100),
         allowNull: false,
         comment: '名称',

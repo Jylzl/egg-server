@@ -3,11 +3,11 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 18:03:25
+ * @lastTime: 2021-01-19 09:22:19
  */
 'use strict';
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
+  const { STRING, INTEGER, DATE } = app.Sequelize;
 
   const CrawlerTemplate = app.model.define('crawler_template', {
     id: {
@@ -16,44 +16,68 @@ module.exports = app => {
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      comment: '任务id',
+      comment: '模板id',
     },
-    siteId: {
-      field: 'site_id',
-      type: INTEGER(8),
-      allowNull: false,
-      comment: '站点ID',
-    },
-    columnId: {
-      field: 'column_id',
-      type: INTEGER(8),
-      allowNull: false,
-      comment: '栏目ID',
-    },
-    title: {
-      field: 'title',
+    name: {
+      field: 'name',
       type: STRING(128),
       allowNull: false,
-      comment: '文章标题',
+      comment: '模板名称',
     },
-    href: {
-      field: 'href',
+    articleTitle: {
+      field: 'article_title',
       type: STRING(128),
-      allowNull: false,
-      comment: '文章链接',
+      comment: '标题',
     },
-    date: {
-      field: 'date',
-      type: DATE,
-      allowNull: true,
-      comment: '文章时间',
+    pubDate: {
+      field: 'pub_date',
+      type: STRING(128),
+      comment: '发布时间',
     },
-    status: {
-      field: 'status',
-      type: TINYINT(1),
-      allowNull: false,
-      defaultValue: 0,
-      comment: '状态: 0入库',
+    contentSource: {
+      field: 'content_source',
+      type: STRING(128),
+      comment: '来源',
+    },
+    keywords: {
+      field: 'keywords',
+      type: STRING(128),
+      comment: '关键词',
+    },
+    author: {
+      field: 'author',
+      type: STRING(128),
+      comment: '作者',
+    },
+    description: {
+      field: 'description',
+      type: STRING(128),
+      comment: '摘要',
+    },
+    image: {
+      field: 'image',
+      type: STRING(128),
+      comment: '图片',
+    },
+    url: {
+      field: 'url',
+      type: STRING(128),
+      comment: '网址',
+    },
+    content: {
+      field: 'content',
+      type: STRING(128),
+      comment: '内容',
+    },
+    views: {
+      field: 'views',
+      type: STRING(128),
+      comment: '阅读量',
+    },
+    desc: {
+      field: 'desc',
+      type: STRING(200),
+      comment: '描述',
     },
     createdAt: {
       field: 'created_at',

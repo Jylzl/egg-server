@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:15:04
+ * @lastTime: 2021-01-19 16:48:43
  */
 'use strict';
 
@@ -100,5 +100,8 @@ module.exports = {
       _url = new URL(url, baseUrl).href;
     }
     return _url;
+  },
+  render(template, context) {
+    return template.replace(/\$\{(\w+)\}/g, (match, key) => context[key.trim()]);
   },
 };

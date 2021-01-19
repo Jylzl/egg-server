@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 17:36:03
+ * @lastTime: 2021-01-19 14:06:10
  */
 'use strict';
 
@@ -28,18 +28,6 @@ class CrawlerColumnController extends Controller {
       siteId: ctx.helper.parseInt(ctx.query.siteId),
     };
     const res = await service.crawlerColumn.index(query);
-    ctx.helper.success({
-      ctx,
-      res,
-    });
-  }
-
-  async check() {
-    const {
-      ctx,
-      service,
-    } = this;
-    const res = await service.crawlerColumn.check(ctx.query);
     ctx.helper.success({
       ctx,
       res,
@@ -112,6 +100,30 @@ class CrawlerColumnController extends Controller {
       service,
     } = this;
     const res = await service.crawlerColumn.destroy(ctx.params);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async check() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.crawlerColumn.check(ctx.query);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async collect() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.crawlerColumn.collect(ctx.query);
     ctx.helper.success({
       ctx,
       res,
