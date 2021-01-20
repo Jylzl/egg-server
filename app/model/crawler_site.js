@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2021-01-18 09:21:18
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 17:01:44
+ * @lastTime: 2021-01-20 14:33:22
  */
 'use strict';
 
@@ -71,7 +71,9 @@ module.exports = app => {
 
   CrawlerSite.associate = () => {
     // 与CrawlerColumn存在一对多关系，所以是hasMany()
-    app.model.CrawlerSite.hasMany(app.model.CrawlerColumn, { foreignKey: 'id', targetKey: 'site_id' });
+    app.model.CrawlerSite.hasMany(app.model.CrawlerColumn, { foreignKey: 'id', targetKey: 'siteId' });
+    // 与CrawlerContent存在一对多关系，所以是hasMany()
+    app.model.CrawlerSite.hasMany(app.model.CrawlerContent, { foreignKey: 'id', targetKey: 'siteId' });
   };
   return CrawlerSite;
 };

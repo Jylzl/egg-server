@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-19 14:05:31
+ * @lastTime: 2021-01-20 16:35:50
  */
 'use strict';
 
@@ -13,7 +13,7 @@ module.exports = app => {
     controller,
     jwt,
   } = app;
-  const { powAccount, powUser, powRole, powDept, powArea, sysFile, sysUpload, powMenu, crawler, crawlerSite, crawlerColumn, crawlerTask, crawlerTemplate, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf, appEmail } = controller;
+  const { powAccount, powUser, powRole, powDept, powArea, sysFile, sysUpload, powMenu, crawler, crawlerSite, crawlerColumn, crawlerContent, crawlerTask, crawlerTemplate, sysDict, sysDictitem, sysSecretkey, sysLog, sysInf, appEmail } = controller;
   // 挂载鉴权路由
   // 登录校验
   // 本地登录
@@ -51,7 +51,13 @@ module.exports = app => {
   router.get('/api/crawler/column/check', jwt, crawlerColumn.check);
   router.get('/api/crawler/column/collect', jwt, crawlerColumn.collect);
   router.resources('crawlerColumn', '/api/crawler/column', jwt, crawlerColumn);
+  // 采集任务模块-内容管理
+  router.get('/api/crawler/content/check', jwt, crawlerContent.check);
+  router.get('/api/crawler/content/collect', jwt, crawlerContent.collect);
+  router.resources('crawlerContent', '/api/crawler/content', jwt, crawlerContent);
   // 采集任务模块-采集任务
+  router.get('/api/crawler/task/progress', jwt, crawlerTask.progress);
+  router.get('/api/crawler/task/collect', jwt, crawlerTask.collect);
   router.resources('crawlerTask', '/api/crawler/task', jwt, crawlerTask);
   // 采集任务模块-采集模板
   router.resources('crawlerTemplate', '/api/crawler/template', jwt, crawlerTemplate);

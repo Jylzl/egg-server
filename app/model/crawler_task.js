@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 17:17:52
+ * @lastTime: 2021-01-20 14:33:47
  */
 'use strict';
 module.exports = app => {
@@ -29,6 +29,12 @@ module.exports = app => {
       type: INTEGER(8),
       allowNull: false,
       comment: '栏目ID',
+    },
+    templateId: {
+      field: 'template_id',
+      type: INTEGER(8),
+      allowNull: false,
+      comment: '模板ID',
     },
     title: {
       field: 'title',
@@ -76,5 +82,13 @@ module.exports = app => {
     timestamps: true,
   });
 
+  CrawlerTask.associate = () => {
+    // 与CrawlerColumn存在一对多关系，所以是hasMany()
+    app.model.CrawlerTask.belongsTo(app.model.CrawlerColumn, { foreignKey: 'columnId', targetKey: 'id', as: 'taskColumn' });
+    // 与CrawlerColumn存在一对多关系，所以是hasMany()
+    app.model.CrawlerTask.belongsTo(app.model.CrawlerSite, { foreignKey: 'siteId', targetKey: 'id', as: 'taskSite' });
+    // 与CrawlerContent存在一对多关系，所以是hasMany()
+    app.model.CrawlerTask.belongsTo(app.model.CrawlerTemplate, { foreignKey: 'templateId', targetKey: 'id', as: 'taskTemplate' });
+  };
   return CrawlerTask;
 };

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 17:18:02
+ * @lastTime: 2021-01-20 11:16:09
  */
 'use strict';
 
@@ -36,6 +36,12 @@ module.exports = {
         type: INTEGER(8),
         allowNull: false,
         comment: '栏目ID',
+      },
+      templateId: {
+        field: 'template_id',
+        type: INTEGER(8),
+        allowNull: false,
+        comment: '模板ID',
       },
       title: {
         field: 'title',

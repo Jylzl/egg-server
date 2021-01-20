@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-19 16:48:43
+ * @lastTime: 2021-01-20 14:50:32
  */
 'use strict';
 
@@ -85,16 +85,20 @@ module.exports = {
     };
     ctx.status = 200;
   },
-  formatTime() {
-    return '1';
-  },
+  // 时间格式化
   moment(date, type) {
-    return moment(date).format(type || 'YYYY-MM-DD HH:mm:ss');
+    let _date = null;
+    if (date === null || date === undefined || date === '') {
+      _date = date;
+    } else {
+      _date = moment(date).format(type || 'YYYY-MM-DD HH:mm:ss');
+    }
+    return _date;
   },
   urlSplicing(baseUrl, url) {
-    let _url = '';
+    let _url = null;
     // 如果是绝对路径直接返回
-    if (url.startsWith('http')) {
+    if (url === null || url === undefined || url === '' || url.startsWith('http')) {
       _url = url;
     } else {
       _url = new URL(url, baseUrl).href;

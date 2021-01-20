@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-19 09:22:19
+ * @lastTime: 2021-01-20 11:30:23
  */
 'use strict';
 module.exports = app => {
@@ -100,5 +100,9 @@ module.exports = app => {
     timestamps: true,
   });
 
+  // CrawlerTemplate.associate = () => {
+  //   // 与CrawlerColumn存在一对多关系，所以是hasMany()
+  //   app.model.CrawlerTemplate.belongsTo(app.model.CrawlerTask, { foreignKey: 'template_id', targetKey: 'id', as: 'taskTemplate' });
+  // };
   return CrawlerTemplate;
 };
