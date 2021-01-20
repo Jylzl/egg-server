@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 11:16:09
+ * @lastTime: 2021-01-20 21:50:40
  */
 'use strict';
 
@@ -51,7 +51,7 @@ module.exports = {
       },
       href: {
         field: 'href',
-        type: STRING(128),
+        type: STRING(512),
         allowNull: false,
         comment: '文章链接',
       },

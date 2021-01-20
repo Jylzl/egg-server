@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 16:36:10
+ * @lastTime: 2021-01-20 22:32:10
  */
 'use strict';
 
@@ -25,6 +25,7 @@ class CrawlerTaskController extends Controller {
     const query = {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
+      columnId: ctx.helper.parseInt(ctx.query.columnId),
     };
     const res = await service.crawlerTask.index(query);
     ctx.helper.success({

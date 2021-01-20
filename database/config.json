@@ -2,13 +2,13 @@
   "development": {
     "username": "root",
     "password": "root",
-    "database": "blogdb",
+    "database": "929924",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "root",
+    "password": "929924",
     "database": "blogdb",
     "host": "127.0.0.1",
     "dialect": "mysql"
@@ -16,7 +16,7 @@
   "production": {
     "username": "root",
     "password": "root",
-    "database": "blogdb",
+    "database": "929924",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }

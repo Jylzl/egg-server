@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 18:14:20
+ * @lastTime: 2021-01-20 22:45:48
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -88,11 +88,8 @@ class CrawlerColumnService extends Service {
 
   async collect(params) {
     const { ctx } = this;
-    const arr = [];
     let total = 0;
-    let finish = 0;
     const result = await ctx.model.CrawlerColumn.findByPk(params.id);
-
     // 解析HTML
     function analysis(cresult) {
       const arrs = [];
@@ -106,7 +103,7 @@ class CrawlerColumnService extends Service {
           href: ctx.helper.urlSplicing(result.crawlerColumnUrl, $($(element).find(result.crawlerItemUrl)).attr('href')),
           date: ctx.helper.moment($($(element).find(result.crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
           siteId: result.siteId,
-          columnId: result.columnId,
+          columnId: result.id,
           templateId: result.templateId,
           status: 0,
         });
@@ -114,29 +111,28 @@ class CrawlerColumnService extends Service {
       return arrs;
     }
 
+
     if (result) {
       const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
       // 计算最后一页数据
       const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
       const endArr = analysis(endResult);
       total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + endArr.length;
-      // 采集列表第一页
-      const startResult = await ctx.curl(result.crawlerColumnUrl);
-      const startArr = analysis(startResult);
-      const startSaveResult = await ctx.model.CrawlerTask.bulkCreate(startArr);
-      if (startSaveResult) {
-        finish += startSaveResult.length;
-      }
-      // 采集列表动态页
-      for (let page = crawlerStartPage; page <= crawlerEndPage; page++) {
-        const cresult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page }));
-        const arrl = analysis(cresult);
-        const sresult = await ctx.model.CrawlerTask.bulkCreate(arrl);
-        if (sresult) {
-          finish += sresult.length;
-          console.log(`save_${page}_${sresult.length}`);
+      // 下单后需要进行一次核对，且不阻塞当前请求
+      ctx.runInBackground(async () => {
+        // 这里面的异常都会统统被 Backgroud 捕获掉，并打印错误日志
+        // 采集列表第一页
+        const startResult = await ctx.curl(result.crawlerColumnUrl);
+        const startArr = analysis(startResult);
+        await ctx.model.CrawlerTask.bulkCreate(startArr);
+
+        // 采集列表动态页
+        for (let page = crawlerStartPage; page <= crawlerEndPage; page++) {
+          const cresult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page }));
+          const arrl = analysis(cresult);
+          await ctx.model.CrawlerTask.bulkCreate(arrl);
         }
-      }
+      });
     }
     // const crawlerStartPage = result.crawlerStartPage;
     // const currentPage = ctx.helper.parseInt(params.currentPage);
@@ -164,19 +160,15 @@ class CrawlerColumnService extends Service {
     //   });
     // });
     // // const sresult = await ctx.model.CrawlerTask.bulkCreate(arr);
-    const tresult = await ctx.model.CrawlerTask.count({
-      where: {
-        column_id: result.columnId,
-      },
-    });
+    // const tresult = await ctx.model.CrawlerTask.count({
+    //   where: {
+    //     column_id: result.columnId,
+    //   },
+    // });
     // return sresult;
     return {
-      rows: arr,
-      finish,
       total,
-      count: total,
-      size: result.crawlerPageSize,
-      tresult,
+      result,
     };
   }
 }

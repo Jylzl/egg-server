@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 16:52:14
+ * @lastTime: 2021-01-20 22:32:42
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -40,11 +40,14 @@ class CrawlerTaskService extends Service {
 
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize } = query;
+    const { currentPage, pageSize, columnId } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.CrawlerTask.findAndCountAll({
+        where: {
+          columnId,
+        },
         // offet去掉前多少个数据
         offset: _offset,
         // limit每页数据数量
