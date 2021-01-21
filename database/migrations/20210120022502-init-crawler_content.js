@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 10:25:49
+ * @lastTime: 2021-01-21 08:52:03
  */
 'use strict';
 
@@ -39,7 +39,7 @@ module.exports = {
       },
       url: {
         field: 'url',
-        type: STRING(128),
+        type: STRING(512),
         comment: '原网址',
       },
       articleTitle: {

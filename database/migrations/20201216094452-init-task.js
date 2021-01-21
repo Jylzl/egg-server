@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-11 22:41:39
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-16 18:03:54
+ * @lastTime: 2021-01-21 08:52:26
  */
 'use strict';
 
@@ -19,12 +19,12 @@ module.exports = {
         comment: '任务id',
       },
       title: {
-        type: STRING(128),
+        type: STRING(256),
         allowNull: false,
         comment: '文章标题',
       },
       href: {
-        type: STRING(128),
+        type: STRING(512),
         allowNull: false,
         comment: '文章链接',
       },

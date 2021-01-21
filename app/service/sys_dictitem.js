@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2020-12-23 10:07:51
+ * @lastTime: 2021-01-21 09:40:32
  */
 'use strict';
 
@@ -18,7 +18,7 @@ class SysDictItemService extends Service {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.SysDictItem.findAndCountAll({
         where: {
-          dict_id: dictId,
+          dictId,
         },
         // offet去掉前多少个数据
         offset: _offset,
@@ -28,7 +28,7 @@ class SysDictItemService extends Service {
     } else {
       result = await ctx.model.SysDictItem.findAll({
         where: {
-          dict_id: dictId,
+          dictId,
         },
       });
     }
@@ -65,7 +65,7 @@ class SysDictItemService extends Service {
     const { ctx } = this;
     const result = await ctx.model.SysDictItem.findAll({
       where: {
-        dict_id: query.dict_id,
+        dictId: query.dictId,
         value: query.value,
       },
       attributes: [ 'id' ],
