@@ -85,21 +85,21 @@ class SysFileService extends Service {
   // index======================================================================================================>
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize, new_name, startTime, endTime } = query;
+    const { currentPage, pageSize, newName } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.SysFile.findAndCountAll({
         where: {
-          new_name: {
-            $like: `%${new_name}%`,
+          newName: {
+            $like: `%${newName}%`,
           },
         },
         // offet去掉前多少个数据
         offset: _offset,
         // limit每页数据数量
         limit: pageSize,
-        order: [[ 'created_at', 'DESC' ]],
+        order: [[ 'createdAt', 'DESC' ]],
       });
     } else {
       result = await ctx.model.SysFile.findAll();
@@ -187,7 +187,7 @@ class SysFileService extends Service {
     } else {
       // 物理删除磁盘文件
       try {
-        const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
+        const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.newName);
         // const folder = path.join(this.config.baseDir, uplaodBasePath, attachment.folder);
         // 文件存在则删除文件
         if (fs.existsSync(target)) {
@@ -227,7 +227,7 @@ class SysFileService extends Service {
   async show(id) {
     const { ctx } = this;
     const attachment = await ctx.model.SysFile.findByPk(id);
-    const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
+    const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.newName);
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     }
@@ -241,7 +241,7 @@ class SysFileService extends Service {
     if (!attachment) {
       ctx.throw(404, 'attachment not found');
     } else {
-      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.new_name);
+      const target = path.join(this.config.baseDir, uplaodBasePath, attachment.folder, attachment.newName);
       return { target, attachment };
     }
   }

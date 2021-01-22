@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 22:32:42
+ * @lastTime: 2021-01-22 09:23:03
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -72,47 +72,55 @@ class CrawlerTaskService extends Service {
 
   async collect(params) {
     const { ctx } = this;
-    let obj = {};
-    const result = await ctx.model.CrawlerTask.findByPk(params.id, {
-      include: [{
-        model: ctx.model.CrawlerColumn,
-        as: 'taskColumn',
-      }, {
-        model: ctx.model.CrawlerTemplate,
-        as: 'taskTemplate',
-      }],
-    });
-    if (result) {
-      const cresult = await ctx.curl(result.href);
+    let total = 0;
+    const result = await ctx.model.CrawlerColumn.findByPk(params.id);
+    // 解析HTML
+    function analysis(cresult) {
+      const arrs = [];
       // toString是为了解析出buffer数据
       const pageXml = cresult.data.toString();
       // decodeEntities参数是为了解决cheerio获取的中文乱码
       const $ = cheerio.load(pageXml, { decodeEntities: false });
-      const { articleTitle, author, content, contentSource, description, image, keywords, pubDate, views } = result.taskTemplate;
-      const imgs = [];
-      $(content + ' img').each((index, element) => {
-        const src = ctx.helper.urlSplicing(result.href, $(element).attr('src'));
-        $(element).attr('src', src);
-        $(element).attr('_src', ctx.helper.urlSplicing(result.href, $(element).attr('_src')));
-        imgs.push(src);
+      $(result.crawlerItem).each((index, element) => {
+        arrs.push({
+          title: $($(element).find(result.crawlerItemTitle)).attr('title') || $($(element).find(result.crawlerItemTitle)).html(),
+          href: ctx.helper.urlSplicing(result.crawlerColumnUrl, $($(element).find(result.crawlerItemUrl)).attr('href')),
+          date: ctx.helper.moment($($(element).find(result.crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
+          siteId: result.siteId,
+          columnId: result.id,
+          templateId: result.templateId,
+          status: 0,
+        });
       });
-      obj = {
-        articleTitle: $(articleTitle).attr('content') || $(articleTitle).html(),
-        author: $(author).attr('content') || $(author).html(),
-        content: $(content).attr('content') || $(content).html(),
-        contentSource: $(contentSource).attr('content') || $(contentSource).html(),
-        description: $(description).attr('content') || $(description).html(),
-        image: ctx.helper.urlSplicing(result.href, $(image).attr('content') || $(image).html()),
-        keywords: $(keywords).attr('content') || $(keywords).html(),
-        pubDate: ctx.helper.moment($(pubDate).attr('content') || $(pubDate).html(), 'YYYY-MM-DD HH:mm:ss'),
-        url: result.href,
-        views: $(views).attr('content') || $(views).html(),
-        imgs,
-      };
-    } else {
-      obj = {};
+      return arrs;
     }
-    return obj;
+
+    if (result) {
+      const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
+      // 计算最后一页数据
+      const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
+      const endArr = analysis(endResult);
+      total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + endArr.length;
+      // 下单后需要进行一次核对，且不阻塞当前请求
+      ctx.runInBackground(async () => {
+        // 这里面的异常都会统统被 Backgroud 捕获掉，并打印错误日志
+        // 采集列表第一页
+        const startResult = await ctx.curl(result.crawlerColumnUrl);
+        const startArr = analysis(startResult);
+        await ctx.model.CrawlerTask.bulkCreate(startArr);
+
+        // 采集列表动态页
+        for (let page = crawlerStartPage; page <= crawlerEndPage; page++) {
+          const cresult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page }));
+          const arrl = analysis(cresult);
+          await ctx.model.CrawlerTask.bulkCreate(arrl);
+        }
+      });
+    }
+    return {
+      total,
+      result,
+    };
   }
 }
 

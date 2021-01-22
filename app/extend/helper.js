@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 14:50:32
+ * @lastTime: 2021-01-22 09:45:28
  */
 'use strict';
 
@@ -95,6 +95,7 @@ module.exports = {
     }
     return _date;
   },
+  // url处理，相对路径转绝对路径
   urlSplicing(baseUrl, url) {
     let _url = null;
     // 如果是绝对路径直接返回
@@ -103,8 +104,15 @@ module.exports = {
     } else {
       _url = new URL(url, baseUrl).href;
     }
-    return _url;
+    return _url.replace(':80', '');
   },
+  // url处理，比较两个url是否一致
+  urlCompare(url1, url2, str) {
+    const _url1 = new URL(url1);
+    const _url2 = new URL(url2);
+    return _url1[str] === _url2[str];
+  },
+  // 模板处理
   render(template, context) {
     return template.replace(/\$\{(\w+)\}/g, (match, key) => context[key.trim()]);
   },

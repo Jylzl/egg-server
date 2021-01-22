@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 20:05:54
+ * @lastTime: 2021-01-22 18:23:18
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -148,6 +148,8 @@ module.exports = appInfo => {
       $values: Op.values,
       $col: Op.col,
     },
+    // 日志打印
+    logging: false,
   };
 
   // GitHub登录

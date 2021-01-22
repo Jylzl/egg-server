@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-21 08:40:15
+ * @lastTime: 2021-01-22 09:22:52
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -111,7 +111,6 @@ class CrawlerColumnService extends Service {
       return arrs;
     }
 
-
     if (result) {
       const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
       // 计算最后一页数据
@@ -134,38 +133,6 @@ class CrawlerColumnService extends Service {
         }
       });
     }
-    // const crawlerStartPage = result.crawlerStartPage;
-    // const currentPage = ctx.helper.parseInt(params.currentPage);
-    // let page;
-    // if (crawlerStartPage === 2) {
-    //   page = currentPage;
-    // } else {
-    //   page = ctx.helper.parseInt(currentPage + (crawlerStartPage - 2));
-    // }
-    // const url = currentPage === 1 ? result.crawlerColumnUrl : ctx.helper.render(result.crawlerReUrl, { page });
-    // const cresult = await ctx.curl(url);
-    // // toString是为了解析出buffer数据
-    // const pageXml = cresult.data.toString();
-    // // decodeEntities参数是为了解决cheerio获取的中文乱码
-    // const $ = cheerio.load(pageXml, { decodeEntities: false });
-    // $(result.crawlerItem).each((index, element) => {
-    //   arr.push({
-    //     title: $($(element).find(result.crawlerItemTitle)).attr('title') || $($(element).find(result.crawlerItemTitle)).html(),
-    //     href: ctx.helper.urlSplicing(result.crawlerColumnUrl, $($(element).find(result.crawlerItemUrl)).attr('href')),
-    //     date: ctx.helper.moment($($(element).find(result.crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
-    //     siteId: result.siteId,
-    //     columnId: result.columnId,
-    //     templateId: result.templateId,
-    //     status: 0,
-    //   });
-    // });
-    // // const sresult = await ctx.model.CrawlerTask.bulkCreate(arr);
-    // const tresult = await ctx.model.CrawlerTask.count({
-    //   where: {
-    //     column_id: result.columnId,
-    //   },
-    // });
-    // return sresult;
     return {
       total,
       result,
