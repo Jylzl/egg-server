@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-19 16:51:32
+ * @lastTime: 2021-01-23 17:51:49
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('crawler_column', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, DATE } = Sequelize;
+    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
     await queryInterface.createTable('crawler_column', {
       id: {
         field: 'id',
@@ -116,6 +116,23 @@ module.exports = {
         type: STRING(200),
         allowNull: false,
         comment: '描述',
+      },
+      status: {
+        field: 'status',
+        type: TINYINT(1),
+        allowNull: false,
+        defaultValue: 0,
+        comment: '状态: speed_state',
+      },
+      collectStartAt: {
+        field: 'collect_start_ad',
+        type: DATE,
+        comment: '采集开始时间',
+      },
+      collectEndAt: {
+        field: 'collect_end_ad',
+        type: DATE,
+        comment: '采集结束时间',
       },
       createdAt: {
         field: 'created_at',

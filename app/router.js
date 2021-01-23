@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 16:35:50
+ * @lastTime: 2021-01-23 17:14:31
  */
 'use strict';
 
@@ -58,6 +58,7 @@ module.exports = app => {
   // 采集任务模块-采集任务
   router.get('/api/crawler/task/progress', jwt, crawlerTask.progress);
   router.get('/api/crawler/task/collect', jwt, crawlerTask.collect);
+  router.delete('/api/crawler/task/clear/:columnId', jwt, crawlerTask.clear);
   router.resources('crawlerTask', '/api/crawler/task', jwt, crawlerTask);
   // 采集任务模块-采集模板
   router.resources('crawlerTemplate', '/api/crawler/template', jwt, crawlerTemplate);

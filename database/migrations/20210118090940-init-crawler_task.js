@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 21:50:40
+ * @lastTime: 2021-01-23 17:52:10
  */
 'use strict';
 
@@ -66,7 +66,7 @@ module.exports = {
         type: TINYINT(1),
         allowNull: false,
         defaultValue: 0,
-        comment: '状态: 0入库',
+        comment: '状态: collect_state',
       },
       createdAt: {
         field: 'created_at',

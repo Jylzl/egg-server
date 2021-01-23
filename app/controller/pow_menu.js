@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 12:44:28
+ * @lastTime: 2021-01-23 11:52:23
  */
 'use strict';
 
@@ -54,8 +54,6 @@ class PowMenuController extends Controller {
       lazy: ctx.query.lazy,
       type: ctx.query.type.split(','),
     };
-    console.log(ctx.query);
-    console.log(ctx.query.type);
     const res = await service.powMenu.tree(query);
     ctx.helper.success({
       ctx,

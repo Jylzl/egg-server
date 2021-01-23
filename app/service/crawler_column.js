@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-22 09:22:52
+ * @lastTime: 2021-01-23 10:57:42
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -112,7 +112,15 @@ class CrawlerColumnService extends Service {
     }
 
     if (result) {
-      const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
+      const { id, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
+      // 保存开始采集时间
+      await ctx.model.CrawlerColumn.update({
+        collectStartAt: Date.now(),
+      }, {
+        where: {
+          id,
+        },
+      });
       // 计算最后一页数据
       const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
       const endArr = analysis(endResult);
@@ -131,6 +139,14 @@ class CrawlerColumnService extends Service {
           const arrl = analysis(cresult);
           await ctx.model.CrawlerTask.bulkCreate(arrl);
         }
+        // 保存开始采集时间
+        await ctx.model.CrawlerColumn.update({
+          collectEndAt: Date.now(),
+        }, {
+          where: {
+            id,
+          },
+        });
       });
     }
     return {

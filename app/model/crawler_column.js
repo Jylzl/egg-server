@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2021-01-18 09:21:18
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 14:34:34
+ * @lastTime: 2021-01-23 17:51:23
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
 
   const CrawlerColumn = app.model.define('crawler_column', {
     id: {
@@ -110,6 +110,23 @@ module.exports = app => {
       type: STRING(200),
       allowNull: false,
       comment: '描述',
+    },
+    status: {
+      field: 'status',
+      type: TINYINT(1),
+      allowNull: false,
+      defaultValue: 0,
+      comment: '状态: speed_state',
+    },
+    collectStartAt: {
+      field: 'collect_start_ad',
+      type: DATE,
+      comment: '采集开始时间',
+    },
+    collectEndAt: {
+      field: 'collect_end_ad',
+      type: DATE,
+      comment: '采集结束时间',
     },
     createdAt: {
       field: 'created_at',

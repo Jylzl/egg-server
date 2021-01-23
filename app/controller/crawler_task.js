@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 22:32:10
+ * @lastTime: 2021-01-23 17:15:36
  */
 'use strict';
 
@@ -137,6 +137,19 @@ class CrawlerTaskController extends Controller {
       service,
     } = this;
     const res = await service.crawlerTask.collect(ctx.query);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  // 清空任务
+  async clear() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.crawlerTask.clear(ctx.params);
     ctx.helper.success({
       ctx,
       res,

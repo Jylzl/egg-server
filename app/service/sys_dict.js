@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-19 13:17:02
+ * @lastTime: 2021-01-23 17:40:19
  */
 'use strict';
 
@@ -37,7 +37,6 @@ class SysDictService extends Service {
 
   async create(params) {
     const { ctx } = this;
-    console.log(params);
     const result = await ctx.model.SysDict.create(params);
     return result;
   }
@@ -75,14 +74,17 @@ class SysDictService extends Service {
       }],
       distinct: true,
     });
-    const res = result.sysDictItem.map(item => {
-      if (result.valueType.toLowerCase() === 'number') {
-        item.value = Number(item.value);
-      } else if (result.valueType.toLowerCase() === 'string') {
-        item.value = item.value.toString();
-      }
-      return item;
-    });
+    let res = [];
+    if (result) {
+      res = result.sysDictItem.map(item => {
+        if (result.valueType.toLowerCase() === 'number') {
+          item.value = Number(item.value);
+        } else if (result.valueType.toLowerCase() === 'string') {
+          item.value = item.value.toString();
+        }
+        return item;
+      });
+    }
     return res;
   }
 

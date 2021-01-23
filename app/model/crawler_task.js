@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-21 08:52:44
+ * @lastTime: 2021-01-23 17:50:52
  */
 'use strict';
 module.exports = app => {
@@ -59,7 +59,7 @@ module.exports = app => {
       type: TINYINT(1),
       allowNull: false,
       defaultValue: 0,
-      comment: '状态: 0入库',
+      comment: '状态: collect_state',
     },
     createdAt: {
       field: 'created_at',
