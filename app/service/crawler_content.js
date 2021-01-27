@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 17:47:34
+ * @lastTime: 2021-01-27 22:29:52
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -230,8 +230,9 @@ class CrawlerContentService extends Service {
               siteId: colum.siteId,
               status: 0,
             };
-            if (ctx.helper.urlCompare(colum.crawlerColumnUrl, tasks.rows[index].href, 'host')) {
-              const cresult = await ctx.curl(tasks.rows[index].href);
+            const { id, href } = tasks.rows[index];
+            if (ctx.helper.urlCompare(colum.crawlerColumnUrl, href, 'host')) {
+              const cresult = await ctx.curl(href);
               // toString是为了解析出buffer数据
               const pageXml = cresult.data.toString();
               // decodeEntities参数是为了解决cheerio获取的中文乱码
@@ -245,7 +246,7 @@ class CrawlerContentService extends Service {
                 }
               }
             } else {
-              obj.url = tasks.rows[index].href;
+              obj.url = href;
             }
             try {
               await ctx.model.CrawlerContent.create(obj);
@@ -254,7 +255,7 @@ class CrawlerContentService extends Service {
                 status: 1,
               }, {
                 where: {
-                  id: columnId,
+                  id,
                 },
               });
             } catch (error) {
@@ -264,7 +265,7 @@ class CrawlerContentService extends Service {
                 statusInf: error,
               }, {
                 where: {
-                  id: columnId,
+                  id: tasks.rows[index].id,
                 },
               });
             }
