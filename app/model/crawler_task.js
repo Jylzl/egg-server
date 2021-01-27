@@ -3,11 +3,11 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-23 17:50:52
+ * @lastTime: 2021-01-27 18:10:10
  */
 'use strict';
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, DATE, TEXT } = app.Sequelize;
 
   const CrawlerTask = app.model.define('crawler_task', {
     id: {
@@ -60,6 +60,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
       comment: '状态: collect_state',
+    },
+    statusInf: {
+      field: 'status_inf',
+      type: TEXT(),
+      comment: '状态信息',
     },
     createdAt: {
       field: 'created_at',

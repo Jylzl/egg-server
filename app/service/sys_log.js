@@ -49,9 +49,7 @@ class PowAreaService extends Service {
             $like: `%${title}%`,
           },
         },
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
         order: [[ 'created_at', 'DESC' ]],
       });

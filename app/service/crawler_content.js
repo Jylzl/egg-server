@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-22 18:29:52
+ * @lastTime: 2021-01-27 17:47:34
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -57,9 +57,7 @@ class CrawlerContentService extends Service {
           model: ctx.model.CrawlerColumn,
           as: 'contentColumn',
         }],
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
       });
     } else {
@@ -76,7 +74,6 @@ class CrawlerContentService extends Service {
       const pageXml = result.data.toString();
       // decodeEntities参数是为了解决cheerio获取的中文乱码
       const $ = cheerio.load(pageXml, { decodeEntities: false });
-      console.log($('title').text());
       const site = {
         title: $('title').text(),
       };
@@ -115,9 +112,7 @@ class CrawlerContentService extends Service {
   //       where: {
   //         columnId: task.columnId,
   //       },
-  //       // offet去掉前多少个数据
   //       offset: _offset,
-  //       // limit每页数据数量
   //       limit: pageSize,
   //       include: [{
   //         model: ctx.model.CrawlerColumn,
@@ -192,51 +187,100 @@ class CrawlerContentService extends Service {
 
   async collect(params) {
     const { ctx } = this;
-    const colum = await ctx.model.CrawlerColumn.findByPk(params.id, {
+    const { columnId } = params;
+    const colum = await ctx.model.CrawlerColumn.findByPk(columnId, {
       include: [{
         model: ctx.model.CrawlerTemplate,
         as: 'taskTemplate',
-      }],
-    });
-    const task = await ctx.model.CrawlerTask.findByPk(params.id, {
-      include: [{
-        model: ctx.model.CrawlerColumn,
-        as: 'taskColumn',
-      }, {
-        model: ctx.model.CrawlerTemplate,
-        as: 'taskTemplate',
+        // eslint-disable-next-line array-bracket-spacing
+        attributes: { exclude: ['createdAt', 'deletedAt', 'desc', 'id', 'name', 'updatedAt'] },
       }],
     });
     const taskTotal = await ctx.model.CrawlerTask.count({
       where: {
-        columnId: task.columnId,
+        columnId,
       },
     });
-    const pageSize = task.taskColumn.crawlerPageSize;
+    const pageSize = colum.crawlerPageSize;
     const pages = Math.ceil(taskTotal / pageSize);
-    for (let index = 1; index <= pages; index++) {
-      const _offset = (index - 1) * pageSize;
-      const tasks = await ctx.model.CrawlerTask.findAndCountAll({
+
+    // 后台去执行内容采集
+    ctx.runInBackground(async () => {
+      // 栏目采集状态改成开始
+      await ctx.model.CrawlerColumn.update({
+        status: 1,
+      }, {
         where: {
-          columnId: task.columnId,
+          id: columnId,
         },
-        // offet去掉前多少个数据
-        offset: _offset,
-        // limit每页数据数量
-        limit: pageSize,
-        include: [{
-          model: ctx.model.CrawlerColumn,
-          as: 'taskColumn',
-        }, {
-          model: ctx.model.CrawlerTemplate,
-          as: 'taskTemplate',
-        }],
       });
-      for (let index = 0; index < tasks.count.rows; index++) {
-        console.log(tasks.rows[index].id);
+      for (let index = 1; index <= pages; index++) {
+        const _offset = (index - 1) * pageSize;
+        const tasks = await ctx.model.CrawlerTask.findAndCountAll({
+          where: {
+            columnId,
+          },
+          offset: _offset,
+          limit: pageSize,
+        });
+        if (tasks && tasks.count > 0) {
+          for (let index = 0; index < tasks.rows.length; index++) {
+            const obj = {
+              columnId,
+              siteId: colum.siteId,
+              status: 0,
+            };
+            if (ctx.helper.urlCompare(colum.crawlerColumnUrl, tasks.rows[index].href, 'host')) {
+              const cresult = await ctx.curl(tasks.rows[index].href);
+              // toString是为了解析出buffer数据
+              const pageXml = cresult.data.toString();
+              // decodeEntities参数是为了解决cheerio获取的中文乱码
+              const $ = cheerio.load(pageXml, { decodeEntities: false });
+              const t = JSON.parse(JSON.stringify(colum.taskTemplate));
+              for (const i in t) {
+                if (t[i].indexOf('meta') !== -1) {
+                  obj[i] = $(t[i]).attr('content');
+                } else {
+                  obj[i] = $(t[i]).html();
+                }
+              }
+            } else {
+              obj.url = tasks.rows[index].href;
+            }
+            try {
+              await ctx.model.CrawlerContent.create(obj);
+              // 记录采集任务执行情况(成功)
+              await ctx.model.CrawlerTask.update({
+                status: 1,
+              }, {
+                where: {
+                  id: columnId,
+                },
+              });
+            } catch (error) {
+              // 记录采集任务执行情况(失败)
+              await ctx.model.CrawlerTask.update({
+                status: 2,
+                statusInf: error,
+              }, {
+                where: {
+                  id: columnId,
+                },
+              });
+            }
+          }
+        }
       }
-    }
-    return { task, taskTotal, colum };
+      // 栏目采集状态改成结束
+      await ctx.model.CrawlerColumn.update({
+        status: 3,
+      }, {
+        where: {
+          id: columnId,
+        },
+      });
+    });
+    return { taskTotal, colum };
   }
 }
 

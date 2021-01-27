@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-21 08:52:03
+ * @lastTime: 2021-01-27 17:46:47
  */
 'use strict';
 
@@ -79,7 +79,7 @@ module.exports = {
       },
       content: {
         field: 'content',
-        type: TEXT(),
+        type: TEXT('long'),
         comment: '内容',
       },
       views: {

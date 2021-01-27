@@ -47,9 +47,7 @@ class PowAreaService extends Service {
         where: {
           parentId,
         },
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
         order: [[ 'order_num', 'ASC' ]],
       });

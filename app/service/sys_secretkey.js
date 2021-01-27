@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-05 14:55:44
+ * @lastTime: 2021-01-27 16:19:16
  */
 'use strict';
 
@@ -39,7 +39,7 @@ class PowAreaService extends Service {
 
   async index(query) {
     const { ctx } = this;
-    const { currentPage, pageSize, description, type } = query;
+    const { currentPage, pageSize, description } = query;
     let result = [];
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
@@ -52,9 +52,7 @@ class PowAreaService extends Service {
           //   $eq: type,
           // },
         },
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
       });
     } else {

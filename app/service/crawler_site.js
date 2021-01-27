@@ -45,9 +45,7 @@ class CrawlerSiteService extends Service {
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.CrawlerSite.findAndCountAll({
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
       });
     } else {

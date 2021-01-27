@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-18 12:52:19
+ * @lastTime: 2021-01-27 16:19:02
  */
 'use strict';
 
@@ -73,9 +73,7 @@ class PowRoleService extends Service {
     if (pageSize) {
       const _offset = (currentPage - 1) * pageSize;
       result = await ctx.model.PowRole.findAndCountAll({
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
         include: [{
           model: ctx.model.PowMenu,

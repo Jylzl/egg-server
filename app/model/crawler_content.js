@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-21 08:50:57
+ * @lastTime: 2021-01-27 17:45:56
  */
 'use strict';
 module.exports = app => {
@@ -72,7 +72,7 @@ module.exports = app => {
     },
     content: {
       field: 'content',
-      type: TEXT(),
+      type: TEXT('long'),
       comment: '内容',
     },
     views: {

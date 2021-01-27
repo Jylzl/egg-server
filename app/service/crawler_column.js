@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-23 10:57:42
+ * @lastTime: 2021-01-27 16:16:38
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -57,9 +57,7 @@ class CrawlerColumnService extends Service {
           model: ctx.model.CrawlerSite,
           as: 'crawlerSite',
         }],
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
       });
     } else {
@@ -125,7 +123,7 @@ class CrawlerColumnService extends Service {
       const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
       const endArr = analysis(endResult);
       total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + endArr.length;
-      // 下单后需要进行一次核对，且不阻塞当前请求
+      // 后台采集任务
       ctx.runInBackground(async () => {
         // 这里面的异常都会统统被 Backgroud 捕获掉，并打印错误日志
         // 采集列表第一页

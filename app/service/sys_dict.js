@@ -20,9 +20,7 @@ class SysDictService extends Service {
         where: {
           type,
         },
-        // offet去掉前多少个数据
         offset: _offset,
-        // limit每页数据数量
         limit: pageSize,
       });
     } else {
