@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 19:33:41
+ * @lastTime: 2021-01-28 19:10:02
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -92,7 +92,7 @@ module.exports = appInfo => {
     host: '127.0.0.1', // host
     port: '3306', // 端口号
     user: 'root', // 用户名
-    password: 'root', // 密码
+    password: '929924', // 密码
     database: 'blogdb', // 数据库名
     // model的全局配置
     define: {

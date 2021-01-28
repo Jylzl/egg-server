@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 08:30:57
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-08 10:10:09
+ * @lastTime: 2021-01-28 19:23:31
  */
 'use strict';
 
@@ -29,10 +29,10 @@ module.exports = {
     enable: true,
     package: 'egg-bcrypt',
   },
-  redis: {
-    enable: true,
-    package: 'egg-redis',
-  },
+  // redis: {
+  //   enable: true,
+  //   package: 'egg-redis',
+  // },
   sequelize: {
     enable: true,
     package: 'egg-sequelize',
