@@ -3,12 +3,14 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 22:29:52
+ * @lastTime: 2021-01-28 15:27:19
  */
 'use strict';
 const cheerio = require('cheerio');
 
 const Service = require('egg').Service;
+
+const minify = require('html-minifier').minify;
 
 class CrawlerContentService extends Service {
 
@@ -83,108 +85,6 @@ class CrawlerContentService extends Service {
     }
   }
 
-  // async collect(params) {
-  //   const { ctx } = this;
-  //   let obj = {};
-  //   const taskObj = {};
-  //   const task = await ctx.model.CrawlerTask.findByPk(params.id, {
-  //     include: [{
-  //       model: ctx.model.CrawlerColumn,
-  //       as: 'taskColumn',
-  //     }, {
-  //       model: ctx.model.CrawlerTemplate,
-  //       as: 'taskTemplate',
-  //     }],
-  //   });
-  //   const taskTotal = await ctx.model.CrawlerTask.count({
-  //     where: {
-  //       columnId: task.columnId,
-  //     },
-  //   });
-  //   const pageSize = task.taskColumn.crawlerPageSize;
-  //   const pages = Math.ceil(taskTotal / pageSize);
-  //   function collectContent(params) {
-  //     console.log(params.id);
-  //   }
-  //   for (let index = 1; index <= pages; index++) {
-  //     const _offset = (index - 1) * pageSize;
-  //     const tasks = await ctx.model.CrawlerTask.findAndCountAll({
-  //       where: {
-  //         columnId: task.columnId,
-  //       },
-  //       offset: _offset,
-  //       limit: pageSize,
-  //       include: [{
-  //         model: ctx.model.CrawlerColumn,
-  //         as: 'taskColumn',
-  //       }, {
-  //         model: ctx.model.CrawlerTemplate,
-  //         as: 'taskTemplate',
-  //       }],
-  //     });
-  //     for (let index = 0; index < tasks.length; index++) {
-  //       collectContent(tasks[index]);
-  //     }
-  //   }
-  //   if (task) {
-  //     taskObj.id = task.id;
-  //     // 文章url和栏目url是同一域名的做采集，否则只记录url做外链
-  //     if (ctx.helper.urlCompare(task.href, task.taskColumn.crawlerColumnUrl, 'host')) {
-  //       const cresult = await ctx.curl(task.href);
-  //       // toString是为了解析出buffer数据
-  //       const pageXml = cresult.data.toString();
-  //       // decodeEntities参数是为了解决cheerio获取的中文乱码
-  //       const $ = cheerio.load(pageXml, { decodeEntities: false });
-  //       const { articleTitle, author, content, contentSource, description, image, keywords, pubDate, views } = task.taskTemplate;
-  //       const imgs = [];
-  //       const as = [];
-  //       $(content + ' img').each((index, element) => {
-  //         const src = ctx.helper.urlSplicing(task.href, $(element).attr('src'));
-  //         $(element).attr('src', src);
-  //         $(element).attr('_src', ctx.helper.urlSplicing(task.href, $(element).attr('_src')));
-  //         imgs.push(src);
-  //       });
-  //       $(content + ' a').each((index, element) => {
-  //         const href = ctx.helper.urlSplicing(task.href, $(element).attr('href'));
-  //         $(element).attr('href', href);
-  //         as.push(href);
-  //       });
-  //       obj = {
-  //         articleTitle: $(articleTitle).attr('content') || $(articleTitle).html(),
-  //         author: $(author).attr('content') || $(author).html(),
-  //         content: $(content).attr('content') || $(content).html(),
-  //         contentSource: $(contentSource).attr('content') || $(contentSource).html(),
-  //         description: $(description).attr('content') || $(description).html(),
-  //         image: ctx.helper.urlSplicing(task.href, $(image).attr('content') || $(image).html()),
-  //         keywords: $(keywords).attr('content') || $(keywords).html(),
-  //         pubDate: ctx.helper.moment($(pubDate).attr('content') || $(pubDate).html(), 'YYYY-MM-DD HH:mm:ss'),
-  //         url: task.href,
-  //         views: $(views).attr('content') || $(views).html(),
-  //         imgs,
-  //         as,
-  //         task,
-  //         taskTotal,
-  //       };
-  //     } else {
-  //       obj = {
-  //         url: task.href,
-  //         task,
-  //         taskTotal,
-  //       };
-  //     }
-  //     taskObj.status = 1;
-  //   } else {
-  //     obj = {};
-  //     taskObj.status = 1;
-  //   }
-  //   await ctx.model.CrawlerTask.update(taskObj, {
-  //     where: {
-  //       id: taskObj.id,
-  //     },
-  //   });
-  //   return obj;
-  // }
-
   async collect(params) {
     const { ctx } = this;
     const { columnId } = params;
@@ -232,18 +132,40 @@ class CrawlerContentService extends Service {
             };
             const { id, href } = tasks.rows[index];
             if (ctx.helper.urlCompare(colum.crawlerColumnUrl, href, 'host')) {
-              const cresult = await ctx.curl(href);
-              // toString是为了解析出buffer数据
-              const pageXml = cresult.data.toString();
-              // decodeEntities参数是为了解决cheerio获取的中文乱码
-              const $ = cheerio.load(pageXml, { decodeEntities: false });
-              const t = JSON.parse(JSON.stringify(colum.taskTemplate));
-              for (const i in t) {
-                if (t[i].indexOf('meta') !== -1) {
-                  obj[i] = $(t[i]).attr('content');
-                } else {
-                  obj[i] = $(t[i]).html();
+              try {
+                const cresult = await ctx.curl(href, {
+                  timeout: 3000,
+                });
+                // toString是为了解析出buffer数据
+                const pageXml = cresult.data.toString();
+                // decodeEntities参数是为了解决cheerio获取的中文乱码
+                const $ = cheerio.load(pageXml, { decodeEntities: false });
+                const t = JSON.parse(JSON.stringify(colum.taskTemplate));
+                for (const i in t) {
+                  if (t[i].length > 0) {
+                    if (t[i].indexOf('meta') !== -1) {
+                      obj[i] = $(t[i]).attr('content');
+                    } else {
+                      // 对能压缩的html尽量压缩
+                      try {
+                        // eslint-disable-next-line array-bracket-spacing
+                        obj[i] = minify($(t[i]).html() || '', { ignoreCustomFragments: [/\{\{[\s\S]*?\}\}/], removeComments: true, collapseWhitespace: true, minifyJS: false, minifyCSS: false });
+                      } catch (error) {
+                        obj[i] = $(t[i]).html();
+                      }
+                    }
+                  }
                 }
+              } catch (error) {
+                // 记录采集任务执行情况(超时)
+                await ctx.model.CrawlerTask.update({
+                  status: 3, // 超时
+                  statusInf: error,
+                }, {
+                  where: {
+                    id,
+                  },
+                });
               }
             } else {
               obj.url = href;
@@ -252,7 +174,8 @@ class CrawlerContentService extends Service {
               await ctx.model.CrawlerContent.create(obj);
               // 记录采集任务执行情况(成功)
               await ctx.model.CrawlerTask.update({
-                status: 1,
+                status: 1, // 成功
+                statusInf: '采集成功',
               }, {
                 where: {
                   id,
@@ -261,7 +184,7 @@ class CrawlerContentService extends Service {
             } catch (error) {
               // 记录采集任务执行情况(失败)
               await ctx.model.CrawlerTask.update({
-                status: 2,
+                status: 2, // 失败
                 statusInf: error,
               }, {
                 where: {

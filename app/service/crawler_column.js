@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 16:16:38
+ * @lastTime: 2021-01-28 12:01:16
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -87,30 +87,27 @@ class CrawlerColumnService extends Service {
   async collect(params) {
     const { ctx } = this;
     let total = 0;
-    const result = await ctx.model.CrawlerColumn.findByPk(params.id);
-    // 解析HTML
-    function analysis(cresult) {
-      const arrs = [];
-      // toString是为了解析出buffer数据
-      const pageXml = cresult.data.toString();
-      // decodeEntities参数是为了解决cheerio获取的中文乱码
-      const $ = cheerio.load(pageXml, { decodeEntities: false });
-      $(result.crawlerItem).each((index, element) => {
-        arrs.push({
-          title: $($(element).find(result.crawlerItemTitle)).attr('title') || $($(element).find(result.crawlerItemTitle)).html(),
-          href: ctx.helper.urlSplicing(result.crawlerColumnUrl, $($(element).find(result.crawlerItemUrl)).attr('href')),
-          date: ctx.helper.moment($($(element).find(result.crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
-          siteId: result.siteId,
-          columnId: result.id,
-          templateId: result.templateId,
-          status: 0,
+    const column = await ctx.model.CrawlerColumn.findByPk(params.id);
+    if (column) {
+      const { id, siteId, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = column;
+      // 解析HTML
+      const analysis = function(cresult) {
+        const arrs = [];
+        const pageXml = cresult.data.toString();
+        const $ = cheerio.load(pageXml, { decodeEntities: false });
+        $(crawlerItem).each((index, element) => {
+          arrs.push({
+            title: $($(element).find(crawlerItemTitle)).attr('title') || $($(element).find(crawlerItemTitle)).html(),
+            href: ctx.helper.urlSplicing(crawlerColumnUrl, $($(element).find(crawlerItemUrl)).attr('href')),
+            date: ctx.helper.moment($($(element).find(crawlerItemTime)).html(), 'YYYY-MM-DD HH:mm:ss'),
+            siteId,
+            columnId: id,
+            templateId,
+            status: 0,
+          });
         });
-      });
-      return arrs;
-    }
-
-    if (result) {
-      const { id, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
+        return arrs;
+      };
       // 保存开始采集时间
       await ctx.model.CrawlerColumn.update({
         collectStartAt: Date.now(),
@@ -127,7 +124,7 @@ class CrawlerColumnService extends Service {
       ctx.runInBackground(async () => {
         // 这里面的异常都会统统被 Backgroud 捕获掉，并打印错误日志
         // 采集列表第一页
-        const startResult = await ctx.curl(result.crawlerColumnUrl);
+        const startResult = await ctx.curl(crawlerColumnUrl);
         const startArr = analysis(startResult);
         await ctx.model.CrawlerTask.bulkCreate(startArr);
 
@@ -149,7 +146,7 @@ class CrawlerColumnService extends Service {
     }
     return {
       total,
-      result,
+      column,
     };
   }
 }

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-23 17:35:53
+ * @lastTime: 2021-01-28 18:12:40
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -57,15 +57,16 @@ class CrawlerTaskService extends Service {
     return result;
   }
 
-  async progress(params) {
+  async progress(query) {
     const { ctx } = this;
-    // const result = await ctx.model.CrawlerTask.count({
-    //   where: {
-    //     column_id: params.id,
-    //   },
-    // });
-    const num = ctx.helper.parseInt(params.num) + 10;
-    return num;
+    const { columnId } = query;
+    const count = await ctx.model.CrawlerTask.count({
+      where: {
+        columnId,
+      },
+    });
+    const column = await ctx.model.CrawlerColumn.findByPk(columnId);
+    return { count, status: column.status };
   }
 
   async collect(params) {
@@ -97,6 +98,7 @@ class CrawlerTaskService extends Service {
       const { id, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize } = result;
       // 保存开始采集时间
       await ctx.model.CrawlerColumn.update({
+        status: 1,
         collectStartAt: Date.now(),
       }, {
         where: {
@@ -123,6 +125,7 @@ class CrawlerTaskService extends Service {
         }
         // 保存开始采集时间
         await ctx.model.CrawlerColumn.update({
+          status: 3,
           collectEndAt: Date.now(),
         }, {
           where: {
@@ -139,13 +142,29 @@ class CrawlerTaskService extends Service {
 
   async clear(params) {
     const { ctx } = this;
-    const delResult = await ctx.model.CrawlerTask.destroy({
+    const { columnId } = params;
+    const delTaskResult = await ctx.model.CrawlerTask.destroy({
       where: {
-        columnId: params.columnId,
+        columnId,
       },
       force: true,
     });
-    return delResult;
+    const delContentResult = await ctx.model.CrawlerContent.destroy({
+      where: {
+        columnId,
+      },
+      force: true,
+    });
+    await ctx.model.CrawlerColumn.update({
+      collectStartAt: null,
+      collectEndAt: null,
+      status: 0,
+    }, {
+      where: {
+        id: columnId,
+      },
+    });
+    return { delTaskResult, delContentResult };
   }
 }
 
