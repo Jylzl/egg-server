@@ -3,12 +3,12 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2021-01-18 09:21:18
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 16:03:48
+ * @lastTime: 2021-01-29 16:11:11
  */
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, TINYINT, DATE } = app.Sequelize;
+  const { STRING, INTEGER, TINYINT, BIGINT, DATE } = app.Sequelize;
 
   const CrawlerColumn = app.model.define('crawler_column', {
     id: {
@@ -66,6 +66,11 @@ module.exports = app => {
       type: INTEGER(8),
       allowNull: false,
       comment: '每页条数',
+    },
+    crawlerPageTotal: {
+      field: 'crawler_page_total',
+      type: BIGINT(11),
+      comment: '任务预计总数',
     },
     crawlerReUrl: {
       field: 'crawler_re_url',
@@ -153,8 +158,8 @@ module.exports = app => {
     app.model.CrawlerColumn.belongsTo(app.model.CrawlerSite, { foreignKey: 'siteId', targetKey: 'id', as: 'crawlerSite' });
     // 与CrawlerContent存在一对多关系，所以是hasMany()
     app.model.CrawlerColumn.hasMany(app.model.CrawlerContent, { foreignKey: 'id', targetKey: 'columnId' });
-    // 与CrawlerContent存在一对多关系，所以是hasMany()
-    app.model.CrawlerColumn.hasOne(app.model.CrawlerTemplate, { foreignKey: 'id', targetKey: 'columnId', as: 'taskTemplate' });
+    // 与CrawlerTemplate存在多对一关系，所以是belongsTo()
+    app.model.CrawlerColumn.belongsTo(app.model.CrawlerTemplate, { foreignKey: 'templateId', targetKey: 'id', as: 'taskTemplate' });
   };
   return CrawlerColumn;
 };

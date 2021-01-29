@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-12 10:53:01
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-27 17:45:56
+ * @lastTime: 2021-01-29 17:34:25
  */
 'use strict';
 module.exports = app => {
@@ -52,7 +52,7 @@ module.exports = app => {
     },
     keywords: {
       field: 'keywords',
-      type: STRING(256),
+      type: STRING(512),
       comment: '关键词',
     },
     author: {
@@ -62,13 +62,35 @@ module.exports = app => {
     },
     description: {
       field: 'description',
-      type: STRING(256),
+      type: STRING(1024),
       comment: '摘要',
     },
     image: {
       field: 'image',
       type: STRING(256),
       comment: '图片',
+    },
+    images: {
+      field: 'images',
+      type: STRING(3000),
+      comment: '图片集合',
+      get() {
+        return this.getDataValue('images').split(',');
+      },
+      set(val) {
+        this.setDataValue('images', val.join(','));
+      },
+    },
+    resources: {
+      field: 'resources',
+      type: STRING(3000),
+      comment: '资源集合',
+      get() {
+        return this.getDataValue('resources').split(',');
+      },
+      set(val) {
+        this.setDataValue('resources', val.join(','));
+      },
     },
     content: {
       field: 'content',

@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-20 10:29:18
+ * @lastTime: 2021-01-29 14:06:36
  */
 'use strict';
 
@@ -118,6 +118,19 @@ class CrawlerContentController extends Controller {
     });
   }
 
+  // 采集进度
+  async progress() {
+    const {
+      ctx,
+      service,
+    } = this;
+    const res = await service.crawlerContent.progress(ctx.query);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
   async collect() {
     const {
       ctx,
@@ -129,6 +142,7 @@ class CrawlerContentController extends Controller {
       res,
     });
   }
+
 }
 
 module.exports = CrawlerContentController;

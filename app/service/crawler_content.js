@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-28 15:27:19
+ * @lastTime: 2021-01-29 17:37:14
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -85,9 +85,23 @@ class CrawlerContentService extends Service {
     }
   }
 
+  // 任务采集进度
+  async progress(query) {
+    const { ctx } = this;
+    const { columnId } = query;
+    const count = await ctx.model.CrawlerContent.count({
+      where: {
+        columnId,
+      },
+    });
+    const column = await ctx.model.CrawlerColumn.findByPk(columnId);
+    return { count, status: column.status };
+  }
+
   async collect(params) {
     const { ctx } = this;
     const { columnId } = params;
+
     const colum = await ctx.model.CrawlerColumn.findByPk(columnId, {
       include: [{
         model: ctx.model.CrawlerTemplate,
@@ -104,16 +118,16 @@ class CrawlerContentService extends Service {
     const pageSize = colum.crawlerPageSize;
     const pages = Math.ceil(taskTotal / pageSize);
 
+    // 保存开始采集时间
+    await ctx.model.CrawlerColumn.update({
+      status: 3,
+    }, {
+      where: {
+        id: columnId,
+      },
+    });
     // 后台去执行内容采集
     ctx.runInBackground(async () => {
-      // 栏目采集状态改成开始
-      await ctx.model.CrawlerColumn.update({
-        status: 1,
-      }, {
-        where: {
-          id: columnId,
-        },
-      });
       for (let index = 1; index <= pages; index++) {
         const _offset = (index - 1) * pageSize;
         const tasks = await ctx.model.CrawlerTask.findAndCountAll({
@@ -129,6 +143,8 @@ class CrawlerContentService extends Service {
               columnId,
               siteId: colum.siteId,
               status: 0,
+              images: [],
+              resources: [],
             };
             const { id, href } = tasks.rows[index];
             if (ctx.helper.urlCompare(colum.crawlerColumnUrl, href, 'host')) {
@@ -141,6 +157,20 @@ class CrawlerContentService extends Service {
                 // decodeEntities参数是为了解决cheerio获取的中文乱码
                 const $ = cheerio.load(pageXml, { decodeEntities: false });
                 const t = JSON.parse(JSON.stringify(colum.taskTemplate));
+                // 内容里面的图片资源
+                $(t.content + ' img').each((index, element) => {
+                  const src = $(element).attr('src');
+                  if (src.indexOf('data:') === -1) {
+                    obj.images.push(ctx.helper.urlSplicing(params.url, src));
+                    $(element).attr('src', ctx.helper.urlSplicing(params.url, src));
+                  }
+                });
+                // 内容里面的附件资源
+                $(t.content + ' a').each((index, element) => {
+                  const href = $(element).attr('href');
+                  obj.resources.push(ctx.helper.urlSplicing(params.url, href));
+                  $(element).attr('href', ctx.helper.urlSplicing(params.url, href));
+                });
                 for (const i in t) {
                   if (t[i].length > 0) {
                     if (t[i].indexOf('meta') !== -1) {
@@ -160,7 +190,7 @@ class CrawlerContentService extends Service {
                 // 记录采集任务执行情况(超时)
                 await ctx.model.CrawlerTask.update({
                   status: 3, // 超时
-                  statusInf: error,
+                  statusInf: '采集超时',
                 }, {
                   where: {
                     id,
@@ -185,7 +215,7 @@ class CrawlerContentService extends Service {
               // 记录采集任务执行情况(失败)
               await ctx.model.CrawlerTask.update({
                 status: 2, // 失败
-                statusInf: error,
+                statusInf: '采集失败',
               }, {
                 where: {
                   id: tasks.rows[index].id,
@@ -197,14 +227,14 @@ class CrawlerContentService extends Service {
       }
       // 栏目采集状态改成结束
       await ctx.model.CrawlerColumn.update({
-        status: 3,
+        status: 4,
       }, {
         where: {
           id: columnId,
         },
       });
     });
-    return { taskTotal, colum };
+    return colum;
   }
 }
 

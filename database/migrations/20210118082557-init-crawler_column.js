@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-23 17:51:49
+ * @lastTime: 2021-01-29 10:26:25
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('crawler_column', { id: Sequelize.INTEGER });
      */
-    const { STRING, INTEGER, TINYINT, DATE } = Sequelize;
+    const { STRING, INTEGER, TINYINT, BIGINT, DATE } = Sequelize;
     await queryInterface.createTable('crawler_column', {
       id: {
         field: 'id',
@@ -72,6 +72,11 @@ module.exports = {
         type: INTEGER(8),
         allowNull: false,
         comment: '每页条数',
+      },
+      crawlerPageTotal: {
+        field: 'crawler_page_total',
+        type: BIGINT(11),
+        comment: '任务预计总数',
       },
       crawlerReUrl: {
         field: 'crawler_re_url',

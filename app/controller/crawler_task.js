@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-23 17:15:36
+ * @lastTime: 2021-01-29 14:06:21
  */
 'use strict';
 
@@ -118,7 +118,7 @@ class CrawlerTaskController extends Controller {
     });
   }
 
-  // 采集进度
+  // 保存进度
   async progress() {
     const {
       ctx,

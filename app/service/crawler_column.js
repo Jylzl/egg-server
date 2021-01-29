@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-28 12:01:16
+ * @lastTime: 2021-01-29 11:18:28
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -14,23 +14,53 @@ class CrawlerColumnService extends Service {
 
   async create(params) {
     const { ctx } = this;
-    const result = await ctx.model.CrawlerColumn.create(params, {
-      include: [{
-        model: ctx.model.CrawlerSite,
-        as: 'crawlerSite',
-      }],
-    });
-    return result;
+    try {
+      // 计算栏目任务量
+      const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize, crawlerItem } = params;
+      const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
+      const pageXml = endResult.data.toString();
+      const $ = cheerio.load(pageXml, { decodeEntities: false });
+      const total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + $(crawlerItem).length;
+      params.crawlerPageTotal = total;
+      const result = await ctx.model.CrawlerColumn.create(params, {
+        include: [{
+          model: ctx.model.CrawlerSite,
+          as: 'crawlerSite',
+        }],
+      });
+      return result;
+    } catch (error) {
+      ctx.helper.error(
+        500,
+        error,
+        '连接超时'
+      );
+    }
   }
 
   async update(params) {
     const { ctx } = this;
-    const result = await ctx.model.CrawlerColumn.update(params, {
-      where: {
-        id: params.id,
-      },
-    });
-    return result;
+    try {
+      // 计算栏目任务量
+      const { crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize, crawlerItem } = params;
+      const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
+      const pageXml = endResult.data.toString();
+      const $ = cheerio.load(pageXml, { decodeEntities: false });
+      const total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + $(crawlerItem).length;
+      params.crawlerPageTotal = total;
+      const result = await ctx.model.CrawlerColumn.update(params, {
+        where: {
+          id: params.id,
+        },
+      });
+      return result;
+    } catch (error) {
+      ctx.helper.error(
+        500,
+        error,
+        '连接超时'
+      );
+    }
   }
 
   async destroy(params) {
@@ -86,10 +116,9 @@ class CrawlerColumnService extends Service {
 
   async collect(params) {
     const { ctx } = this;
-    let total = 0;
     const column = await ctx.model.CrawlerColumn.findByPk(params.id);
     if (column) {
-      const { id, siteId, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageSize, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = column;
+      const { id, siteId, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = column;
       // 解析HTML
       const analysis = function(cresult) {
         const arrs = [];
@@ -108,6 +137,7 @@ class CrawlerColumnService extends Service {
         });
         return arrs;
       };
+
       // 保存开始采集时间
       await ctx.model.CrawlerColumn.update({
         collectStartAt: Date.now(),
@@ -116,10 +146,7 @@ class CrawlerColumnService extends Service {
           id,
         },
       });
-      // 计算最后一页数据
-      const endResult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page: crawlerEndPage }));
-      const endArr = analysis(endResult);
-      total = (crawlerEndPage - crawlerStartPage + 1) * crawlerPageSize + endArr.length;
+
       // 后台采集任务
       ctx.runInBackground(async () => {
         // 这里面的异常都会统统被 Backgroud 捕获掉，并打印错误日志
@@ -144,10 +171,7 @@ class CrawlerColumnService extends Service {
         });
       });
     }
-    return {
-      total,
-      column,
-    };
+    return column;
   }
 }
 
