@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-28 14:16:28
+ * @lastTime: 2021-01-30 14:04:54
  */
 'use strict';
 
@@ -47,7 +47,8 @@ module.exports = {
       return r;
       // eslint-disable-next-line no-else-return
     } else {
-      return [ sNodes ];
+      // eslint-disable-next-line array-bracket-spacing
+      return [sNodes];
     }
   },
   // 处理成功响应
@@ -104,7 +105,7 @@ module.exports = {
     } else {
       _url = new URL(url, baseUrl).href;
     }
-    return _url.replace(':80', '');
+    return _url.replace(':80/', '/');
   },
   // url处理，比较两个url是否一致
   urlCompare(url1, url2, str) {

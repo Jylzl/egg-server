@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-29 14:21:52
+ * @lastTime: 2021-01-30 11:56:41
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -74,9 +74,10 @@ class CrawlerTaskService extends Service {
     const { ctx } = this;
     const colum = await ctx.model.CrawlerColumn.findByPk(params.id);
     if (colum) {
-      const { siteId, id, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = colum;
+      const { siteId, id, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerPageCount, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = colum;
       // 解析HTML
-      const analysis = function(cresult) {
+      // eslint-disable-next-line space-before-function-paren
+      const analysis = function (cresult) {
         const arrs = [];
         // toString是为了解析出buffer数据
         const pageXml = cresult.data.toString();
@@ -112,11 +113,13 @@ class CrawlerTaskService extends Service {
         const startArr = analysis(startResult);
         await ctx.model.CrawlerTask.bulkCreate(startArr);
 
-        // 采集列表动态页
-        for (let page = crawlerStartPage; page <= crawlerEndPage; page++) {
-          const cresult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page }));
-          const arrl = analysis(cresult);
-          await ctx.model.CrawlerTask.bulkCreate(arrl);
+        // 采集列表动态页(总页数大于1时采集动态页)
+        if (crawlerPageCount > 1) {
+          for (let page = crawlerStartPage; page <= crawlerEndPage; page++) {
+            const cresult = await ctx.curl(ctx.helper.render(crawlerReUrl, { page }));
+            const arrl = analysis(cresult);
+            await ctx.model.CrawlerTask.bulkCreate(arrl);
+          }
         }
         // 保存开始采集时间
         await ctx.model.CrawlerColumn.update({

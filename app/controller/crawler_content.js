@@ -10,7 +10,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: Do not edit
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-29 14:06:36
+ * @lastTime: 2021-01-30 10:45:08
  */
 'use strict';
 
@@ -26,6 +26,8 @@ class CrawlerContentController extends Controller {
       currentPage: ctx.helper.parseInt(ctx.query.currentPage),
       pageSize: ctx.helper.parseInt(ctx.query.pageSize),
       siteId: ctx.helper.parseInt(ctx.query.siteId),
+      columnId: ctx.helper.parseInt(ctx.query.columnId),
+      articleTitle: ctx.query.articleTitle,
     };
     const res = await service.crawlerContent.index(query);
     ctx.helper.success({
@@ -61,24 +63,12 @@ class CrawlerContentController extends Controller {
   async show() {
     const {
       ctx,
+      service,
     } = this;
+    const res = await service.crawlerContent.show(ctx.params);
     ctx.helper.success({
       ctx,
-      res: {
-        a: 111,
-      },
-    });
-  }
-
-  async edit() {
-    const {
-      ctx,
-    } = this;
-    ctx.helper.success({
-      ctx,
-      res: {
-        a: 111,
-      },
+      res,
     });
   }
 

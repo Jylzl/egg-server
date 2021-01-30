@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-29 11:18:28
+ * @lastTime: 2021-01-30 14:33:41
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -86,6 +86,9 @@ class CrawlerColumnService extends Service {
         include: [{
           model: ctx.model.CrawlerSite,
           as: 'crawlerSite',
+        }, {
+          model: ctx.model.CrawlerTemplate,
+          as: 'taskTemplate',
         }],
         offset: _offset,
         limit: pageSize,
@@ -120,7 +123,8 @@ class CrawlerColumnService extends Service {
     if (column) {
       const { id, siteId, templateId, crawlerReUrl, crawlerStartPage, crawlerEndPage, crawlerColumnUrl, crawlerItem, crawlerItemTitle, crawlerItemUrl, crawlerItemTime } = column;
       // 解析HTML
-      const analysis = function(cresult) {
+      // eslint-disable-next-line space-before-function-paren
+      const analysis = function (cresult) {
         const arrs = [];
         const pageXml = cresult.data.toString();
         const $ = cheerio.load(pageXml, { decodeEntities: false });

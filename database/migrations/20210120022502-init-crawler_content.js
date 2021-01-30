@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2020-12-21 10:04:31
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-29 17:34:50
+ * @lastTime: 2021-01-30 09:44:48
  */
 'use strict';
 
@@ -115,6 +115,13 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
         comment: '状态: 0待同步',
+      },
+      isExternallinks: {
+        field: 'is_external_links',
+        type: TINYINT(1),
+        allowNull: false,
+        defaultValue: 0,
+        comment: '是否外链文章: 0否，1为是',
       },
       createdAt: {
         field: 'created_at',
