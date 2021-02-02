@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-19 11:56:05
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-30 14:04:54
+ * @lastTime: 2021-02-02 10:10:04
  */
 'use strict';
 
@@ -92,7 +92,7 @@ module.exports = {
     if (date === null || date === undefined || date === '') {
       _date = date;
     } else {
-      _date = moment(date).format(type || 'YYYY-MM-DD HH:mm:ss');
+      _date = moment(new Date(date.replace(/(^\s*)|(\s*$)/g, ''))).format(type || 'YYYY-MM-DD HH:mm:ss');
     }
     return _date;
   },

@@ -3,7 +3,7 @@
  * @author: lizlong<94648929@qq.com>
  * @since: 2019-12-20 08:43:13
  * @LastAuthor: lizlong
- * @lastTime: 2021-01-30 18:09:34
+ * @lastTime: 2021-02-02 10:03:55
  */
 'use strict';
 const cheerio = require('cheerio');
@@ -188,22 +188,22 @@ class CrawlerContentService extends Service {
                   let value = '';
                   if (t[i].indexOf('$') !== -1) {
                     // eslint-disable-next-line no-eval
-                    value = eval(t[i]).replace(/(^\s*)|(\s*$)/g, '');
-                    // value = (new Function(`return ${t[i]}`))().replace(/(^\s*)|(\s*$)/g, '');
-                  }
-                  if (t[i].indexOf('meta') !== -1) {
-                    value = $(t[i]).attr('content').replace(/(^\s*)|(\s*$)/g, '');
+                    value = eval(t[i]);
+                    // eslint-disable-next-line no-new-func
+                    // value = (new Function(`return ${t[i]}`))();
+                  } else if (t[i].indexOf('meta') !== -1) {
+                    value = $(t[i]).attr('content');
                   } else {
-                    value = $(t[i]).html().replace(/(^\s*)|(\s*$)/g, '');
+                    value = $(t[i]).html();
                   }
                   // 值存在则记录
                   if (value && value.length > 0) {
                     // 对能压缩的html尽量压缩
                     try {
                       // eslint-disable-next-line array-bracket-spacing
-                      obj[i] = minify(value, { ignoreCustomFragments: [/\{\{[\s\S]*?\}\}/], removeComments: true, collapseWhitespace: true, minifyJS: false, minifyCSS: false });
+                      obj[i] = minify(value.replace(/(^\s*)|(\s*$)/g, ''), { ignoreCustomFragments: [/\{\{[\s\S]*?\}\}/], removeComments: true, collapseWhitespace: true, minifyJS: false, minifyCSS: false });
                     } catch (error) {
-                      obj[i] = value;
+                      obj[i] = value.replace(/(^\s*)|(\s*$)/g, '');
                     }
                   }
                 }
